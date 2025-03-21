@@ -10,7 +10,7 @@ declare module "framer-motion" {
 declare global{
 
     interface NavbarProps {
-        isDashboard: boolean;
+        isDashboasdasdard: boolean;
       }
 
     interface SettingsFormProps {
