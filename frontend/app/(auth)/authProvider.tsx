@@ -27,13 +27,13 @@ const components = {
     return (
       <View className="mt-4 mb-7">
         <Heading level={3} className="!text-2xl !font-bold">
-          DesireCutie
+          Thera
           <span className="text-secondary-500 font-light hover:!text-primary-300">
-            Rent
+            Link
           </span>
         </Heading>
         <p className="text-muted-foreground mt-2">
-          <span className="font-bold">Welcome!</span> Please sign in to continue
+          <span className="font-bold">Witamy!</span> Zaloguj się, aby nic nie przegapić
         </p>
       </View>
     );
@@ -44,12 +44,12 @@ const components = {
       return (
         <View className="text-center mt-4">
           <p className="text-muted-foreground">
-            Don&apos;t have an account?{" "}
+            Nie masz konta?{" "}
             <button
               onClick={toSignUp}
               className="text-primary hover:underline bg-transparent border-none p-0"
             >
-              Sign Up Here!
+              Załóż konto
             </button>
           </p>
         </View>
@@ -57,24 +57,6 @@ const components = {
     },
   },
   SignUp: {
-    FormFields() {
-      const { validationErrors } = useAuthenticator();
-      return (
-        <>
-          <Authenticator.SignUp.FormFields />
-          <RadioGroupField
-            legend="Role"
-            name="custom:role"
-            errorMessage={validationErrors?.["custom:role"]}
-            hasError={!!validationErrors?.["custom:role"]}
-            isRequired
-          >
-            <Radio value="tenant">Tenant</Radio>
-            <Radio value="manager">Manager</Radio>
-          </RadioGroupField>
-        </>
-      );
-    },
     Footer() {
       const { toSignIn } = useAuthenticator();
       return (
