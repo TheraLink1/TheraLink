@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -47,6 +48,13 @@ export default function Home() {
           >
             Read our docs
           </a>
+          <Link
+                href="/signup"
+                className="inline-block text-black bg-secondary-500 rounded-lg px-6 py-3 font-semibold hover:bg-secondary-600"
+                scroll={false}
+              >
+                Sign Up
+              </Link>
         </div>
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">

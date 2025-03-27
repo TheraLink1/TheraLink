@@ -27,10 +27,13 @@ const components = {
     return (
       <View className="mt-4 mb-7">
         <Heading level={3} className="!text-2xl !font-bold">
-          TheraLink
+          DesireCutie
+          <span className="text-secondary-500 font-light hover:!text-primary-300">
+            Rent
+          </span>
         </Heading>
         <p className="text-muted-foreground mt-2">
-          <span className="font-bold">Witamy!</span> Zaloguj się żeby kontynuować
+          <span className="font-bold">Welcome!</span> Please sign in to continue
         </p>
       </View>
     );
@@ -41,12 +44,12 @@ const components = {
       return (
         <View className="text-center mt-4">
           <p className="text-muted-foreground">
-            Nie masz konta?{" "}
+            Don&apos;t have an account?{" "}
             <button
               onClick={toSignUp}
               className="text-primary hover:underline bg-transparent border-none p-0"
             >
-              Załóż konto
+              Sign Up Here!
             </button>
           </p>
         </View>
