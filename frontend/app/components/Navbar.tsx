@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react'
 
 const Navbar = () => {
@@ -5,7 +6,7 @@ const Navbar = () => {
 
     return (
             <nav style={{ display: 'flex', justifyContent: 'space-between', padding: '1rem', backgroundColor: '#256269' }}>
-                <a href="/" style={{ fontWeight: 'bold', fontSize: '1.5rem', color: 'white', textDecoration: 'none' }}>TheraLink</a>
+                <Link href="/" style={{ fontWeight: 'bold', fontSize: '1.5rem', color: 'white', textDecoration: 'none' }}>TheraLink</Link>
                 <div>
                     {user ? (
                         <>
@@ -14,8 +15,8 @@ const Navbar = () => {
                         </>
                     ) : (
                         <>
-                            <a href="/signup" style={{ marginRight: '1rem', padding: '0.5rem 1rem', backgroundColor: 'white', color: '#256269', border: 'none', borderRadius: '4px', textDecoration: 'none', display: 'inline-block' }}>Sign Up</a>
-                            <a href="/signin" style={{ padding: '0.5rem 1rem', backgroundColor: 'white', color: '#256269', border: 'none', borderRadius: '4px', textDecoration: 'none', display: 'inline-block' }}>Sign In</a>
+                            <Link href="/signup" style={{ marginRight: '1rem', padding: '0.5rem 1rem', backgroundColor: 'white', color: '#256269', border: 'none', borderRadius: '4px', textDecoration: 'none', display: 'inline-block' }}>Sign Up</Link>
+                            <Link href="/signin" style={{ padding: '0.5rem 1rem', backgroundColor: 'white', color: '#256269', border: 'none', borderRadius: '4px', textDecoration: 'none', display: 'inline-block' }}>Sign In</Link>
                         </>
                     )}
                 </div>

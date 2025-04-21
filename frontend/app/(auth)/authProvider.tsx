@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
 import { Amplify } from "aws-amplify";
-
+import  Navbar  from "@/app/components/Navbar";
 import {
   Authenticator,
   Heading,
@@ -33,7 +33,8 @@ const components = {
           </span>
         </Heading>
         <p className="text-muted-foreground mt-2">
-          <span className="font-bold">Witamy!</span> Zaloguj się, aby nic nie przegapić
+          <span className="font-bold">Witamy!</span> Zaloguj się, aby nic nie
+          przegapić
         </p>
       </View>
     );
@@ -136,13 +137,14 @@ const Auth = ({ children }: { children: React.ReactNode }) => {
   }
   return (
     <div className="h-full">
-      <Authenticator
-        initialState={pathname.includes("signup") ? "signUp" : "signIn "}
-        components={components}
-        formFields={formFields}
-      >
-        {() => <>{children}</>}
-      </Authenticator>
+      <Navbar />
+        <Authenticator
+          initialState={pathname.includes("signup") ? "signUp" : "signIn"}
+          components={components}
+          formFields={formFields}
+        >
+          {() => <>{children}</>}
+        </Authenticator>
     </div>
   );
 };
