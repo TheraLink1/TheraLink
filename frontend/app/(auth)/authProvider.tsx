@@ -5,8 +5,6 @@ import  Navbar  from "@/app/components/Navbar";
 import {
   Authenticator,
   Heading,
-  Radio,
-  RadioGroupField,
   useAuthenticator,
   View,
 } from "@aws-amplify/ui-react";
@@ -17,24 +15,23 @@ Amplify.configure({
   Auth: {
     Cognito: {
       userPoolId: process.env.NEXT_PUBLIC_AWS_COGNITO_USER_POOL_ID!,
-      userPoolClientId: process.env.NEXT_PUBLIC_AWS_COGNITO_USER_CLIENT_ID!,
+      userPoolClientId:
+        process.env.NEXT_PUBLIC_AWS_COGNITO_USER_POOL_CLIENT_ID!,
     },
   },
 });
-
 const components = {
   Header() {
     return (
-      <View className="mt-4 mb-7">
-        <Heading level={3} className="!text-2xl !font-bold">
-          Thera
-          <span className="text-secondary-500 font-light hover:!text-primary-300">
-            Link
-          </span>
+      <View className="mt-6 mb-8 text-center">
+        <Heading
+          level={3}
+          className="text-3xl font-extrabold text-gray-800 tracking-tight"
+        >
+          Thera<span className="text-primary-500">Link</span>
         </Heading>
-        <p className="text-muted-foreground mt-2">
-          <span className="font-bold">Witamy!</span> Zaloguj się, aby nic nie
-          przegapić
+        <p className="mt-2 text-sm text-gray-500">
+          Zaloguj się, aby kontynuować swoją terapię
         </p>
       </View>
     );
@@ -43,14 +40,14 @@ const components = {
     Footer() {
       const { toSignUp } = useAuthenticator();
       return (
-        <View className="text-center mt-4">
-          <p className="text-muted-foreground">
+        <View className="text-center mt-6">
+          <p className="text-sm text-gray-600">
             Nie masz konta?{" "}
             <button
               onClick={toSignUp}
-              className="text-primary hover:underline bg-transparent border-none p-0"
+              className="text-primary-500 font-medium hover:underline"
             >
-              Załóż konto
+              Zarejestruj się
             </button>
           </p>
         </View>
@@ -61,14 +58,14 @@ const components = {
     Footer() {
       const { toSignIn } = useAuthenticator();
       return (
-        <View className="text-center mt-4">
-          <p className="text-muted-foreground">
-            Already have an account?{" "}
+        <View className="text-center mt-6">
+          <p className="text-sm text-gray-600">
+            Masz już konto?{" "}
             <button
               onClick={toSignIn}
-              className="text-primary hover:underline bg-transparent border-none p-0"
+              className="text-primary-500 font-medium hover:underline"
             >
-              Sign In
+              Zaloguj się
             </button>
           </p>
         </View>
@@ -76,47 +73,47 @@ const components = {
     },
   },
 };
-
 const formFields = {
   signIn: {
     username: {
-      placeholder: "Enter your email",
-      label: "Email",
+      placeholder: "Twój adres e-mail",
+      label: "Adres e-mail",
       isRequired: true,
     },
     password: {
-      placeholder: "Enter your password",
-      label: "Password",
+      placeholder: "Twoje hasło",
+      label: "Hasło",
       isRequired: true,
     },
   },
   signUp: {
     username: {
       order: 1,
-      placeholder: "Choose a username",
-      label: "Username",
+      placeholder: "Nazwa użytkownika (unikalna)",
+      label: "Nazwa użytkownika",
       isRequired: true,
     },
     email: {
       order: 2,
-      placeholder: "Enter your email address",
-      label: "Email",
+      placeholder: "Twój e-mail",
+      label: "E-mail",
       isRequired: true,
     },
     password: {
       order: 3,
-      placeholder: "Create a password",
-      label: "Password",
+      placeholder: "Wymyśl hasło",
+      label: "Hasło",
       isRequired: true,
     },
     confirm_password: {
       order: 4,
-      placeholder: "Confirm your password",
-      label: "Confirm Password",
+      placeholder: "Potwierdź hasło",
+      label: "Potwierdzenie hasła",
       isRequired: true,
     },
   },
 };
+
 
 const Auth = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAuthenticator((context) => [context.user]);
@@ -124,7 +121,7 @@ const Auth = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
   const isAuthPage = pathname.match(/^\/(signin|signup)$/);
   const isDashboardPage =
-    pathname.startsWith("/manager") || pathname.startsWith("/tenants");
+    pathname.startsWith("/clients") || pathname.startsWith("/psychologists");
 
   useEffect(() => {
     if (user && isAuthPage) {
