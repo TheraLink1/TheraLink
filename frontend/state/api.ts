@@ -1,5 +1,5 @@
 import { createNewUserInDatabase } from "@/lib/utils";
-import { Manager, Tenant } from "@/types/prismaTypes";
+import { Client, Psychologist } from "@/types/prismaTypes";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { fetchAuthSession, getCurrentUser } from "aws-amplify/auth";
 
@@ -16,7 +16,7 @@ export const api = createApi({
     },
   }),
   reducerPath: "api",
-  tagTypes: ["Managers", "Tenants"],
+  tagTypes: ["Psychologists", "Clients"],
   endpoints: (build) => ({
     getAuthUser: build.query<User, void>({
       queryFn: async (_, _queryApi, _extraOptions, fetchWithBQ) => {
@@ -27,9 +27,9 @@ export const api = createApi({
           const userRole = idToken?.payload["custom:role"] as string;
 
           const endpoint =
-            userRole === "manager"
-              ? `/managers/${user.userId}`
-              : `/tenants/${user.userId}`;
+            userRole === "psychologist"
+              ? `/psychologists/${user.userId}`
+              : `/clients/${user.userId}`;
 
           let userDetailsResponse = await fetchWithBQ(endpoint);
 
@@ -47,7 +47,7 @@ export const api = createApi({
           return {
             data: {
               cognitoInfo: { ...user },
-              userInfo: userDetailsResponse.data as Tenant | Manager,
+              userInfo: userDetailsResponse.data as Client | Psychologist,
               userRole,
             },
           };
@@ -56,38 +56,39 @@ export const api = createApi({
         }
       },
     }),
-    updateTenantSettings: build.mutation<
-      Tenant,
-      { cognitoId: string } & Partial<Tenant>
-    >({
-      query: ({ cognitoId, ...updatedTenant }) => ({
-        url: `tenants/${cognitoId}`,
-        method: "PUT",
-        body: updatedTenant,
-      }),
-      invalidatesTags: (result) => [{ type: "Tenants", id: result?.id }],
-    }),
-    updateManagerSettings: build.mutation<
-      Manager,
-      { cognitoId: string } & Partial<Manager>
-    >({
-      query: ({ cognitoId, ...updatedManager }) => ({
-        url: `managers/${cognitoId}`,
-        method: "PUT",
-        body: updatedManager,
-      }),
-      invalidatesTags: (result) => [
-        {
-          type: "Managers",
-          id: result?.id,
-        },
-      ],
-    }),
+    // TODO: Pozmieniac ponizsze typy na klientow i psychologow i mamy czesciowo gotowe ustawienia
+    // updateTenantSettings: build.mutation< 
+    //   Tenant,
+    //   { cognitoId: string } & Partial<Tenant>
+    // >({
+    //   query: ({ cognitoId, ...updatedTenant }) => ({
+    //     url: `tenants/${cognitoId}`,
+    //     method: "PUT",
+    //     body: updatedTenant,
+    //   }),
+    //   invalidatesTags: (result) => [{ type: "Tenants", id: result?.id }],
+    // }),
+    // updateManagerSettings: build.mutation<
+    //   Manager,
+    //   { cognitoId: string } & Partial<Manager>
+    // >({
+    //   query: ({ cognitoId, ...updatedManager }) => ({
+    //     url: `managers/${cognitoId}`,
+    //     method: "PUT",
+    //     body: updatedManager,
+    //   }),
+    //   invalidatesTags: (result) => [
+    //     {
+    //       type: "Managers",
+    //       id: result?.id,
+    //     },
+    //   ],
+    // }),
   }),
 });
 
 export const {
   useGetAuthUserQuery,
-  useUpdateTenantSettingsMutation,
-  useUpdateManagerSettingsMutation,
+  // useUpdateTenantSettingsMutation,
+  // useUpdateManagerSettingsMutation,
 } = api;
