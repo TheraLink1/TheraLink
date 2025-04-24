@@ -16,7 +16,7 @@ const Navbar = () => {
                 <div>
                     {authUser ? (
                         <>
-                            <button style={{ marginRight: '1rem', padding: '0.5rem 1rem', backgroundColor: 'white', color: '#256269', border: 'none', borderRadius: '4px' }}>Profile</button>
+                            <Link href="/profile" style={{ marginRight: '1rem', padding: '0.5rem 1rem', backgroundColor: 'white', color: '#256269', border: 'none', borderRadius: '4px', textDecoration: 'none', display: 'inline-block' }}>Profile</Link>
                             <button onClick={handleSignOut} style={{ padding: '0.5rem 1rem', backgroundColor: 'white', color: '#256269', border: 'none', borderRadius: '4px' }}>Log Out</button>
                         </>
                     ) : (
