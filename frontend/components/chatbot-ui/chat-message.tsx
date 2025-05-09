@@ -149,21 +149,19 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
 
   if (isUser) {
     return (
-      <div
-        className={cn("flex flex-col", isUser ? "items-end" : "items-start")}
-      >
-        {files ? (
-          <div className="mb-1 flex flex-wrap gap-2">
-            {files.map((file, index) => {
-              return <FilePreview file={file} key={index} />
-            })}
-          </div>
-        ) : null}
-
+      <div className={cn("flex flex-col", isUser ? "items-end" : "items-start")}>
         <div className={cn(chatBubbleVariants({ isUser, animation }))}>
-          <MarkdownRenderer>{content}</MarkdownRenderer>
+          <MarkdownRenderer>
+            {/* 👇 Najważniejsza linijka — pokazuje odpowiedź nawet bez .content */}
+            {parts?.[0]?.type === "text" ? parts[0].text : content}
+          </MarkdownRenderer>
+          {actions ? (
+            <div className="absolute -bottom-4 right-2 flex space-x-1 rounded-lg border bg-background p-1 text-foreground opacity-0 transition-opacity group-hover/message:opacity-100">
+              {actions}
+            </div>
+          ) : null}
         </div>
-
+    
         {showTimeStamp && createdAt ? (
           <time
             dateTime={createdAt.toISOString()}
@@ -177,6 +175,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
         ) : null}
       </div>
     )
+    
   }
 
   if (parts && parts.length > 0) {

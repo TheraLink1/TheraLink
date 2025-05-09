@@ -208,10 +208,16 @@ export function Chat({
       {messages.length > 0 ? (
         <ChatMessages messages={messages}>
           <MessageList
-            messages={messages}
-            isTyping={isTyping}
-            messageOptions={messageOptions}
-          />
+  messages={messages.map((message) => ({
+    ...message,
+    parts: message.parts
+      ? message.parts
+      : [{ type: "text", text: message.content ?? "" }] as const,
+  }))}
+  isTyping={isTyping}
+  messageOptions={messageOptions}
+/>
+
         </ChatMessages>
       ) : null}
  
