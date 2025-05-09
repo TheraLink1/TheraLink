@@ -1,5 +1,6 @@
 import React from 'react'
 import { useState } from 'react';
+import VerifyForm from './VerifyForm';
 interface ClientDashboardProps {
     user: {
         id: number;
@@ -25,6 +26,10 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ user }) => {
                     <li style={{ margin: '10px 0' }}>
                         <a href="#" style={{ textDecoration: 'none', color: '#333' }} onClick={() => setSelectedOption('Billings')}>Billings</a>
                     </li>
+                    {/* Lead to a form to verify and become a psychologist */}
+                    <li style={{ margin: '10px 0' }}>
+                        <a href="#" style={{ textDecoration: 'none', color: '#333' }} onClick={() => setSelectedOption('Verify')}>Verify</a>
+                    </li>
                     </ul>
                 </div>
                 <div style={{ flex: 1, padding: '20px' }}>
@@ -37,6 +42,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ user }) => {
                     {selectedOption === 'Account Settings' && <h1>Account Settings Section</h1>}
                     {selectedOption === 'Appointments' && <h1>Appointments Section</h1>}
                     {selectedOption === 'Billings' && <h1>Billings Section</h1>}
+                    {selectedOption === 'Verify' && <VerifyForm />}
                 </div>
                 </div>
             </div>
