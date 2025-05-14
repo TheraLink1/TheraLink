@@ -1,7 +1,7 @@
 'use client';
-
-import React, { useState, useMemo } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useGetAuthUserQuery } from '@/state/api';
+import React, { useState, useMemo, useEffect } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import Card from './Card';
 import DetailsPanel from './DetailsPanel';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -9,22 +9,41 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Psychologist, mockPsychologists } from '../data/psychologists';
 
 const Page: React.FC = () => {
+  // Fetch auth user
+  const { data: authUser } = useGetAuthUserQuery();
+  if (!authUser) {
+    // Redirect to sign-in page if not authenticated
+    window.location.href = '/signin';
+  }
+
   const searchParams = useSearchParams();
+  const router = useRouter();
   const [selected, setSelected] = useState<Psychologist | null>(null);
 
-  // Get search parameters
-  const keyword = searchParams.get('keyword')?.toLowerCase() || '';
-  const location = searchParams.get('location')?.toLowerCase() || '';
+  // Get params from URL
+  const keywordParam = searchParams.get('keyword') || '';
+  const locationParam = searchParams.get('location') || '';
+
+  // Controlled form state
+  const [keyword, setKeyword] = useState(keywordParam);
+  const [location, setLocation] = useState(locationParam);
+
+  // Update form fields when URL params change
+  useEffect(() => {
+    setKeyword(keywordParam);
+    setLocation(locationParam);
+  }, [keywordParam, locationParam]);
 
   // Filter psychologists
   const filteredPsychologists = useMemo(() => {
     return mockPsychologists.filter((p) => {
       const matchesKeyword =
-        keyword === '' ||
-        p.specialization.toLowerCase().includes(keyword) ||
-        p.name.toLowerCase().includes(keyword);
+        !keyword ||
+        p.specialization.toLowerCase().includes(keyword.toLowerCase()) ||
+        p.name.toLowerCase().includes(keyword.toLowerCase());
+
       const matchesLocation =
-        location === '' || p.address.toLowerCase().includes(location);
+        !location || p.address.toLowerCase().includes(location.toLowerCase());
 
       return matchesKeyword && matchesLocation;
     });
@@ -45,6 +64,7 @@ const Page: React.FC = () => {
           boxShadow: '2px 0 6px rgba(0,0,0,0.1)',
           display: 'flex',
           flexDirection: 'column',
+          gap: '20px',
         }}
       >
         <h2 style={{ color: '#00796b', fontWeight: 'bold' }}>Mapa</h2>
@@ -73,6 +93,24 @@ const Page: React.FC = () => {
           gap: '20px',
         }}
       >
+        {/* Filtering Inputs */}
+        <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
+          <input
+            type="text"
+            placeholder="Specjalizacja / Imię"
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+            style={{ padding: '8px', flex: 1, borderRadius: '4px', border: '1px solid #ccc' }}
+          />
+          <input
+            type="text"
+            placeholder="Lokalizacja"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            style={{ padding: '8px', flex: 1, borderRadius: '4px', border: '1px solid #ccc' }}
+          />
+        </div>
+
         {filteredPsychologists.length > 0 ? (
           filteredPsychologists.map((ps) => (
             <div
