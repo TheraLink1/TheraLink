@@ -1,11 +1,13 @@
 import React from 'react'
 import { useState } from 'react';
 import VerifyForm from './VerifyForm';
+import AccountSettings from './AccountSettings';
 interface ClientDashboardProps {
     user: {
         id: number;
         role: string;
         name: string;
+        email: string;
     };
 }
 
@@ -39,7 +41,10 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ user }) => {
                         <p>Select an option from the menu to get started.</p>
                     </div>
                     )}
-                    {selectedOption === 'Account Settings' && <h1>Account Settings Section</h1>}
+                    {selectedOption === 'Account Settings' && (
+                        <AccountSettings user={user} />
+                        )}
+
                     {selectedOption === 'Appointments' && <h1>Appointments Section</h1>}
                     {selectedOption === 'Billings' && <h1>Billings Section</h1>}
                     {selectedOption === 'Verify' && <VerifyForm />}

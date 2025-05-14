@@ -48,17 +48,22 @@ const availableTimes = useMemo(() => {
         <strong>Ocena:</strong>{' '}
         <span style={{ verticalAlign: 'middle' }}>
           {Array.from({ length: 5 }).map((_, i) => {
-            const full = i + 1 <= Math.floor(rating);
-            const half = i + 0.5 === rating;
-            return full ? (
-              <Star key={i} style={{ color: '#2b6369' }} />
-            ) : half ? (
-              <StarHalf key={i} style={{ color: '#2b6369' }} />
-            ) : (
-              <StarBorder key={i} style={{ color: '#2b6369' }} />
-            );
+            const fullStars = Math.floor(rating);               // e.g. 4 for 4.3, 4.5, 4.6
+            const hasHalfStar = rating - fullStars >= 0.5;      // true for 4.5, 4.6; false for 4.3
+            if (i < fullStars) {
+              // these are the fully filled stars
+              return <Star key={i} style={{ color: '#2b6369' }} />;
+            } else if (i === fullStars && hasHalfStar) {
+              // exactly one half star, at the "next" index after the full stars
+              return <StarHalf key={i} style={{ color: '#2b6369' }} />;
+            } else {
+              // all remaining stars are empty
+              return <StarBorder key={i} style={{ color: '#2b6369' }} />;
+            }
           })}
         </span>
+
+
 
       </p>
 

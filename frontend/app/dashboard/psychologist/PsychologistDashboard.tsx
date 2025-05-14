@@ -1,15 +1,12 @@
 import React from 'react'
 import { useState } from 'react';
+import { Psychologist } from '../../data/psychologists';
 
-interface PsychologistDashboardProps {
-    user: {
-        id: number;
-        role: string;
-        name: string;
-    };
+interface Props {
+  psychologist: Psychologist;
 }
 
-const ClientDashboard: React.FC<PsychologistDashboardProps> = ({ user }) => {
+const ClientDashboard: React.FC<Props> = ({psychologist}) => {
     const [selectedOption, setSelectedOption] = useState<string>('');
     return (
         <div>
@@ -31,7 +28,7 @@ const ClientDashboard: React.FC<PsychologistDashboardProps> = ({ user }) => {
             <div style={{ flex: 1, padding: '20px' }}>
                 {selectedOption === '' && (
                 <div>
-                    <h1>Welcome, {user.name}!</h1>
+                    <h1>Welcome, {psychologist.name}!</h1>
                     <p>Select an option from the menu to get started.</p>
                 </div>
                 )}
