@@ -1,60 +1,79 @@
 import React from 'react';
+import { Star } from '@mui/icons-material';
+import { Typography, Box, Paper } from '@mui/material';
 
 interface Psychologist {
-    name: string;
-    specialization: string;
-    adress: string;
-    rate: number;
-    rating: number;
+  name: string;
+  specialization: string;
+  address: string;
+  rate: number;
+  rating: number;
+  description?: string;
 }
 
 interface CardProps {
-    psychologist: Psychologist;
+  psychologist: Psychologist;
 }
 
 const Card: React.FC<CardProps> = ({ psychologist }) => {
-    return (
-        <div style={styles.card}>
-            <h2 style={styles.name}>{psychologist.name}</h2>
-            <p style={styles.specialization}>{psychologist.specialization}</p>
-            <p style={styles.address}>{psychologist.adress}</p>
-            <p style={styles.moreInfo}>Click the card for more info</p>
-        </div>
-    );
-};
-
-const styles = {
-    card: {
-        width: '60%',
-        border: '1px solid #ccc',
-        borderRadius: '8px',
-        padding: '16px',
-        textAlign: 'center' as const,
-        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+  return (
+    <Paper
+      elevation={3}
+      sx={{
+        width: '80%',
         margin: '16px auto',
-        position: 'relative' as const,
-    },
-    name: {
-        fontSize: '1.5rem',
-        margin: '8px 0',
-    },
-    specialization: {
-        fontSize: '1rem',
-        color: '#555',
-    },
-    address: {
-        fontSize: '0.9rem',
-        color: '#777',
-        marginBottom: '16px',
-    },
-    moreInfo: {
-        fontSize: '0.8rem',
-        color: '#2b6369',
-        textDecoration: 'underline',
-        position: 'absolute' as const,
-        bottom: '4px',
-        right: '8px',
-    },
+        padding: 2,
+        backgroundColor: '#fff',
+        border: '1px solid #2b6369',
+        borderRadius: 2,
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        gap: 2,
+      }}
+    >
+      <Box sx={{ flex: 1 }}>
+        <Typography variant="h6" sx={{ color: '#2b6369', fontWeight: 'bold', mb: 0.5 }}>
+          {psychologist.name}
+        </Typography>
+        <Typography variant="body1" sx={{ color: '#2b6369', mb: 0.5 }}>
+          {psychologist.specialization}
+        </Typography>
+        <Typography variant="body2" sx={{ color: '#2b6369', mb: 0.5 }}>
+          Adres: {psychologist.address}
+        </Typography>
+        <Typography variant="body2" sx={{ color: '#2b6369', mb: 0.5 }}>
+          Stawka: {psychologist.rate} zł
+        </Typography>
+        {psychologist.description && (
+          <Typography variant="body2" sx={{ color: '#2b6369' }}>
+            {psychologist.description}
+          </Typography>
+        )}
+      </Box>
+
+      <Box
+        sx={{
+          minWidth: 100,
+          textAlign: 'right',
+        }}
+      >
+        <Typography variant="body1" sx={{ color: '#2b6369', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+          {psychologist.rating} <Star sx={{ color: '#2b6369', fontSize: 18, ml: 0.5 }} />
+        </Typography>
+        <Typography
+          variant="caption"
+          sx={{
+            color: '#2b6369',
+            textDecoration: 'underline',
+            cursor: 'pointer',
+          }}
+        >
+          Więcej informacji
+        </Typography>
+      </Box>
+    </Paper>
+  );
 };
 
 export default Card;
