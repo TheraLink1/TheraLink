@@ -6,43 +6,29 @@ import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { format } from 'date-fns';
 import { Star, StarHalf, StarBorder } from '@mui/icons-material';
 import {Typography} from "@mui/material";
-
-export interface Psychologist {
-  id: number;
-  name: string;
-  specialization: string;
-  address: string;
-  rate: number;
-  rating: number;
-}
+import { Psychologist } from '../data/psychologists';
 
 interface DetailsPanelProps {
   psychologist: Psychologist;
 }
 
-// Mock availability data
-const mockAvailability: Record<string, string[]> = {
-  '2025-05-10': ['09:00', '10:00', '14:00', '15:00', '16:00', '17:00'],
-  '2025-05-12': ['13:00', '14:00', '15:00'],
-};
-
 const DetailsPanel: React.FC<DetailsPanelProps> = ({ psychologist }) => {
-  const { name, specialization, address, rate, rating } = psychologist;
+  const { name, specialization, address, rate, rating, description } = psychologist;
   const [date, setDate] = useState<Date | null>(null);
   const [time, setTime] = useState<string | null>(null);
 
   const formattedDate = date ? format(date, 'yyyy-MM-dd') : '';
 
-  const availableDates = Object.keys(mockAvailability);
+  const availableDates = useMemo(() => Object.keys(psychologist.availability), [psychologist]);
 
-  const isDateAvailable = (day: Date) => {
-    return availableDates.includes(format(day, 'yyyy-MM-dd'));
-  };
+const isDateAvailable = (day: Date) => {
+  return availableDates.includes(format(day, 'yyyy-MM-dd'));
+};
 
-  const availableTimes = useMemo(() => {
-    if (!date) return [];
-    return mockAvailability[format(date, 'yyyy-MM-dd')] || [];
-  }, [date]);
+const availableTimes = useMemo(() => {
+  if (!date) return [];
+  return psychologist.availability[format(date, 'yyyy-MM-dd')] || [];
+}, [date, psychologist]);
 
   return (
     <div style={{ flex: 0.3, padding: '20px', backgroundColor: '#ffffff', boxShadow: '0 0 10px rgba(0,0,0,0.1)', overflowY: 'auto', fontFamily: 'Arial, sans-serif' }}>

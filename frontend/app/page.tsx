@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 
 const Page = () => {
-  const [mode, setMode] = useState(""); // stationary or online
   const [keyword, setKeyword] = useState(""); // specialization or doctor name
   const [location, setLocation] = useState(""); // default location
   const router = useRouter();
@@ -12,7 +11,6 @@ const Page = () => {
     e.preventDefault();
     // Navigate to /view with query parameters
     const params = new URLSearchParams({
-      mode,
       keyword,
       location,
     }).toString();
@@ -45,39 +43,6 @@ const Page = () => {
           <p style={{ fontSize: "1.2rem", marginBottom: "20px" }}>
             Szukaj wśród 146 000 lekarzy.
           </p>
-
-          <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
-            <button
-              type="button"
-              onClick={() => setMode("stationary")}
-              style={{
-                padding: "10px 20px",
-                fontSize: "16px",
-                backgroundColor: mode === "stationary" ? "#fff" : "#00bfa5",
-                color: mode === "stationary" ? "#00bfa5" : "#fff",
-                border: "2px solid #fff",
-                borderRadius: "5px",
-                fontWeight: mode === "stationary" ? "bold" : "normal",
-              }}
-            >
-              W gabinecie
-            </button>
-            <button
-              type="button"
-              onClick={() => setMode("online")}
-              style={{
-                padding: "10px 20px",
-                fontSize: "16px",
-                backgroundColor: mode === "online" ? "#fff" : "#00bfa5",
-                color: mode === "online" ? "#00bfa5" : "#fff",
-                border: "2px solid #fff",
-                borderRadius: "5px",
-                fontWeight: mode === "online" ? "bold" : "normal",
-              }}
-            >
-              Online
-            </button>
-          </div>
 
           <form
             onSubmit={handleSubmit}
@@ -142,7 +107,7 @@ const Page = () => {
           <div
             style={{
               flex: "1 1 calc(33% - 20px)",
-              backgroundColor: "#e8f5f4",
+              backgroundColor: "white",
               color: "#2b6369",
               padding: "20px",
               borderRadius: "10px",
@@ -167,7 +132,7 @@ const Page = () => {
           <div
             style={{
               flex: "1 1 calc(33% - 20px)",
-              backgroundColor: "#e8f5f4",
+              backgroundColor: "white",
               color: "#2b6369",
               padding: "20px",
               borderRadius: "10px",
@@ -192,7 +157,7 @@ const Page = () => {
           <div
             style={{
               flex: "1 1 calc(33% - 20px)",
-              backgroundColor: "#e8f5f4",
+              backgroundColor: "white",
               color: "#2b6369",
               padding: "20px",
               borderRadius: "10px",
