@@ -10,7 +10,6 @@ const styles = {
         alignItems: 'flex-start',
         height: '100vh',
         paddingTop: '60px',            // Add top padding
-        backgroundColor: '#f5f5f5',
     },
     formContainer: {
         maxWidth: '500px',
@@ -18,8 +17,8 @@ const styles = {
         margin: '0 auto',
         padding: '30px',
         backgroundColor: '#fff',
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-        borderRadius: '8px',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+        borderRadius: '10px',
         fontFamily: 'Arial, sans-serif' as const,
     },
     field: {

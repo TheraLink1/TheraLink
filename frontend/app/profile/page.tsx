@@ -40,12 +40,6 @@ const Dashboard: React.FC = () => {
         fontFamily: 'Arial, sans-serif',
       }}
     >
-      <header style={{ padding: '20px', backgroundColor: '#f5f5f5' }}>
-        <h1>Dashboard</h1>
-        <p style={{ color: '#555' }}>  
-          {authuser?.cognitoInfo.username}
-        </p>
-      </header>
 
       <div
         style={{
