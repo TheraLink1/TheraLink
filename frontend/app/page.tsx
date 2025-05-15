@@ -1,186 +1,191 @@
-"use client";
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+'use client';
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import {
+  Box,
+  Button,
+  Container,
+  InputAdornment,
+  TextField,
+  Typography,
+  Paper,
+  Stack,
+} from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 
-const Page = () => {
-  const [keyword, setKeyword] = useState(""); // specialization or doctor name
-  const [location, setLocation] = useState(""); // default location
+const tiles = [
+  {
+    title: 'Czym jest TheraLink?',
+    desc: `TheraLink to nowoczesna platforma, która pomaga w łatwy sposób znaleźć specjalistów 
+medycznych online lub stacjonarnie. Dzięki prostemu interfejsowi, możesz umówić wizytę w kilku krokach.`,
+  },
+  {
+    title: 'Jak działamy?',
+    desc: `Wyszukuj lekarzy według specjalizacji, lokalizacji lub nazwiska. Przeglądaj profile, 
+sprawdzaj oceny i umawiaj wizyty z wybranym specjalistą – wszystko online lub stacjonarnie.`,
+  },
+  {
+    title: 'Dlaczego akurat my?',
+    desc: `TheraLink to szybka, wygodna i bezpieczna usługa umawiania wizyt. Zaufaj naszej 
+bogatej bazie ekspertów i zaoszczędź czas dzięki prostym rozwiązaniom.`,
+  },
+];
+
+export default function Page() {
+  const [keyword, setKeyword] = useState('');
+  const [location, setLocation] = useState('');
   const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Navigate to /view with query parameters
-    const params = new URLSearchParams({
-      keyword,
-      location,
-    }).toString();
+    const params = new URLSearchParams({ keyword, location }).toString();
     router.push(`/view?${params}`);
   };
 
   return (
-    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-      <div
-        style={{
-          width: "100%",
-          backgroundColor: "#00bfa5",
-          color: "#fff",
-          textAlign: "center",
-          padding: "20px 0",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: "800px",
-            margin: "0 auto",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <h1 style={{ fontSize: "2rem", marginBottom: "10px" }}>
+    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      {/* Teal Header with Inline Search */}
+      <Box sx={{ bgcolor: '#2b6369', color: '#fff', py: 6 }}>
+        <Container maxWidth="md" sx={{ textAlign: 'center' }}>
+          <Typography variant="h3" fontWeight="bold" gutterBottom>
             Znajdź lekarza i umów wizytę
-          </h1>
-          <p style={{ fontSize: "1.2rem", marginBottom: "20px" }}>
-            Szukaj wśród 146 000 lekarzy.
-          </p>
+          </Typography>
+          <Typography variant="subtitle1" sx={{ mb: 4, opacity: 0.9 }}>
+            Znajdź idealnego specjalistę w kilka chwil. Wybierz, co Ci odpowiada.
+          </Typography>
 
-          <form
+          {/* Wider Search Form */}
+          <Box
+            component="form"
             onSubmit={handleSubmit}
-            style={{ display: "flex", gap: "10px", marginBottom: "20px" }}
+            sx={{
+              display: 'flex',
+              gap: 1.5,
+              flexDirection: { xs: 'column', sm: 'row' },
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
           >
-            <input
-              type="text"
-              placeholder="specjalizacja lub nazwisko"
+            <TextField
+              placeholder="Specjalizacja lub nazwisko"
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
-              style={{
-                padding: "10px",
-                fontSize: "16px",
-                borderRadius: "5px",
-                border: "1px solid #ccc",
-                width: "300px",
+              size="small"
+              sx={{
+                bgcolor: '#ffffff',
+                borderRadius: '8px',
+                boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.1)',
+                width: { xs: '100%', sm: 320 },           // widened
+                '& .MuiOutlinedInput-root': {
+                  height: 40,
+                  '& fieldset': { borderColor: '#ccc' },
+                  '&:hover fieldset': { borderColor: '#1f4f52' },
+                  '&.Mui-focused fieldset': { borderColor: '#1f4f52', borderWidth: 2 },
+                },
+                '& .MuiInputAdornment-root svg': { color: '#1f4f52' },
+              }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <MedicalServicesIcon />
+                  </InputAdornment>
+                ),
               }}
             />
-            <input
-              type="text"
-              placeholder="Warszawa"
+
+            <TextField
+              placeholder="Miasto lub kod pocztowy"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              style={{
-                padding: "10px",
-                fontSize: "16px",
-                borderRadius: "5px",
-                border: "1px solid #ccc",
-                width: "200px",
+              size="small"
+              sx={{
+                bgcolor: '#ffffff',
+                borderRadius: '8px',
+                boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.1)',
+                width: { xs: '100%', sm: 280 },           // widened
+                '& .MuiOutlinedInput-root': {
+                  height: 40,
+                  '& fieldset': { borderColor: '#ccc' },
+                  '&:hover fieldset': { borderColor: '#1f4f52' },
+                  '&.Mui-focused fieldset': { borderColor: '#1f4f52', borderWidth: 2 },
+                },
+                '& .MuiInputAdornment-root svg': { color: '#1f4f52' },
+              }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <LocationOnIcon />
+                  </InputAdornment>
+                ),
               }}
             />
-            <button
+
+            <Button
               type="submit"
-              style={{
-                padding: "10px 20px",
-                fontSize: "16px",
-                backgroundColor: "#fff",
-                color: "#00bfa5",
-                border: "none",
-                borderRadius: "5px",
+              variant="contained"
+              startIcon={<SearchIcon />}
+              sx={{
+                bgcolor: '#00bfa5',
+                color: '#fff',
+                borderRadius: '8px',
+                px: 3,
+                py: 1.5,
+                minHeight: 40,
+                textTransform: 'none',
+                fontWeight: 'bold',
+                '&:hover': { bgcolor: '#009e8f' },
               }}
             >
               Szukaj
-            </button>
-          </form>
-        </div>
-      </div>
+            </Button>
+          </Box>
+        </Container>
+      </Box>
 
-      {/* TheraLink Explanation Section */}
-      <div style={{ padding: "40px 20px", backgroundColor: "#f4f4f4" }}>
-        <div
-          style={{
-            maxWidth: "1000px",
-            margin: "0 auto",
-            display: "flex",
-            justifyContent: "space-between",
-            flexWrap: "wrap",
-            gap: "20px",
-          }}
-        >
-          {/* Tile 1 */}
-          <div
-            style={{
-              flex: "1 1 calc(33% - 20px)",
-              backgroundColor: "white",
-              color: "#2b6369",
-              padding: "20px",
-              borderRadius: "10px",
-              boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              border: "2px solid #2b6369", // Border color
+      {/* Explanation Tiles */}
+      <Box sx={{ bgcolor: '#f4f4f4', py: 8, flexGrow: 1 }}>
+        <Container maxWidth="lg">
+          <Stack
+            direction="row"
+            spacing={4}
+            justifyContent="center"
+            sx={{
+              overflowX: { xs: 'auto', md: 'visible' },
+              py: 2,
+              '&::-webkit-scrollbar': { display: 'none' },
             }}
           >
-            <h3 style={{ fontSize: "1.5rem", marginBottom: "15px", color: "#2b6369" }}>
-              Czym jest TheraLink?
-            </h3>
-            <p style={{ fontSize: "1rem", marginBottom: "20px", color: "#2b6369" }}>
-              TheraLink to nowoczesna platforma, która pomaga w łatwy sposób znaleźć specjalistów
-              medycznych online lub stacjonarnie. Dzięki prostemu interfejsowi, możesz umówić
-              wizytę w kilku krokach.
-            </p>
-          </div>
-
-          {/* Tile 2 */}
-          <div
-            style={{
-              flex: "1 1 calc(33% - 20px)",
-              backgroundColor: "white",
-              color: "#2b6369",
-              padding: "20px",
-              borderRadius: "10px",
-              boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              border: "2px solid #2b6369", // Border color
-            }}
-          >
-            <h3 style={{ fontSize: "1.5rem", marginBottom: "15px", color: "#2b6369" }}>
-              Jak działamy?
-            </h3>
-            <p style={{ fontSize: "1rem", marginBottom: "20px", color: "#2b6369" }}>
-              Wyszukuj lekarzy według specjalizacji, lokalizacji lub nazwiska. Filtruj wyniki
-              po trybie wizyty – online lub stacjonarnie. Przeglądaj profile, sprawdzaj oceny i
-              umawiaj wizyty z wybranym lekarzem.
-            </p>
-          </div>
-
-          {/* Tile 3 */}
-          <div
-            style={{
-              flex: "1 1 calc(33% - 20px)",
-              backgroundColor: "white",
-              color: "#2b6369",
-              padding: "20px",
-              borderRadius: "10px",
-              boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              border: "2px solid #2b6369", // Border color
-            }}
-          >
-            <h3 style={{ fontSize: "1.5rem", marginBottom: "15px", color: "#2b6369" }}>
-              Dlaczego akurat my?
-            </h3>
-            <p style={{ fontSize: "1rem", marginBottom: "20px", color: "#2b6369" }}>
-              TheraLink to szybka, wygodna i bezpieczna platforma do umawiania wizyt. Zaufaj
-              naszej bazie ekspertów medycznych i skorzystaj z usługi, która zaoszczędzi Ci
-              czas i zapewni dostęp do najlepszych specjalistów.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
+            {tiles.map((tile, i) => (
+              <Paper
+                key={i}
+                elevation={2}
+                sx={{
+                  flex: '0 0 300px',
+                  p: 3,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  borderRadius: 2,
+                  border: '2px solid #2b6369',
+                  bgcolor: '#fff',
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  gutterBottom
+                  sx={{ color: '#2b6369', fontWeight: 'bold' }}
+                >
+                  {tile.title}
+                </Typography>
+                <Typography sx={{ color: '#2b6369', flexGrow: 1, lineHeight: 1.6 }}>
+                  {tile.desc}
+                </Typography>
+              </Paper>
+            ))}
+          </Stack>
+        </Container>
+      </Box>
+    </Box>
   );
-};
-
-export default Page;
+}

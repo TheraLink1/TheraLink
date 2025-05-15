@@ -12,14 +12,19 @@ const Footer = () => {
         margin: '0 auto',
       }}>
         {/* Company Info */}
-        <div style={{ flex: '1', minWidth: '250px', marginBottom: '1rem' }}>
+        <div style={{ flex: '1', minWidth: '250px', marginBottom: '1rem', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
           <h3>TheraLink</h3>
           <p>Connecting people with trusted mental health professionals.</p>
+          
+          <img
+            src="favicon.ico"
+            alt="logo"
+            style={{ width: '48px', height: '48px', marginTop: '1rem' }}
+          />
         </div>
 
         {/* Navigation */}
         <div style={{ flex: '1', minWidth: '250px', marginBottom: '1rem' }}>
-          <h4>Navigation</h4>
           <ul style={{ listStyle: 'none', padding: 0 }}>
             <li><a href="/about" style={linkStyle}>About Us</a></li>
             <li><a href="/contact" style={linkStyle}>Contact</a></li>
@@ -29,7 +34,7 @@ const Footer = () => {
         </div>
 
         {/* Contact Info */}
-        <div style={{ flex: '1', minWidth: '250px', marginBottom: '1rem' }}>
+        <div style={{ flex: '1', minWidth: '250px', marginBottom: '1rem'}}>
           <h4>Contact</h4>
           <p>Email: support@theralink.com</p>
           <p>Phone: +48 123 456 789</p>

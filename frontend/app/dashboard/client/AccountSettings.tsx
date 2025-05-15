@@ -25,7 +25,6 @@ const AccountSettings: React.FC<AccountSettingsProps> = ({ user }) => {
         height: '100vh', // use full viewport height
         paddingTop: '40px', // match header height if sticky
         paddingBottom: '100px', // space for fixed footer
-        backgroundColor: '#f9f9f9',
       }}
     >
       <Box
@@ -59,18 +58,6 @@ const AccountSettings: React.FC<AccountSettingsProps> = ({ user }) => {
         </Box>
 
         <Box mb={2}>
-          <Typography fontWeight="bold" mb={1} color="#555">
-            Email
-          </Typography>
-          <TextField
-            fullWidth
-            value={user.email}
-            variant="outlined"
-            size="small"
-          />
-        </Box>
-
-        <Box mb={2}>
           <Typography variant="h6" mb={1.5} sx={{ color: primaryColor }}>
             Change Password
           </Typography>
@@ -96,13 +83,6 @@ const AccountSettings: React.FC<AccountSettingsProps> = ({ user }) => {
             variant="outlined"
             size="small"
             sx={{ mb: 2 }}
-          />
-          <TextField
-            fullWidth
-            type="password"
-            placeholder="Confirm New Password"
-            variant="outlined"
-            size="small"
           />
           <Button
             variant="contained"
