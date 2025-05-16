@@ -6,6 +6,10 @@ import { fetchAuthSession, getCurrentUser } from "aws-amplify/auth";
 export const api = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
+    responseHandler: (response) =>
+      response.headers.get("content-type")?.includes("application/json")
+        ? response.json()
+        : response.text(),
     prepareHeaders: async (headers) => {
       const session = await fetchAuthSession();
       const { idToken } = session.tokens ?? {};
@@ -25,25 +29,40 @@ export const api = createApi({
           const { idToken } = session.tokens ?? {};
           const user = await getCurrentUser();
           const userRole = idToken?.payload["custom:role"] as string;
-
           const endpoint =
             userRole === "psychologist"
               ? `/psychologists/${user.userId}`
               : `/clients/${user.userId}`;
 
           let userDetailsResponse = await fetchWithBQ(endpoint);
-
-          if (
-            userDetailsResponse.error &&
-            userDetailsResponse.error.status === 404
-          ) {
-            userDetailsResponse = await createNewUserInDatabase(
-              user,
-              idToken,
-              userRole,
-              fetchWithBQ
-            );
+          if (userDetailsResponse.error) {
+            const err = userDetailsResponse.error;
+          
+            // wyciągamy faktyczny status:
+            let httpStatus: number | undefined;
+            if (err.status === "PARSING_ERROR" && "originalStatus" in err) {
+              httpStatus = err.originalStatus;
+            } else if (typeof err.status === "number") {
+              httpStatus = err.status;
+            }
+          
+            // teraz możemy spasować na 404:
+            if (httpStatus === 404) {
+              userDetailsResponse = await createNewUserInDatabase(
+                user,
+                idToken,
+                userRole,
+                fetchWithBQ
+              );
+            } else if (httpStatus) {
+              // dla pozostałych kodów np. 401, 500 możesz rzucić błąd, żeby debugować:
+              throw new Error(`Fetch user failed with HTTP status ${httpStatus}`);
+            }
           }
+          console.log("Session:", session);
+          console.log("ID token payload:", idToken?.payload);
+          console.log("UserRole:", userRole);
+          console.log("Initial fetch status:", userDetailsResponse);
           return {
             data: {
               cognitoInfo: { ...user },
@@ -57,7 +76,7 @@ export const api = createApi({
       },
     }),
     // TODO: Pozmieniac ponizsze typy na klientow i psychologow i mamy czesciowo gotowe ustawienia
-    // updateTenantSettings: build.mutation< 
+    // updateTenantSettings: build.mutation<
     //   Tenant,
     //   { cognitoId: string } & Partial<Tenant>
     // >({

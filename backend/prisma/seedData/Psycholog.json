@@ -1,0 +1,9 @@
+[
+    {
+      "userCognitoId": "psychologist-123",
+      "specialization": "Psychoterapia dzieci i młodzieży",
+      "price": 250,
+      "availability": "2025-05-10T09:00:00.000Z",
+      "locationId": 1
+    }
+  ]

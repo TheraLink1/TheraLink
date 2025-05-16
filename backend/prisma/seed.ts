@@ -1,130 +1,141 @@
-import { PrismaClient, Prisma } from '@prisma/client';
-import bcrypt from 'bcrypt';
-import { Decimal } from 'decimal.js';
+import { PrismaClient, Prisma } from "@prisma/client";
+import fs from "fs";
+import path from "path";
+
 const prisma = new PrismaClient();
 
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function toPascalCase(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function toCamelCase(str: string): string {
+  return str.charAt(0).toLowerCase() + str.slice(1);
+}
+
+async function insertLocationData(locations: any[]) {
+  for (const location of locations) {
+    const { street, city, houseNumber, postalCode, coordinates } = location;
+    try {
+      await prisma.$executeRaw`
+        INSERT INTO "Lokalizacja" 
+          (street, city, "houseNumber", "postalCode", coordinates) 
+        VALUES 
+          (${street}, 
+          ${city}, 
+          ${houseNumber}, 
+          ${postalCode}, 
+          ST_SetSRID(ST_GeomFromText(${coordinates}, 4326))) 
+        RETURNING id;
+      `;
+      console.log(`Inserted location for ${city}`);
+    } catch (error) {
+      console.error(`Error inserting location for ${city}:`, error);
+    }
+  }
+}
+
+async function resetSequence(modelName: string) {
+  const quotedModelName = `"${toPascalCase(modelName)}"`;
+
+  const maxIdResult = await (
+    prisma[modelName as keyof PrismaClient] as any
+  ).findMany({
+    select: { id: true },
+    orderBy: { id: "desc" },
+    take: 1,
+  });
+
+  if (maxIdResult.length === 0) return;
+
+  const nextId = maxIdResult[0].id + 1;
+  await prisma.$executeRaw(
+    Prisma.raw(`
+    SELECT setval(pg_get_serial_sequence('${quotedModelName}', 'id'), coalesce(max(id)+1, ${nextId}), false) FROM ${quotedModelName};
+  `)
+  );
+  console.log(`Reset sequence for ${modelName} to ${nextId}`);
+}
+
+async function deleteAllData(orderedFileNames: string[]) {
+  const modelNames = orderedFileNames.map((fileName) => {
+    return toPascalCase(path.basename(fileName, path.extname(fileName)));
+  });
+
+  for (const modelName of modelNames.reverse()) {
+    const modelNameCamel = toCamelCase(modelName);
+    const model = (prisma as any)[modelNameCamel];
+    if (!model) {
+      console.error(`Model ${modelName} not found in Prisma client`);
+      continue;
+    }
+    try {
+      await model.deleteMany({});
+      console.log(`Cleared data from ${modelName}`);
+    } catch (error) {
+      console.error(`Error clearing data from ${modelName}:`, error);
+    }
+  }
+}
+
 async function main() {
-  await prisma.payment.deleteMany();
-  await prisma.appointment.deleteMany();
-  await prisma.psychologist.deleteMany();
-  await prisma.client.deleteMany();
-  await prisma.user.deleteMany();
-  await prisma.$executeRaw`DELETE FROM "Lokalizacja"`;
+  const dataDirectory = path.join(__dirname, "seedData");
 
-  const locations = await prisma.$queryRaw<{ id: number }[]>`
-    INSERT INTO "Lokalizacja" (street, city, "houseNumber", "postalCode", coordinates)
-    VALUES 
-      ('Main Street', 'Warsaw', '1', '00-001', ST_SetSRID(ST_MakePoint(21.0122, 52.2297), 4326)),
-      ('Old Town', 'Krakow', '5', '30-002', ST_SetSRID(ST_MakePoint(19.9369, 50.0647), 4326))
-    RETURNING id;
-  `;
+  // Kolejność ważna dla zależności między modelami
+  const orderedFileNames = [
+    "Lokalizacja.json",       // Najpierw lokalizacje
+    "Uzytkownik.json",        // Następnie użytkownicy
+    "Psycholog.json",         // Potem psychologowie (wymaga użytkowników i lokalizacji)
+    "Klient.json",            // Klienci (wymaga użytkowników)
+    "Wizyta.json",            // Wizyty (wymaga psychologów i klientów)
+    "Platnosc.json",          // Płatności (wymaga wizyt)
+  ];
 
-  const user1 = await prisma.user.create({
-    data: {
-      role: 'client',
-      email: 'client1@example.com',
-      password: await bcrypt.hash('test123', 10),
-      firstName: 'Anna',
-      lastName: 'Nowak',
-      phone: '123456789',
-      dateOfBirth: new Date('1990-01-01'),
-    },
-  });
+  // Usuwanie istniejących danych w odwrotnej kolejności
+  await deleteAllData(orderedFileNames);
 
-  const user2 = await prisma.user.create({
-    data: {
-      role: 'client',
-      email: 'client2@example.com',
-      password: await bcrypt.hash('test123', 10),
-      firstName: 'Piotr',
-      lastName: 'Kowalski',
-      phone: '987654321',
-      dateOfBirth: new Date('1985-05-15'),
-    },
-  });
+  // Seedowanie danych
+  for (const fileName of orderedFileNames) {
+    const filePath = path.join(dataDirectory, fileName);
+    const jsonData = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+    const modelName = toPascalCase(
+      path.basename(fileName, path.extname(fileName))
+    );
+    const modelNameCamel = toCamelCase(modelName);
 
-  const user3 = await prisma.user.create({
-    data: {
-      role: 'psychologist',
-      email: 'psychologist@example.com',
-      password: await bcrypt.hash('test123', 10),
-      firstName: 'Maria',
-      lastName: 'Wójcik',
-      phone: '555444333',
-      dateOfBirth: new Date('1980-10-20'),
-    },
-  });
+    // Specjalna obsługa lokalizacji z PostGIS
+    if (modelName === "Lokalizacja") {
+      await insertLocationData(jsonData);
+    } else {
+      const model = (prisma as any)[modelNameCamel];
+      try {
+        for (const item of jsonData) {
+          // Konwersja dat z stringów na obiekty Date
+          if (item.dateOfBirth) item.dateOfBirth = new Date(item.dateOfBirth);
+          if (item.availability) item.availability = new Date(item.availability);
+          if (item.date) item.date = new Date(item.date);
+          if (item.paymentDate) item.paymentDate = new Date(item.paymentDate);
 
-  const client1 = await prisma.client.create({
-    data: {
-      userId: user1.id,
-      history: 'Anxiety disorder treatment history',
-    },
-  });
+          await model.create({
+            data: item,
+          });
+        }
+        console.log(`Seeded ${modelName} with data from ${fileName}`);
+      } catch (error) {
+        console.error(`Error seeding data for ${modelName}:`, error);
+      }
+    }
 
-  const client2 = await prisma.client.create({
-    data: {
-      userId: user2.id,
-      history: 'Couples therapy sessions',
-    },
-  });
+    // Reset sekwencji ID
+    await resetSequence(modelName);
 
-  const psychologist = await prisma.psychologist.create({
-    data: {
-      userId: user3.id,
-      specialization: 'Clinical Psychology',
-      price: new Decimal(150.5),
-      availability: new Date('2024-03-30T10:00:00Z'),
-      locationId: locations[0].id,
-    },
-  });
-
-  const appointment1 = await prisma.appointment.create({
-    data: {
-      clientId: client1.id,
-      psychologistId: psychologist.id,
-      meetingLink: 'https://meet.example.com/1',
-      date: new Date('2024-03-25T15:00:00Z'),
-      isConfirmed: true,
-    },
-  });
-
-  const appointment2 = await prisma.appointment.create({
-    data: {
-      clientId: client2.id,
-      psychologistId: psychologist.id,
-      meetingLink: 'https://meet.example.com/2',
-      date: new Date('2024-04-01T16:30:00Z'),
-      isConfirmed: false,
-    },
-  });
-
-  await prisma.payment.create({
-    data: {
-      appointmentId: appointment1.id,
-      clientId: client1.id,
-      paymentDate: new Date('2024-03-25T14:00:00Z'),
-      isPaid: true,
-      amount: 15050, // 150.50 PLN w groszach
-    },
-  });
-
-  await prisma.payment.create({
-    data: {
-      appointmentId: appointment2.id,
-      clientId: client2.id,
-      paymentDate: new Date('2024-03-28T12:00:00Z'),
-      isPaid: false,
-      amount: 15050,
-    },
-  });
+    await sleep(1000);
+  }
 }
 
 main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+  .catch((e) => console.error(e))
+  .finally(async () => await prisma.$disconnect());

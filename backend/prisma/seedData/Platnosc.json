@@ -1,0 +1,9 @@
+[
+    {
+      "appointmentId": 1,
+      "clientCognitoId": "client-456",
+      "paymentDate": "2024-05-20T12:00:00.000Z",
+      "isPaid": true,
+      "amount": 250
+    }
+  ]

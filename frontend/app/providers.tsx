@@ -1,7 +1,7 @@
 "use client";
+import StoreProvider from "@/state/redux";
 import { Authenticator } from "@aws-amplify/ui-react";
-import StoreProvider from "../state/redux";
-import Auth from "@/app/(auth)/authProvider";
+import Auth from "./(auth)/authProvider";
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
   return (

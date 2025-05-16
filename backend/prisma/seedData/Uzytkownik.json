@@ -1,0 +1,22 @@
+[
+    {
+      "cognitoId": "psychologist-123",
+      "role": "psychologist",
+      "email": "psy@example.com",
+      "password": "securepassword",
+      "firstName": "Anna",
+      "lastName": "Kowalska",
+      "phone": "123456789",
+      "dateOfBirth": "1980-05-10"
+    },
+    {
+      "cognitoId": "client-456",
+      "role": "client",
+      "email": "client@example.com",
+      "password": "clientpass",
+      "firstName": "Jan",
+      "lastName": "Nowak",
+      "phone": "987654321",
+      "dateOfBirth": "1995-08-15"
+    }
+  ]
