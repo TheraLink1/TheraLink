@@ -53,7 +53,6 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ user }) => {
   const [selectedOption, setSelectedOption] = useState<string>('Account Settings');
 
   const menuItems = ['Account Settings', 'Appointments', 'Billings', 'Verify'];
-  // add 'Messages' to the menu items
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh' }}>
@@ -89,9 +88,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ user }) => {
         {selectedOption === 'Appointments' && (
           <AppointmentHistory appointments={sampleAppointments} />
         )}
-        {selectedOption === 'Billings' && (
-          <Billings userName={user.name} cardInfo={sampleCard} payments={samplePayments} />
-        )}
+        {selectedOption === 'Billings' && <Billings userName={user.name} cardInfo={sampleCard} payments={samplePayments} />}
         {selectedOption === 'Verify' && <VerifyForm />}
       </div>
     </div>

@@ -1,45 +1,47 @@
 import React from 'react'
 import { useState } from 'react';
 import { Psychologist } from '../../data/psychologists';
+import AccountSettings from './AccountSettings'
 
 interface Props {
   psychologist: Psychologist;
 }
 
-const ClientDashboard: React.FC<Props> = ({psychologist}) => {
-    const [selectedOption, setSelectedOption] = useState<string>('');
+const PsychologistDashboard: React.FC<Props> = ({psychologist}) => {
+    const [selectedOption, setSelectedOption] = useState<string>('Account Settings');
+    const menuItems = ['Account Settings', 'Set Availability', 'Appointments', 'Billings', 'Location', 'Calendar', 'Ratings'];
     return (
-        <div>
-            <div style={{ display: 'flex', height: '100vh' }}>
-            <div style={{ width: '250px', backgroundColor: '#f4f4f4', padding: '20px', boxShadow: '2px 0 5px rgba(0,0,0,0.1)' }}>
-                <h2>Menu</h2>
-                <ul style={{ listStyleType: 'none', padding: 0 }}>
-                <li style={{ margin: '10px 0' }}>
-                    <a href="#" style={{ textDecoration: 'none', color: '#333' }} onClick={() => setSelectedOption('Account Settings')}>Account Settings</a>
-                </li>
-                <li style={{ margin: '10px 0' }}>
-                    <a href="#" style={{ textDecoration: 'none', color: '#333' }} onClick={() => setSelectedOption('Appointments')}>Appointments</a>
-                </li>
-                <li style={{ margin: '10px 0' }}>
-                    <a href="#" style={{ textDecoration: 'none', color: '#333' }} onClick={() => setSelectedOption('Billings')}>Billings</a>
-                </li>
+        <div style={{display: 'flex', minHeight: '100vh'}}>
+            <div style={{
+                width: '250px',
+                backgroundColor: '#f4f4f4',
+                padding: '20px',
+                boxShadow: '2px 0 5px rgba(0,0,0,0.1)',
+            }}>
+                <ul style={{ listStyleType: 'none', padding: 0, margin: 0 }}>
+                {menuItems.map(item => (
+                    <li key={item} style={{ margin: '10px 0' }}>
+                    <a
+                        href="#"
+                        onClick={e => { e.preventDefault(); setSelectedOption(item); }}
+                        style={{
+                        textDecoration: 'none',
+                        color: selectedOption === item ? '#2b6369' : '#333',
+                        fontWeight: selectedOption === item ? 'bold' : 'normal',
+                        }}
+                    >
+                        {item}
+                    </a>
+                    </li>
+                ))}
                 </ul>
             </div>
-            <div style={{ flex: 1, padding: '20px' }}>
-                {selectedOption === '' && (
-                <div>
-                    <h1>Welcome, {psychologist.name}!</h1>
-                    <p>Select an option from the menu to get started.</p>
-                </div>
-                )}
-                {selectedOption === 'Account Settings' && <h1>Account Settings Section</h1>}
-                {selectedOption === 'Appointments' && <h1>Appointments Section</h1>}
-                {selectedOption === 'Billings' && <h1>Billings Section</h1>}
-            </div>
+
+            <div style={{flex: 1, padding: '20px'}}>
+                {selectedOption === 'Account Settings' && <AccountSettings psychologist={psychologist}/>}
             </div>
         </div>
-
     )
 }
 
-export default ClientDashboard
+export default PsychologistDashboard
