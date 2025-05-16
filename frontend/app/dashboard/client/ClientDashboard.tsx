@@ -2,8 +2,9 @@
 import React, { useState } from 'react';
 import VerifyForm from './VerifyForm';
 import AccountSettings from './AccountSettings';
-import AppointmentHistory, { Appointment } from './AppointmentHistory'; // <-- import typu
-
+import AppointmentHistory, { Appointment } from './AppointmentHistory'; 
+import { CardInfo, PaymentRecord } from './Billings';
+import Billings from './Billings'; 
 interface ClientDashboardProps {
   user: {
     id: number;
@@ -36,10 +37,23 @@ const sampleAppointments: Appointment[] = [
   },
 ];
 
+const sampleCard: CardInfo = {
+  brand: 'Visa',
+  last4: '4242',
+  expiry: '12/26',
+  cardholder: 'Jan Kowalski',
+};
+
+const samplePayments: PaymentRecord[] = [
+  { id: 1, date: '2025-05-01T12:00:00Z', amount: 200, status: 'Paid' },
+  { id: 2, date: '2025-04-15T09:30:00Z', amount: 150, status: 'Not payed' },
+];
+
 const ClientDashboard: React.FC<ClientDashboardProps> = ({ user }) => {
   const [selectedOption, setSelectedOption] = useState<string>('Account Settings');
 
   const menuItems = ['Account Settings', 'Appointments', 'Billings', 'Verify'];
+  // add 'Messages' to the menu items
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh' }}>
@@ -75,7 +89,9 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ user }) => {
         {selectedOption === 'Appointments' && (
           <AppointmentHistory appointments={sampleAppointments} />
         )}
-        {selectedOption === 'Billings' && <h1>Billings Section</h1>}
+        {selectedOption === 'Billings' && (
+          <Billings userName={user.name} cardInfo={sampleCard} payments={samplePayments} />
+        )}
         {selectedOption === 'Verify' && <VerifyForm />}
       </div>
     </div>

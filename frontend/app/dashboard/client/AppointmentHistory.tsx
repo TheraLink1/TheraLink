@@ -152,7 +152,7 @@ const AppointmentHistory: React.FC<AppointmentHistoryProps> = ({ appointments })
                           {appt.meetingLink}
                         </a>
                       </Typography>
-                      <Typography variant="body2">
+                      <Typography component="span">
                         <strong>Status:</strong>{' '}
                         <StyledChip label={appt.status} size="small" variant="outlined" />
                       </Typography>
