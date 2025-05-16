@@ -29,7 +29,7 @@ const Dashboard: React.FC = () => {
     role: 'client',
   }
 
-  const chosenPsychologist = false  //mock the user (client or psychologist)
+  const chosenPsychologist = true  //mock the user (client or psychologist)
   
   return (
     <div

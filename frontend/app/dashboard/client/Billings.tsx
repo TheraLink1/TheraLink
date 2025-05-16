@@ -209,15 +209,19 @@ const Billings: React.FC<BillingsProps> = ({ userName, cardInfo, payments }) => 
                   <Typography variant="body1">{p.amount} zł</Typography>
                 </Box>
 
-                {/* Status chip */}
+                {/* Status chip (fixed width) */}
                 <Chip
                   label={p.status}
                   variant="outlined"
+                  size="small"
                   sx={{
                     borderColor: statusColorMap[p.status],
                     color: statusColorMap[p.status],
+                    width: 80,
+                    textAlign: 'center',
+                    fontSize: '0.75rem',
+                    fontWeight: 500,
                   }}
-                  size="small"
                 />
 
                 {/* Action button on the far right */}
