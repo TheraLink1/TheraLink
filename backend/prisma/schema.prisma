@@ -8,82 +8,69 @@ datasource db {
   url        = env("DATABASE_URL")
   extensions = [postgis]
 }
-
-model User {
-  id            Int          @id @default(autoincrement())
-  role          String       @db.VarChar(20)
-  email         String       @unique @db.VarChar(100)
-  password      String       @db.VarChar(100)
-  firstName     String       @db.VarChar(100)
-  lastName      String       @db.VarChar(100)
-  phone         String       @db.VarChar(11)
-  dateOfBirth   DateTime
-  client        Client?
-  psychologist  Psychologist?
-
-  @@map("Uzytkownik")
+enum ApplicationStatus {
+  Pending
+  Denied
+  Approved
+}
+enum PaymentStatus {
+  Pending
+  Paid
+  PartiallyPaid
+  Overdue
 }
 
 model Client {
-  id          Int          @id @default(autoincrement())
-  user        User         @relation(fields: [userId], references: [id])
-  userId      Int          @unique
-  history     String?
-  appointments Appointment[]
-  payments    Payment[]
-
-  @@map("Klient")
+  id          Int    @id @default(autoincrement())
+  cognitoId   String @unique
+  name        String
+  email       String
+  phoneNumber String
+  history       String?
+  appointments  Appointment[]
+  payments      Payment[]
 }
 
 model Psychologist {
-  id             Int           @id @default(autoincrement())
-  user           User          @relation(fields: [userId], references: [id])
-  userId         Int           @unique
-  specialization String        @db.VarChar(100)
-  price          Decimal       @db.Money
-  availability   DateTime
-  location       Location      @relation(fields: [locationId], references: [id])
+    id          Int    @id @default(autoincrement())
+  cognitoId   String @unique
+  name        String
+  email       String
+  phoneNumber String
   locationId     Int
+  location       Location      @relation(fields: [locationId], references: [id])
   appointments   Appointment[]
-
-  @@map("Psycholog")
 }
 
 model Location {
-  id           Int           @id @default(autoincrement())
-  street       String        @db.VarChar(100)
-  city         String        @db.VarChar(100)
-  houseNumber  String        @db.VarChar(100)
-  postalCode   String        @db.VarChar(6)
-  coordinates  Unsupported("geography(Point, 4326)")
-  psychologists Psychologist[]
-
-  @@map("Lokalizacja")
+  id            Int                                   @id @default(autoincrement())
+  street        String                                @db.VarChar(100)
+  city          String                                @db.VarChar(100)
+  houseNumber   String                                @db.VarChar(100)
+  postalCode    String                                @db.VarChar(6)
+  coordinates   Unsupported("geography(Point, 4326)")
+  psychologists Psychologist[] 
 }
 
 model Appointment {
-  id             Int           @id @default(autoincrement())
-  client         Client        @relation(fields: [clientId], references: [id])
-  clientId       Int
-  psychologist   Psychologist  @relation(fields: [psychologistId], references: [id])
-  psychologistId Int
-  meetingLink    String        @db.VarChar(400)
-  date           DateTime
-  isConfirmed    Boolean
-  payment        Payment?
-
-  @@map("Wizyta")
+  id              Int          @id @default(autoincrement())
+  clientCognitoId String
+  client          Client      @relation(fields: [clientCognitoId], references: [cognitoId])
+  psychologistId  Int
+  psychologist    Psychologist @relation(fields: [psychologistId], references: [id])
+  meetingLink     String       
+  date            DateTime
+  Status          ApplicationStatus
+  payment         Payment?
 }
 
 model Payment {
-  id            Int         @id @default(autoincrement())
-  appointment   Appointment @relation(fields: [appointmentId], references: [id])
-  appointmentId Int         @unique
-  client        Client      @relation(fields: [clientId], references: [id])
-  clientId      Int
-  paymentDate   DateTime
-  isPaid        Boolean
-  amount        Int
-
-  @@map("Platnosc")
+  id              Int         @id @default(autoincrement())
+  appointmentId   Int         @unique
+  appointment     Appointment @relation(fields: [appointmentId], references: [id])
+  clientCognitoId String?
+  client          Client?     @relation(fields: [clientCognitoId], references: [cognitoId])
+  paymentDate     DateTime
+  isPaid          Boolean
+  amount          Int
 }

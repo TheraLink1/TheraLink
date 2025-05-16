@@ -1,0 +1,9 @@
+[
+    {
+      "clientCognitoId": "client-456",
+      "psychologistId": 1,
+      "meetingLink": "https://zoom.us/example-link",
+      "date": "2025-06-01T10:00:00.000Z",
+      "isConfirmed": true
+    }
+  ]

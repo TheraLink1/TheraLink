@@ -5,6 +5,8 @@ import  Navbar  from "@/app/components/Navbar";
 import {
   Authenticator,
   Heading,
+  Radio,
+  RadioGroupField,
   useAuthenticator,
   View,
 } from "@aws-amplify/ui-react";
@@ -40,14 +42,14 @@ const components = {
     Footer() {
       const { toSignUp } = useAuthenticator();
       return (
-        <View className="text-center mt-6">
-          <p className="text-sm text-gray-600">
-            Nie masz konta?{" "}
+        <View className="text-center mt-4">
+          <p className="text-muted-foreground">
+            Nie masz konta? 
             <button
               onClick={toSignUp}
-              className="text-primary-500 font-medium hover:underline"
+              className="text-primary hover:underline bg-transparent border-none p-0 ml-1"
             >
-              Zarejestruj się
+               Zarejestruj się
             </button>
           </p>
         </View>
@@ -55,15 +57,34 @@ const components = {
     },
   },
   SignUp: {
+    FormFields() {
+      const { validationErrors } = useAuthenticator();
+
+      return (
+        <>
+          <Authenticator.SignUp.FormFields />
+          <RadioGroupField
+            legend="Zarejestruj się jako"
+            name="custom:role"
+            errorMessage={validationErrors?.["custom:role"]}
+            hasError={!!validationErrors?.["custom:role"]}
+            isRequired
+          >
+            <Radio value="client">Klient</Radio>
+          </RadioGroupField>
+        </>
+      );
+    },
+
     Footer() {
       const { toSignIn } = useAuthenticator();
       return (
-        <View className="text-center mt-6">
-          <p className="text-sm text-gray-600">
+        <View className="text-center mt-4">
+          <p className="text-muted-foreground">
             Masz już konto?{" "}
             <button
               onClick={toSignIn}
-              className="text-primary-500 font-medium hover:underline"
+              className="text-primary hover:underline bg-transparent border-none p-0"
             >
               Zaloguj się
             </button>
