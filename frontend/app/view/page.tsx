@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import Card from './Card';
 import DetailsPanel from './DetailsPanel';
 import { AnimatePresence, motion } from 'framer-motion';
+import Map from '../components/GMap';
 
 import { Psychologist, mockPsychologists } from '../data/psychologists';
 
@@ -56,29 +57,11 @@ const Page: React.FC = () => {
   return (
     <div style={{ display: 'flex', height: '100vh', fontFamily: 'Arial, sans-serif' }}>
       {/* Map Column */}
-      <div
-        style={{
-          width: selected ? '25%' : '35%',
-          backgroundColor: '#e0f7fa',
-          padding: '20px',
-          boxShadow: '2px 0 6px rgba(0,0,0,0.1)',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '20px',
-        }}
-      >
-        <h2 style={{ color: '#00796b', fontWeight: 'bold' }}>Mapa</h2>
-        <div
-          style={{
-            flexGrow: 1,
-            backgroundColor: '#b2ebf2',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <p style={{ color: '#00796b' }}>Google Maps Placeholder</p>
-        </div>
+       <div style={{ width: '30%', backgroundColor: '#e0f7fa' }}>
+        <Map
+          psychologists={filteredPsychologists}
+          selected={selected}
+        />
       </div>
 
       {/* List Column */}
