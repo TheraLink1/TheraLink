@@ -29,13 +29,6 @@ export function ChatDemo(props: ChatDemoProps) {
     console.log("💡 Status czatu:", status);
   }, [status]);
 
-  useEffect(() => {
-    if (status === "streaming") {
-      setTimeout(() => {
-        stop?.();
-      }, 2000); // wymuś zatrzymanie po 2 sek.
-    }
-  }, [status, stop]);
 
   const convertedMessages = messages.map((message) => {
     const validParts = message.parts?.filter(
