@@ -1,3 +1,4 @@
+
 'use client';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -14,6 +15,7 @@ import {
 import SearchIcon from '@mui/icons-material/Search';
 import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import { FloatingChat } from "@/components/FloatingChat";
 
 const tiles = [
   {
@@ -43,6 +45,10 @@ export default function Page() {
     const params = new URLSearchParams({ keyword, location }).toString();
     router.push(`/view?${params}`);
   };
+
+
+
+
 
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -171,6 +177,7 @@ export default function Page() {
                   bgcolor: '#fff',
                 }}
               >
+
                 <Typography
                   variant="h6"
                   gutterBottom
@@ -186,6 +193,8 @@ export default function Page() {
           </Stack>
         </Container>
       </Box>
+      <FloatingChat />
     </Box>
+          
   );
 }
