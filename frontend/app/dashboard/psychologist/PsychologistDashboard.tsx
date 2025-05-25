@@ -3,12 +3,76 @@ import { useState } from 'react';
 import { Psychologist } from '../../data/psychologists';
 import AccountSettings from './AccountSettings'
 import SetAvailability from './SetAvailability';
+import Appointments, {Appointment} from './Appointments';
 
 interface Props {
   psychologist: Psychologist;
 }
 
 const PsychologistDashboard: React.FC<Props> = ({psychologist}) => {
+    // Mock appointments array
+    const mockAppointments: Appointment[] = [
+      {
+        id: 1,
+        date: '2025-05-30T09:00:00Z',
+        meetingLink: 'https://meet.example.com/abc123',
+        status: 'Pending',
+        patient: {
+          id: 101,
+          name: 'Anna Kowalska',
+          email: 'anna.kowalska@example.com'
+        },
+        payment: {
+          amount: 150,
+          isPaid: false,
+          paymentDate: '2025-05-20T08:00:00Z'
+        }
+      },
+      {
+        id: 2,
+        date: '2025-06-01T11:30:00Z',
+        meetingLink: 'https://meet.example.com/xyz789',
+        status: 'Pending',
+        patient: {
+          id: 102,
+          name: 'Jan Nowak',
+          email: 'jan.nowak@example.com'
+        },
+        payment: {
+          amount: 200,
+          isPaid: true,
+          paymentDate: '2025-05-22T10:30:00Z'
+        }
+      },
+      {
+        id: 3,
+        date: '2025-06-05T14:00:00Z',
+        meetingLink: 'https://meet.example.com/def456',
+        status: 'Approved',
+        patient: {
+          id: 103,
+          name: 'Katarzyna Zielinska',
+          email: 'katarzyna.zielinska@example.com'
+        },
+        payment: {
+          amount: 180,
+          isPaid: true,
+          paymentDate: '2025-05-25T12:00:00Z'
+        }
+      },
+      {
+        id: 4,
+        date: '2025-06-07T10:00:00Z',
+        meetingLink: 'https://meet.example.com/ghi321',
+        status: 'Denied',
+        patient: {
+          id: 104,
+          name: 'Marek Wójcik',
+          email: 'marek.wojcik@example.com'
+        }
+      }
+    ];
+
     const [selectedOption, setSelectedOption] = useState<string>('Account Settings');
     const menuItems = ['Account Settings', 'Set Availability', 'Appointments', 'Billings', 'Calendar', 'Ratings'];
     return (
@@ -41,6 +105,7 @@ const PsychologistDashboard: React.FC<Props> = ({psychologist}) => {
             <div style={{flex: 1, padding: '20px' ,marginTop: '-20px', backgroundColor: '#ffffff'}}>
                 {selectedOption === 'Account Settings' && <AccountSettings psychologist={psychologist}/>}
                 {selectedOption === 'Set Availability' && <SetAvailability/>}
+                {selectedOption === 'Appointments' && <Appointments appointments={mockAppointments}/>}
             </div>
         </div>
     )
