@@ -104,11 +104,6 @@ const Appointments: React.FC<AppointmentsProps> = ({ appointments }) => {
     handleCloseDialog();
   };
 
-  const handleDenyReschedule = () => {
-    console.log('Denied reschedule for appointment', selectedAppt?.id);
-    handleCloseDialog();
-  };
-
   const handleCancelAppointment = (id: number) => {
     console.log('Cancelled appointment', id);
   };
@@ -135,7 +130,7 @@ const Appointments: React.FC<AppointmentsProps> = ({ appointments }) => {
                         {new Date(appt.date).toLocaleString()}
                       </Typography>
                       <Divider sx={{ borderColor: DARK_TEAL }} />
-                      <Typography><strong>Student:</strong> {appt.patient.name}</Typography>
+                      <Typography><strong>Client:</strong> {appt.patient.name}</Typography>
                       <Typography variant="body2" color="text.secondary">
                         <a href={`mailto:${appt.patient.email}`} style={{ color: DARK_TEAL }}>
                           {appt.patient.email}
