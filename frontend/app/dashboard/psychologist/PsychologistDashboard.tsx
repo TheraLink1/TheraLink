@@ -4,6 +4,9 @@ import { Psychologist } from '../../data/psychologists';
 import AccountSettings from './AccountSettings'
 import SetAvailability from './SetAvailability';
 import Appointments, {Appointment} from './Appointments';
+import Billings from './Billings'; 
+import Calendar from './Calendar';
+import Ratings from './Ratings';
 
 interface Props {
   psychologist: Psychologist;
@@ -73,6 +76,18 @@ const PsychologistDashboard: React.FC<Props> = ({psychologist}) => {
       }
     ];
 
+    const dummyAvailabilities = {
+  '2025-05-25': ['08:00', '08:15', '08:30', '08:45', '10:00', '10:15', '10:30', '10:45'],
+  '2025-05-26': ['09:00', '09:15', '09:30', '09:45'],
+  // ...
+};
+
+const dummyAppointments = {
+  '2025-05-25': ['10:00', '10:15', '10:30', '10:45'],
+  '2025-05-27': ['08:00', '08:15', '08:30', '08:45'],
+  // ...
+};
+
     const [selectedOption, setSelectedOption] = useState<string>('Account Settings');
     const menuItems = ['Account Settings', 'Set Availability', 'Appointments', 'Billings', 'Calendar', 'Ratings'];
     return (
@@ -106,6 +121,11 @@ const PsychologistDashboard: React.FC<Props> = ({psychologist}) => {
                 {selectedOption === 'Account Settings' && <AccountSettings psychologist={psychologist}/>}
                 {selectedOption === 'Set Availability' && <SetAvailability/>}
                 {selectedOption === 'Appointments' && <Appointments appointments={mockAppointments}/>}
+                {selectedOption === 'Billings' && (
+                  <Billings appointments={mockAppointments} />
+                )}
+                {selectedOption === 'Calendar' && <Calendar availabilities={dummyAvailabilities} appointments={dummyAppointments} />}
+                {selectedOption === 'Ratings' && <Ratings />}
             </div>
         </div>
     )
