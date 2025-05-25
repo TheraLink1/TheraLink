@@ -34,34 +34,64 @@ const SetAvailability: React.FC = () => {
   const weekDates = Array.from({ length: 7 }, (_, i) => startDate.add(i, 'day'));
 
   const toggleTimeSlot = (date: string, time: string) => {
-    const selectedDate = dayjs(date);
-    if (selectedDate.isBefore(today, 'day')) {
-      return; // Prevent toggling past dates
-    }
+  const selectedDate = dayjs(date);
+  if (selectedDate.isBefore(today, 'day')) {
+    return; // Prevent toggling past dates
+  }
 
-    const timeIndex = timeSlots.indexOf(time);
-    const newSlots = [
-      timeSlots[timeIndex],
-      timeSlots[timeIndex + 1],
-      timeSlots[timeIndex + 2],
-      timeSlots[timeIndex + 3],
-    ];
+  const timeIndex = timeSlots.indexOf(time);
+  if (timeIndex < 0 || timeIndex + 3 >= timeSlots.length) {
+    return; // Invalid time index or exceeds available slots
+  }
 
-    // Check if the new slots overlap with existing availability
-    const isOverlap = newSlots.some((slot) => {
-      return availability[date]?.includes(slot);
-    });
+  const newSlots = [
+    timeSlots[timeIndex],
+    timeSlots[timeIndex + 1],
+    timeSlots[timeIndex + 2],
+    timeSlots[timeIndex + 3],
+  ];
 
-    if (isOverlap || timeIndex > timeSlots.indexOf('19:00')) {
-      return; // Prevent overlapping selections or selections after 19:00
-    }
+  setAvailability((prev) => {
+    const daySlots = prev[date] || [];
+    const allSelected = newSlots.every((slot) => daySlots.includes(slot));
 
-    setAvailability((prev) => {
-      const daySlots = prev[date] || [];
+    if (allSelected) {
+      // Attempting to remove the 60-minute block
+      const updatedSlots = daySlots.filter((slot) => !newSlots.includes(slot));
+
+      // Validate that the remaining slots form only complete 60-minute blocks
+      const remainingIndices = updatedSlots
+        .map((slot) => timeSlots.indexOf(slot))
+        .sort((a, b) => a - b);
+
+      let i = 0;
+      while (i < remainingIndices.length) {
+        // Check for a sequence of four consecutive indices
+        if (
+          i + 3 < remainingIndices.length &&
+          remainingIndices[i + 1] === remainingIndices[i] + 1 &&
+          remainingIndices[i + 2] === remainingIndices[i] + 2 &&
+          remainingIndices[i + 3] === remainingIndices[i] + 3
+        ) {
+          i += 4; // Valid 60-minute block found
+        } else {
+          return prev; // Invalid block detected; abort removal
+        }
+      }
+
+      return { ...prev, [date]: updatedSlots };
+    } else {
+      // Attempting to add a new 60-minute block
+      const isOverlap = newSlots.some((slot) => daySlots.includes(slot));
+      if (isOverlap || timeIndex > timeSlots.indexOf('19:00')) {
+        return prev; // Prevent overlapping selections or selections after 19:00
+      }
+
       const updatedSlots = [...new Set([...daySlots, ...newSlots])];
       return { ...prev, [date]: updatedSlots };
-    });
-  };
+    }
+  });
+};
 
   const handlePreviousWeek = () => {
     const newStartDate = startDate.subtract(7, 'day');
@@ -74,7 +104,6 @@ const SetAvailability: React.FC = () => {
   const handleNextWeek = () => {
     setStartDate((prev: dayjs.Dayjs) => prev.add(7, 'day'));
   };
-
 
   return (
     <Box
@@ -122,7 +151,13 @@ const SetAvailability: React.FC = () => {
             overflowX: 'auto',
           }}
         >
-          <table style={{ borderCollapse: 'collapse', width: '100%' }}>
+          <table
+            style={{
+              borderCollapse: 'separate',
+              borderSpacing: '10px 0',
+              width: '100%',
+            }}
+          >
             <thead>
               <tr>
                 <th style={{ width: '80px' }}></th>
@@ -143,7 +178,7 @@ const SetAvailability: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {timeSlots.map((time) => (
+              {timeSlots.map((time, timeIndex) => (
                 <tr key={time}>
                   <td
                     style={{
@@ -157,8 +192,17 @@ const SetAvailability: React.FC = () => {
                   </td>
                   {weekDates.map((date) => {
                     const dateKey = date.format('YYYY-MM-DD');
-                    const isSelected = availability[dateKey]?.includes(time);
+                    const daySlots = availability[dateKey] || [];
+                    const isSelected = daySlots.includes(time);
                     const isPast = date.isBefore(today, 'day');
+
+                    const prevTime = timeSlots[timeIndex - 1];
+                    const nextTime = timeSlots[timeIndex + 1];
+
+                    const isStart =
+                      isSelected && (!daySlots.includes(prevTime) || timeIndex === 0);
+                    const isEnd =
+                      isSelected && (!daySlots.includes(nextTime) || timeIndex === timeSlots.length - 1);
 
                     return (
                       <td
@@ -175,9 +219,12 @@ const SetAvailability: React.FC = () => {
                             : isPast
                             ? '#cccccc'
                             : '#e0e0e0',
-                          border: '1px solid #ffffff',
                           height: '20px',
                           transition: 'background-color 0.3s',
+                          position: 'relative',
+                          color: '#fff',
+                          fontSize: '12px',
+                          textAlign: 'center',
                         }}
                         onMouseEnter={(e) => {
                           if (!isPast) {
@@ -193,7 +240,14 @@ const SetAvailability: React.FC = () => {
                               : '#e0e0e0';
                           }
                         }}
-                      ></td>
+                      >
+                        {isStart && <div style={{ position: 'absolute', top: '2px', left: '2px' }}>{time}</div>}
+                        {isEnd && (
+                          <div style={{ position: 'absolute', bottom: '2px', right: '2px' }}>
+                            {timeSlots[timeIndex + 1] || '20:00'}
+                          </div>
+                        )}
+                      </td>
                     );
                   })}
                 </tr>
