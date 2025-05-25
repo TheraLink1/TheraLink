@@ -2,6 +2,7 @@ import React from 'react'
 import { useState } from 'react';
 import { Psychologist } from '../../data/psychologists';
 import AccountSettings from './AccountSettings'
+import SetAvailability from './SetAvailability';
 
 interface Props {
   psychologist: Psychologist;
@@ -9,7 +10,7 @@ interface Props {
 
 const PsychologistDashboard: React.FC<Props> = ({psychologist}) => {
     const [selectedOption, setSelectedOption] = useState<string>('Account Settings');
-    const menuItems = ['Account Settings', 'Set Availability', 'Appointments', 'Billings', 'Location', 'Calendar', 'Ratings'];
+    const menuItems = ['Account Settings', 'Set Availability', 'Appointments', 'Billings', 'Calendar', 'Ratings'];
     return (
         <div style={{display: 'flex', minHeight: '100vh'}}>
             <div style={{
@@ -37,8 +38,9 @@ const PsychologistDashboard: React.FC<Props> = ({psychologist}) => {
                 </ul>
             </div>
 
-            <div style={{flex: 1, padding: '20px'}}>
+            <div style={{flex: 1, padding: '20px' ,marginTop: '-20px', backgroundColor: '#ffffff'}}>
                 {selectedOption === 'Account Settings' && <AccountSettings psychologist={psychologist}/>}
+                {selectedOption === 'Set Availability' && <SetAvailability/>}
             </div>
         </div>
     )
