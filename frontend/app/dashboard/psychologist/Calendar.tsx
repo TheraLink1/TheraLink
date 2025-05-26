@@ -27,12 +27,17 @@ const generateTimeSlots = () => {
 
 const timeSlots = generateTimeSlots();
 
-const expandTimeBlocks = (entries: { date: string; start_hour: string }[]) => {
-  const result: Record<string, string[]> = {};
-  entries.forEach(({ date, start_hour }) => {
+const expandTimeBlocks = (
+  entries: { date: string; start_hour: string; patientName?: string }[]
+) => {
+  const result: Record<string, { time: string; patientName?: string }[]> = {};
+  entries.forEach(({ date, start_hour, patientName }) => {
     const startIndex = timeSlots.indexOf(start_hour);
     if (startIndex !== -1 && startIndex + 3 < timeSlots.length) {
-      const block = timeSlots.slice(startIndex, startIndex + 4);
+      const block = timeSlots.slice(startIndex, startIndex + 4).map((time, idx) => ({
+        time,
+        patientName: idx === 1 ? patientName : undefined, // Assign patientName to the second tile
+      }));
       if (!result[date]) {
         result[date] = [];
       }
@@ -44,12 +49,12 @@ const expandTimeBlocks = (entries: { date: string; start_hour: string }[]) => {
 
 interface CalendarProps {
   availabilities: { date: string; start_hour: string }[];
-  appointments: { date: string; start_hour: string }[];
+  appointments: { date: string; start_hour: string, patientName: string}[];
 }
 
 const Calendar: React.FC<CalendarProps> = ({ availabilities, appointments }) => {
-  const [availabilitiesExpanded, setAvailabilitiesExpanded] = useState<Record<string, string[]>>({});
-  const [appointmentsExpanded, setAppointmentsExpanded] = useState<Record<string, string[]>>({});
+  const [availabilitiesExpanded, setAvailabilitiesExpanded] = useState<Record<string, { time: string; patientName?: string }[]>>({});
+  const [appointmentsExpanded, setAppointmentsExpanded] = useState<Record<string, { time: string; patientName?: string }[]>>({});
 
   useEffect(() => {
     setAvailabilitiesExpanded(expandTimeBlocks(availabilities));
@@ -153,64 +158,77 @@ const Calendar: React.FC<CalendarProps> = ({ availabilities, appointments }) => 
                 <tr key={time}>
                   <td>{time}</td>
                   {weekDates.map((date) => {
-                  const dateKey = date.format('YYYY-MM-DD');
-                  const availTimes = availabilitiesExpanded[dateKey] || [];
-                  const apptTimes = appointmentsExpanded[dateKey] || [];
+                    const dateKey = date.format('YYYY-MM-DD');
+                    const availTimes = availabilitiesExpanded[dateKey] || [];
+                    const apptTimes = appointmentsExpanded[dateKey] || [];
 
-                  const isAvailable = availTimes.includes(time);
-                  const isAppointment = apptTimes.includes(time);
-                  const isPast = date.isBefore(today, 'day');
+                    const isAvailable = availTimes.some((entry) => entry.time === time);
+                    const apptEntry = apptTimes.find((entry) => entry.time === time);
+                    const isAppointment = !!apptEntry;
+                    const isPast = date.isBefore(today, 'day');
 
-                  let backgroundColor = isPast ? '#cccccc' : '#e0e0e0';
-                  if (isAvailable) backgroundColor = primaryColor;
-                  if (isAppointment) backgroundColor = appointmentColor;
+                    let backgroundColor = isPast ? '#cccccc' : '#e0e0e0';
+                    if (isAvailable) backgroundColor = primaryColor;
+                    if (isAppointment) backgroundColor = appointmentColor;
 
-                  // Determine if this is the start or end of a 4-slot block
-                  const isBlockStart = timeIndex % 4 === 0;
-                  const isBlockEnd = timeIndex % 4 === 3;
+                    // Determine if this is the start or end of a 4-slot block
+                    const isBlockStart = timeIndex % 4 === 0;
+                    const isBlockEnd = timeIndex % 4 === 3;
 
-                  // Determine if the current time is part of a block
-                  const isInBlock = isAvailable || isAppointment;
+                    // Determine if the current time is part of a block
+                    const isInBlock = isAvailable || isAppointment;
 
-                  // Display start time on the first tile and end time on the last tile
-                  let displayTime: React.ReactNode = null;
-                  if (isInBlock && isBlockStart) {
-                    displayTime = (
-                    <span style={{ fontWeight: 'bold' }}>
-                      {time}
-                    </span>
-                    );
-                  } else if (isInBlock && isBlockEnd && timeIndex + 1 < timeSlots.length) {
-                    displayTime = (
-                    <span style={{ fontWeight: 'bold' }}>
-                      {timeSlots[timeIndex + 1]}
-                    </span>
-                    );
-                  }
-
-                  return (
-                    <td
-                    key={`${dateKey}-${time}`}
-                    style={{
-                      backgroundColor,
-                      color: '#fff',
-                      textAlign: 'center',
-                      cursor: 'default',
-                    }}
-                    title={
-                      isAvailable
-                      ? `Available at ${time}`
-                      : isAppointment
-                      ? `Appointment at ${time}`
-                      : ''
+                    // Display start time on the first tile and end time on the last tile
+                    let displayContent: React.ReactNode = null;
+                    if (isInBlock && isBlockStart) {
+                      displayContent = (
+                        <span style={{ fontWeight: 'bold' }}>
+                          {time}
+                        </span>
+                      );
+                    } else if (isInBlock && isBlockEnd && timeIndex + 1 < timeSlots.length) {
+                      displayContent = (
+                        <span style={{ fontWeight: 'bold' }}>
+                          {timeSlots[timeIndex + 1]}
+                        </span>
+                      );
                     }
-                    >
-                    {displayTime}
-                    </td>
-                  );
+
+                    // Display patient name on the second tile of the appointment block
+                    if (isAppointment && apptEntry?.patientName) {
+                      const blockStartIndex = timeSlots.indexOf(apptEntry.time) - 1;
+                      if (blockStartIndex >= 0 && timeSlots[blockStartIndex + 1] === time) {
+                        displayContent = (
+                          <span style={{ fontSize: '0.85rem' }}>
+                            {apptEntry.patientName}
+                          </span>
+                        );
+                      }
+                    }
+
+                    return (
+                      <td
+                        key={`${dateKey}-${time}`}
+                        style={{
+                          backgroundColor,
+                          color: '#fff',
+                          textAlign: 'center',
+                          cursor: 'default',
+                        }}
+                        title={
+                          isAvailable
+                            ? `Available at ${time}`
+                            : isAppointment
+                            ? `Appointment at ${time}`
+                            : ''
+                        }
+                      >
+                        {displayContent}
+                      </td>
+                    );
                   })}
                 </tr>
-                ))}
+              ))}
             </tbody>
           </table>
         </Box>

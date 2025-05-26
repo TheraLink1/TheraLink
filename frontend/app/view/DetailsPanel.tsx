@@ -137,7 +137,7 @@ const availableTimes = useMemo(() => {
           component="a"
           href={
             date && time
-              ? `/confirm-booking?date=${formattedDate}&time=${time}`
+              ? `/confirm-booking?date=${formattedDate}&time=${time}&psychologist_id=${psychologist.id}`
               : '#'
           }
           variant="contained"
@@ -147,6 +147,7 @@ const availableTimes = useMemo(() => {
         >
           Umów spotkanie na {date && time ? `${formattedDate} o ${time}` : '...'}
         </Button>
+
       </div>
     </div>
   );
