@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Typography,
@@ -14,6 +14,7 @@ const primaryColor = '#2b6369';      // Availability color
 const appointmentColor = '#8bc34a';  // Appointment color (light green)
 const hoverColor = '#224f54';
 const appointmentHoverColor = '#689f38'; // Darker green for appointment hover
+
 const generateTimeSlots = () => {
   const slots: string[] = [];
   for (let hour = 8; hour <= 19; hour++) {
@@ -23,14 +24,38 @@ const generateTimeSlots = () => {
   }
   return slots;
 };
+
 const timeSlots = generateTimeSlots();
 
+const expandTimeBlocks = (entries: { date: string; start_hour: string }[]) => {
+  const result: Record<string, string[]> = {};
+  entries.forEach(({ date, start_hour }) => {
+    const startIndex = timeSlots.indexOf(start_hour);
+    if (startIndex !== -1 && startIndex + 3 < timeSlots.length) {
+      const block = timeSlots.slice(startIndex, startIndex + 4);
+      if (!result[date]) {
+        result[date] = [];
+      }
+      result[date].push(...block);
+    }
+  });
+  return result;
+};
+
 interface CalendarProps {
-  availabilities: Record<string, string[]>;
-  appointments: Record<string, string[]>;
+  availabilities: { date: string; start_hour: string }[];
+  appointments: { date: string; start_hour: string }[];
 }
 
 const Calendar: React.FC<CalendarProps> = ({ availabilities, appointments }) => {
+  const [availabilitiesExpanded, setAvailabilitiesExpanded] = useState<Record<string, string[]>>({});
+  const [appointmentsExpanded, setAppointmentsExpanded] = useState<Record<string, string[]>>({});
+
+  useEffect(() => {
+    setAvailabilitiesExpanded(expandTimeBlocks(availabilities));
+    setAppointmentsExpanded(expandTimeBlocks(appointments));
+  }, [availabilities, appointments]);
+
   const [startDate, setStartDate] = useState(dayjs());
   const today = dayjs().startOf('day');
   const weekDates = Array.from({ length: 7 }, (_, i) => startDate.add(i, 'day'));
@@ -69,7 +94,7 @@ const Calendar: React.FC<CalendarProps> = ({ availabilities, appointments }) => 
         border="1px solid #e0e0e0"
       >
         {/* Legend */}
-        <Box display="flex" flexWrap="wrap">
+        <Box display="flex" flexWrap="wrap" mb={2}>
           <Chip label="Available" sx={{ marginRight: '5px', backgroundColor: primaryColor, color: '#fff' }} />
           <Chip label="Appointment" sx={{ backgroundColor: appointmentColor, color: '#fff' }} />
         </Box>
@@ -124,92 +149,68 @@ const Calendar: React.FC<CalendarProps> = ({ availabilities, appointments }) => 
               </tr>
             </thead>
             <tbody>
-              {timeSlots.map((time, timeIndex) => (
+                {timeSlots.map((time, timeIndex) => (
                 <tr key={time}>
-                  <td
-                    style={{
-                      textAlign: 'center',
-                      color: '#555',
-                      fontWeight: 500,
-                      borderRight: '1px solid #e0e0e0',
-                    }}
-                  >
-                    {time}
-                  </td>
+                  <td>{time}</td>
                   {weekDates.map((date) => {
-                    const dateKey = date.format('YYYY-MM-DD');
-                    const dayAvail = availabilities[dateKey] || [];
-                    const dayAppts = appointments[dateKey] || [];
-                    const isAvailable = dayAvail.includes(time);
-                    const isAppointment = dayAppts.includes(time);
-                    const isPast = date.isBefore(today, 'day');
+                  const dateKey = date.format('YYYY-MM-DD');
+                  const availTimes = availabilitiesExpanded[dateKey] || [];
+                  const apptTimes = appointmentsExpanded[dateKey] || [];
 
-                    const backgroundColor = isAppointment
-                      ? appointmentColor
-                      : isAvailable
-                      ? primaryColor
-                      : isPast
-                      ? '#cccccc'
-                      : '#e0e0e0';
+                  const isAvailable = availTimes.includes(time);
+                  const isAppointment = apptTimes.includes(time);
+                  const isPast = date.isBefore(today, 'day');
 
-                    const hoverBg = isAppointment ? appointmentHoverColor : hoverColor;
+                  let backgroundColor = isPast ? '#cccccc' : '#e0e0e0';
+                  if (isAvailable) backgroundColor = primaryColor;
+                  if (isAppointment) backgroundColor = appointmentColor;
 
-                    return (
-                      <td
-                        key={dateKey + time}
-                        style={{
-                          cursor: 'default',
-                          backgroundColor,
-                          height: '20px',
-                          transition: 'background-color 0.3s',
-                          position: 'relative',
-                          color: '#fff',
-                          fontSize: '12px',
-                          textAlign: 'center',
-                          userSelect: 'none',
-                        }}
-                        onMouseEnter={(e) => {
-                          (e.currentTarget as HTMLElement).style.backgroundColor = hoverBg;
-                        }}
-                        onMouseLeave={(e) => {
-                          (e.currentTarget as HTMLElement).style.backgroundColor = backgroundColor;
-                        }}
-                        title={
-                          isAppointment
-                            ? `Appointment at ${time}`
-                            : isAvailable
-                            ? `Available at ${time}`
-                            : undefined
-                        }
-                      >
-                        {(isAvailable || isAppointment) && (() => {
-                          const slotsArray = isAppointment ? dayAppts : dayAvail;
-                          const idx = slotsArray.indexOf(time);
-                          if (
-                            idx !== -1 &&
-                            idx + 3 < slotsArray.length &&
-                            timeSlots.indexOf(slotsArray[idx + 1]) === timeSlots.indexOf(time) + 1 &&
-                            timeSlots.indexOf(slotsArray[idx + 2]) === timeSlots.indexOf(time) + 2 &&
-                            timeSlots.indexOf(slotsArray[idx + 3]) === timeSlots.indexOf(time) + 3
-                          ) {
-                            return (
-                              <>
-                                <div style={{ position: 'absolute', top: '2px', left: '4px' }}>
-                                  {time}
-                                </div>
-                                <div style={{ position: 'absolute', bottom: '2px', right: '4px', fontSize: 10 }}>
-                                  {timeSlots[timeSlots.indexOf(time) + 4] || '20:00'}
-                                </div>
-                              </>
-                            );
-                          }
-                          return null;
-                        })()}
-                      </td>
+                  // Determine if this is the start or end of a 4-slot block
+                  const isBlockStart = timeIndex % 4 === 0;
+                  const isBlockEnd = timeIndex % 4 === 3;
+
+                  // Determine if the current time is part of a block
+                  const isInBlock = isAvailable || isAppointment;
+
+                  // Display start time on the first tile and end time on the last tile
+                  let displayTime: React.ReactNode = null;
+                  if (isInBlock && isBlockStart) {
+                    displayTime = (
+                    <span style={{ fontWeight: 'bold' }}>
+                      {time}
+                    </span>
                     );
+                  } else if (isInBlock && isBlockEnd && timeIndex + 1 < timeSlots.length) {
+                    displayTime = (
+                    <span style={{ fontWeight: 'bold' }}>
+                      {timeSlots[timeIndex + 1]}
+                    </span>
+                    );
+                  }
+
+                  return (
+                    <td
+                    key={`${dateKey}-${time}`}
+                    style={{
+                      backgroundColor,
+                      color: '#fff',
+                      textAlign: 'center',
+                      cursor: 'default',
+                    }}
+                    title={
+                      isAvailable
+                      ? `Available at ${time}`
+                      : isAppointment
+                      ? `Appointment at ${time}`
+                      : ''
+                    }
+                    >
+                    {displayTime}
+                    </td>
+                  );
                   })}
                 </tr>
-              ))}
+                ))}
             </tbody>
           </table>
         </Box>

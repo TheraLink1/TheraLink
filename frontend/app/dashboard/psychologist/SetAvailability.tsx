@@ -30,6 +30,11 @@ const SetAvailability: React.FC = () => {
   const [startDate, setStartDate] = useState(dayjs());
   const [availability, setAvailability] = useState<Record<string, string[]>>({});
 
+  const [formattedAvailability, setFormattedAvailability] = useState<
+    { date: string; start_hour: string }[]
+  >([]);
+
+
   const today = dayjs().startOf('day');
   const weekDates = Array.from({ length: 7 }, (_, i) => startDate.add(i, 'day'));
 
@@ -267,12 +272,32 @@ const SetAvailability: React.FC = () => {
               },
             }}
             onClick={() => {
-              // Handle submission logic here
-              console.log('Submitted availability:', availability);
+              const formatted = Object.entries(availability).map(([date, timeSlots]) => ({
+                date,
+                start_hour: timeSlots.length > 0 ? timeSlots[0] : '',
+              }));
+              setFormattedAvailability(formatted);
             }}
           >
             Save Availability
           </Button>
+
+          {/* For now, saving the availability just formats it for display */}
+
+          {formattedAvailability.length > 0 && (
+          <Box mt={4}>
+            <Typography variant="h6" sx={{ color: primaryColor, mb: 2 }}>
+              Selected Availability
+            </Typography>
+            <ul>
+              {formattedAvailability.map(({ date, start_hour }) => (
+                <li key={date}>
+                  {date} — {start_hour}
+                </li>
+              ))}
+            </ul>
+          </Box>
+        )}
         </Box>
       </Box>
     </Box>
