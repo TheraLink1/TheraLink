@@ -59,10 +59,6 @@ export const api = createApi({
               throw new Error(`Fetch user failed with HTTP status ${httpStatus}`);
             }
           }
-          console.log("Session:", session);
-          console.log("ID token payload:", idToken?.payload);
-          console.log("UserRole:", userRole);
-          console.log("Initial fetch status:", userDetailsResponse);
           return {
             data: {
               cognitoInfo: { ...user },
