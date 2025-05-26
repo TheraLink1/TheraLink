@@ -76,17 +76,20 @@ const PsychologistDashboard: React.FC<Props> = ({psychologist}) => {
       }
     ];
 
-    const dummyAvailabilities = {
-  '2025-05-25': ['08:00', '08:15', '08:30', '08:45', '10:00', '10:15', '10:30', '10:45'],
-  '2025-05-26': ['09:00', '09:15', '09:30', '09:45'],
+    const dummyAvailabilities = [
+  { date: '2025-05-25', start_hour: '08:00' },
+  { date: '2025-05-25', start_hour: '10:00' },
+  { date: '2025-05-26', start_hour: '09:00' },
   // ...
-};
+];
 
-const dummyAppointments = {
-  '2025-05-25': ['10:00', '10:15', '10:30', '10:45'],
-  '2025-05-27': ['08:00', '08:15', '08:30', '08:45'],
+const dummyAppointments = [
+  { date: '2025-05-25', start_hour: '10:00' },
+  { date: '2025-05-27', start_hour: '08:00' },
   // ...
-};
+];
+
+
 
     const [selectedOption, setSelectedOption] = useState<string>('Account Settings');
     const menuItems = ['Account Settings', 'Set Availability', 'Appointments', 'Billings', 'Calendar', 'Ratings'];
