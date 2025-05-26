@@ -84,10 +84,11 @@ const PsychologistDashboard: React.FC<Props> = ({psychologist}) => {
 ];
 
 const dummyAppointments = [
-  { date: '2025-05-25', start_hour: '10:00' },
-  { date: '2025-05-27', start_hour: '08:00' },
+  { date: '2025-05-25', start_hour: '10:00', patientName: 'Anna Kowalska' },
+  { date: '2025-05-27', start_hour: '08:00', patientName: 'Marek Nowak' },
   // ...
 ];
+
 
 
 

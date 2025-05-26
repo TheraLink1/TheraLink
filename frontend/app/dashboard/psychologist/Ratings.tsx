@@ -9,7 +9,6 @@ interface RatingData {
 }
 
 const Ratings = () => {
-  // Mock data: client reviews
   const reviews: RatingData[] = [
     { clientName: 'Anna Kowalska', rating: 5, reviewDate: '2025-05-20' },
     { clientName: 'Marek Nowak', rating: 4.5, reviewDate: '2025-05-18' },
@@ -19,8 +18,19 @@ const Ratings = () => {
   ];
 
   return (
-    <Box sx={{ width: '100%', maxWidth: 600, margin: '0 auto', padding: 2 }}>
-      <Typography variant="h6" gutterBottom>
+    <Box
+      sx={{
+        width: '100%',
+        maxWidth: 600,
+        margin: '0 auto',
+        padding: 2,
+        backgroundColor: '#ffffff',
+        borderRadius: '10px',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+        border: '1px solid #e0e0e0',
+      }}
+    >
+      <Typography variant="h6" gutterBottom sx={{ color: '#2b6369' }}>
         Client Reviews
       </Typography>
       {reviews.map((review, index) => (
@@ -34,7 +44,7 @@ const Ratings = () => {
           <Typography variant="body2" color="text.secondary">
             {dayjs(review.reviewDate).format('MMMM D, YYYY')}
           </Typography>
-          <Divider sx={{ marginTop: 1 }} />
+          {index < reviews.length - 1 && <Divider sx={{ marginTop: 1 }} />}
         </Box>
       ))}
     </Box>
