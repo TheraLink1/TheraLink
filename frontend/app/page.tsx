@@ -186,6 +186,90 @@ export default function Page() {
           </Stack>
         </Container>
       </Box>
+
+      <Box sx={{ bgcolor: '#ffffff', py: 8 }}>
+        <Container maxWidth="md">
+          <Typography
+            variant="h4"
+            fontWeight="bold"
+            gutterBottom
+            sx={{ textAlign: 'center', color: '#2b6369' }}
+          >
+            Opinie użytkowników
+          </Typography>
+          <Typography
+            variant="subtitle1"
+            sx={{ textAlign: 'center', mb: 4, color: '#2b6369', opacity: 0.8 }}
+          >
+            Sprawdź, co mówią o nas inni pacjenci.
+          </Typography>
+          <Stack spacing={3}>
+            {[
+              {
+                name: 'Anna K.',
+                quote:
+                  'TheraLink pomogło mi znaleźć świetnego specjalistę w moim mieście. Cały proces był szybki i intuicyjny!',
+              },
+              {
+                name: 'Tomasz M.',
+                quote:
+                  'Cenię sobie możliwość rezerwacji wizyt online. Oszczędzam mnóstwo czasu, a aplikacja jest bardzo prosta w obsłudze.',
+              },
+              {
+                name: 'Ewelina Z.',
+                quote:
+                  'Dzięki TheraLink w końcu znalazłam lekarza, który rozumie moje potrzeby. Gorąco polecam!',
+              },
+            ].map((testimonial, index) => (
+              <Paper
+                key={index}
+                elevation={1}
+                sx={{
+                  p: 3,
+                  borderLeft: '4px solid #00bfa5',
+                  bgcolor: '#f9f9f9',
+                  borderRadius: 2,
+                }}
+              >
+                <Typography variant="body1" sx={{ fontStyle: 'italic', mb: 1 }}>
+                  “{testimonial.quote}”
+                </Typography>
+                <Typography variant="subtitle2" sx={{ fontWeight: 'bold', color: '#2b6369' }}>
+                  – {testimonial.name}
+                </Typography>
+              </Paper>
+            ))}
+          </Stack>
+        </Container>
+      </Box>
+
+      {/* Call to Action Section */}
+      <Box sx={{ bgcolor: '#e0f7fa', py: 6 }}>
+        <Container maxWidth="md" sx={{ textAlign: 'center' }}>
+          <Typography variant="h4" fontWeight="bold" gutterBottom sx={{ color: '#004d40' }}>
+            Gotowy, by zadbać o swoje zdrowie?
+          </Typography>
+          <Typography variant="subtitle1" sx={{ mb: 4, color: '#004d40', opacity: 0.9 }}>
+            Dołącz do tysięcy użytkowników, którzy już korzystają z TheraLink. Zarejestruj się i umów pierwszą wizytę już teraz!
+          </Typography>
+          <Button
+            variant="contained"
+            sx={{
+              bgcolor: '#00796b',
+              color: '#fff',
+              px: 4,
+              py: 1.5,
+              borderRadius: 2,
+              textTransform: 'none',
+              fontWeight: 'bold',
+              '&:hover': { bgcolor: '#004d40' },
+            }}
+            onClick={() => console.log('Redirect to registration')}
+          >
+            Załóż konto
+          </Button>
+        </Container>
+      </Box>
     </Box>
   );
 }

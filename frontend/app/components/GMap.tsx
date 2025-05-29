@@ -1,8 +1,7 @@
-// components/GMap.tsx
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { GoogleMap, MarkerF, useJsApiLoader } from '@react-google-maps/api';
+import { GoogleMap, MarkerF } from '@react-google-maps/api';
 import { Psychologist } from '../data/psychologists';
 
 const DARK_TEAL = '#2b6369';
@@ -15,17 +14,12 @@ interface GMapProps {
 }
 
 export default function GMap({ psychologists, selected }: GMapProps) {
-  const { isLoaded, loadError } = useJsApiLoader({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_API || '',
-    libraries: ['places'] as any,
-  });
-
   const mapRef = useRef<google.maps.Map|null>(null);
   const onLoad = (map: google.maps.Map) => { mapRef.current = map; };
 
   const [positions, setPositions] = useState<google.maps.LatLngLiteral[]>([]);
+
   useEffect(() => {
-    if (!isLoaded) return;
     const geocoder = new window.google.maps.Geocoder();
     Promise.all(
       psychologists.map(p =>
@@ -41,9 +35,8 @@ export default function GMap({ psychologists, selected }: GMapProps) {
         })
       )
     ).then(setPositions);
-  }, [isLoaded, psychologists]);
+  }, [psychologists]);
 
-  // Pan & zoom to selected if needed
   useEffect(() => {
     const map = mapRef.current;
     if (!map || positions.length === 0) return;
@@ -60,9 +53,6 @@ export default function GMap({ psychologists, selected }: GMapProps) {
     }
   }, [selected, positions, psychologists]);
 
-  if (loadError) return <p>Map load error</p>;
-  if (!isLoaded) return <p>Loading map…</p>;
-
   return (
     <GoogleMap
       onLoad={onLoad}
@@ -70,24 +60,21 @@ export default function GMap({ psychologists, selected }: GMapProps) {
       center={WARSAW}
       zoom={12}
     >
-      {positions.map((pos, i) => {
-        return (
-          <MarkerF
-            key={i}
-            position={pos}
-            onClick={() => {
-              const url = [
-                'https://www.google.com/maps/dir/?api=1',
-                `origin=My+Location`, 
-                `destination=${pos.lat},${pos.lng}`,
-                `travelmode=driving`
-              ].join('&');
-              window.open(url, '_blank');
-            }}
-            
-          />
-        );
-      })}
+      {positions.map((pos, i) => (
+        <MarkerF
+          key={i}
+          position={pos}
+          onClick={() => {
+            const url = [
+              'https://www.google.com/maps/dir/?api=1',
+              `origin=My+Location`,
+              `destination=${pos.lat},${pos.lng}`,
+              `travelmode=driving`
+            ].join('&');
+            window.open(url, '_blank');
+          }}
+        />
+      ))}
     </GoogleMap>
   );
 }
