@@ -8,6 +8,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import Map from '../components/GMap';
 
 import { Psychologist, mockPsychologists } from '../data/psychologists';
+import { MapProvider } from '../components/MapProvider';
 
 const Page: React.FC = () => {
   // Fetch auth user
@@ -58,10 +59,12 @@ const Page: React.FC = () => {
     <div style={{ display: 'flex', height: '100vh', fontFamily: 'Arial, sans-serif' }}>
       {/* Map Column */}
        <div style={{ width: '30%', backgroundColor: '#e0f7fa' }}>
+        <MapProvider>
         <Map
           psychologists={filteredPsychologists}
           selected={selected}
         />
+        </MapProvider>
       </div>
 
       {/* List Column */}
