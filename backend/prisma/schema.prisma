@@ -40,6 +40,9 @@ model Psychologist {
   locationId     Int
   location       Location      @relation(fields: [locationId], references: [id])
   appointments   Appointment[]
+  hourlyRate Int
+  Description String
+  Specialization String
 }
 
 model Location {
