@@ -6,6 +6,8 @@ import helmet from "helmet";
 import morgan from "morgan";
 import { authMiddleware } from "./middleware/authMiddleware";
 import userRoutes from "./routes/userRoutes";
+import chatRouter from "./routes/chat";  
+
 
 /* KONFIGURACJA */
 dotenv.config();
@@ -28,9 +30,8 @@ app.use(
 /* TRASY  */
 
 app.use("/clients", userRoutes);
-
 /* SERWER*/
-
+app.use('/api',chatRouter);
 const port = Number(process.env.PORT);
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

@@ -46,27 +46,26 @@ export const createClient = async (
         .json({ message: `Error retrieving tenant: ${error.message}` });
     }
   };
-  // export const updateClient = async (
-  //   req: Request,
-  //   res: Response
-  // ): Promise<void> => {
-  //   try {
-  //     const { cognitoId } = req.params;
-  //     const { firstName, email, phone } = req.body;
+  export const updateClient = async (
+    req: Request,
+    res: Response
+  ): Promise<void> => {
+    try {
+      const { cognitoId } = req.params;
+      const {  email, phoneNumber } = req.body;
   
-  //     const updateTenant = await prisma.user.update({
-  //       where: { cognitoId },
-  //       data: {
-  //         firstName,
-  //         email,
-  //         phone,
-  //       },
-  //     });
+      const updateClient = await prisma.client.update({
+        where: { cognitoId },
+        data: {
+          email,
+          phoneNumber,
+        },
+      });
   
-  //     res.json(updateTenant);
-  //   } catch (error: any) {
-  //     res
-  //       .status(500)
-  //       .json({ message: `Error updating tenant: ${error.message}` });
-  //   }
-  // };
+      res.json(updateClient);
+    } catch (error: any) {
+      res
+        .status(500)
+        .json({ message: `Error updating client: ${error.message}` });
+    }
+  };
