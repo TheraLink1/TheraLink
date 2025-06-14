@@ -6,6 +6,7 @@ import Card from './Card';
 import DetailsPanel from './DetailsPanel';
 import { AnimatePresence, motion } from 'framer-motion';
 import Map from '../components/GMap';
+import { redirect } from 'next/navigation';
 
 import { Psychologist, mockPsychologists } from '../data/psychologists';
 import { MapProvider } from '../components/MapProvider';
@@ -15,7 +16,7 @@ const Page: React.FC = () => {
   const { data: authUser } = useGetAuthUserQuery();
   if (!authUser) {
     // Redirect to sign-in page if not authenticated
-    window.location.href = '/signin';
+    redirect('/signin');
   }
 
   const searchParams = useSearchParams();

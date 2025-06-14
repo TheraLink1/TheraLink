@@ -77,17 +77,33 @@ const PsychologistDashboard: React.FC<Props> = ({psychologist}) => {
     ];
 
     const dummyAvailabilities = [
-  { date: '2025-05-25', start_hour: '08:00' },
-  { date: '2025-05-25', start_hour: '10:00' },
-  { date: '2025-05-26', start_hour: '09:00' },
-  // ...
+  { date: '2025-05-30', start_hour: '08:00' },
+  { date: '2025-05-30', start_hour: '09:00' },
+  { date: '2025-05-30', start_hour: '11:00' },
+  { date: '2025-05-31', start_hour: '10:00' },
+  { date: '2025-05-31', start_hour: '12:00' },
+  { date: '2025-06-01', start_hour: '09:00' },
+  { date: '2025-06-01', start_hour: '14:00' },
+  { date: '2025-06-02', start_hour: '08:00' },
+  { date: '2025-06-02', start_hour: '16:00' },
+  { date: '2025-06-03', start_hour: '10:00' },
+  { date: '2025-06-03', start_hour: '13:00' },
+  { date: '2025-06-04', start_hour: '11:00' },
+  { date: '2025-06-04', start_hour: '17:00' },
+  { date: '2025-06-05', start_hour: '08:00' },
+  { date: '2025-06-05', start_hour: '15:00' },
 ];
 
 const dummyAppointments = [
-  { date: '2025-05-25', start_hour: '10:00', patientName: 'Anna Kowalska' },
-  { date: '2025-05-27', start_hour: '08:00', patientName: 'Marek Nowak' },
-  // ...
+  { date: '2025-05-30', start_hour: '09:00', patientName: 'Anna Kowalska' },
+  { date: '2025-05-31', start_hour: '12:00', patientName: 'Marek Nowak' },
+  { date: '2025-06-01', start_hour: '14:00', patientName: 'Julia Nowicka' },
+  { date: '2025-06-02', start_hour: '16:00', patientName: 'Kacper Wiśniewski' },
+  { date: '2025-06-03', start_hour: '13:00', patientName: 'Natalia Wójcik' },
+  { date: '2025-06-04', start_hour: '17:00', patientName: 'Tomasz Mazur' },
+  { date: '2025-06-05', start_hour: '15:00', patientName: 'Zofia Zielińska' },
 ];
+
 
 
 
