@@ -14,6 +14,7 @@ import {
 import SearchIcon from '@mui/icons-material/Search';
 import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import {FloatingChat} from '@/components/FloatingChat';
 
 const tiles = [
   {
@@ -242,6 +243,117 @@ export default function Page() {
           </Stack>
         </Container>
       </Box>
+
+      {/* FAQ Section */}
+      <Box sx={{ bgcolor: '#f0f0f0', py: 8 }}>
+        <Container maxWidth="md">
+          <Typography
+            variant="h4"
+            fontWeight="bold"
+            gutterBottom
+            sx={{ textAlign: 'center', color: '#2b6369' }}
+          >
+            Najczęściej zadawane pytania
+          </Typography>
+          <Typography
+            variant="subtitle1"
+            sx={{ textAlign: 'center', mb: 4, color: '#2b6369', opacity: 0.8 }}
+          >
+            Odpowiedzi na pytania, które mogą Ci pomóc.
+          </Typography>
+          <Stack spacing={3}>
+            {[
+              {
+                question: 'Czy korzystanie z TheraLink jest darmowe?',
+                answer: 'Tak, wyszukiwanie lekarzy i przeglądanie profili jest całkowicie darmowe.',
+              },
+              {
+                question: 'Czy mogę odwołać umówioną wizytę?',
+                answer:
+                  'Tak, możesz anulować wizytę bezpośrednio z poziomu swojego konta, najlepiej minimum 24 godziny przed terminem.',
+              },
+              {
+                question: 'Jakie specjalizacje są dostępne?',
+                answer:
+                  'Na TheraLink znajdziesz szeroki wybór specjalistów – od internistów po psychoterapeutów i dermatologów.',
+              },
+            ].map((faq, idx) => (
+              <Paper
+                key={idx}
+                elevation={0}
+                sx={{
+                  p: 3,
+                  borderRadius: 2,
+                  bgcolor: '#ffffff',
+                  border: '1px solid #d9d9d9',
+                }}
+              >
+                <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: '#2b6369' }}>
+                  {faq.question}
+                </Typography>
+                <Typography sx={{ mt: 1, color: '#2b6369' }}>{faq.answer}</Typography>
+              </Paper>
+            ))}
+          </Stack>
+        </Container>
+      </Box>
+
+      {/* Statistics Section */}
+      <Box sx={{ bgcolor: ' #ffffff', py: 8 }}>
+        <Container maxWidth="lg">
+          <Typography
+            variant="h4"
+            fontWeight="bold"
+            gutterBottom
+            sx={{ textAlign: 'center', color: '#2b6369' }}
+          >
+            Nasze osiągnięcia w liczbach
+          </Typography>
+          <Typography
+            variant="subtitle1"
+            sx={{ textAlign: 'center', mb: 6, color: '#2b6369', opacity: 0.8 }}
+          >
+            Dziękujemy za zaufanie!
+          </Typography>
+          <Stack
+            direction={{ xs: 'column', sm: 'row' }}
+            spacing={4}
+            justifyContent="center"
+            alignItems="stretch" // Changed from "center" to "stretch"
+          >
+            {[
+              { value: '25 000+', label: 'Zarejestrowanych pacjentów' },
+              { value: '3 500+', label: 'Dostępnych specjalistów' },
+              { value: '12 000+', label: 'Umówionych wizyt' },
+            ].map((stat, index) => (
+              <Paper
+                key={index}
+                elevation={2}
+                sx={{
+                  textAlign: 'center',
+                  borderRadius: 3,
+                  flex: 1, // Ensures equal width
+                  minHeight: 160, // Optional: sets equal height baseline
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  bgcolor: '#f0fdfc',
+                  border: '2px solid #00bfa5',
+                }}
+              >
+                <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#00796b' }}>
+                  {stat.value}
+                </Typography>
+                <Typography variant="subtitle1" sx={{ color: '#004d40', mt: 1 }}>
+                  {stat.label}
+                </Typography>
+              </Paper>
+            ))}
+          </Stack>
+        </Container>
+      </Box>
+
+
 
       {/* Call to Action Section */}
       <Box sx={{ bgcolor: '#e0f7fa', py: 6 }}>

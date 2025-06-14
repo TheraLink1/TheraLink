@@ -2,12 +2,16 @@
 import StoreProvider from "@/state/redux";
 import { Authenticator } from "@aws-amplify/ui-react";
 import Auth from "./(auth)/authProvider";
+import { FloatingChat } from "@/components/FloatingChat"
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
     <StoreProvider>
       <Authenticator.Provider>
-        <Auth>{children}</Auth>
+        <Auth>
+          {children}
+          <FloatingChat />
+        </Auth>
       </Authenticator.Provider>
     </StoreProvider>
   );

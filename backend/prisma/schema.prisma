@@ -8,11 +8,13 @@ datasource db {
   url        = env("DATABASE_URL")
   extensions = [postgis]
 }
+
 enum ApplicationStatus {
   Pending
   Denied
   Approved
 }
+
 enum PaymentStatus {
   Pending
   Paid
@@ -21,37 +23,37 @@ enum PaymentStatus {
 }
 
 model Client {
-  id          Int    @id @default(autoincrement())
-  cognitoId   String @unique
-  name        String
-  email       String
-  phoneNumber String
-  history       String?
-  appointments  Appointment[]
-  payments      Payment[]
+  id           Int           @id @default(autoincrement())
+  cognitoId    String        @unique
+  name         String
+  email        String
+  phoneNumber  String
+  history      String?
+  appointments Appointment[]
+  payments     Payment[]
 }
 
 model Psychologist {
-    id          Int    @id @default(autoincrement())
-  cognitoId   String @unique
-  name        String
-  email       String
-  phoneNumber String
-  location       String
-  appointments   Appointment[]
-  hourlyRate Int
-  Description String
-  Specialization String
+  id                  Int                   @id @default(autoincrement())
+  cognitoId           String                @unique
+  name                String
+  email               String
+  phoneNumber         String
+  location            String                @default("")
+  appointments        Appointment[]
+  hourlyRate          Int
+  Description         String
+  Specialization      String
+  CalendarAppointment CalendarAppointment[]
 }
 
-
 model Appointment {
-  id              Int          @id @default(autoincrement())
+  id              Int               @id @default(autoincrement())
   clientCognitoId String
-  client          Client      @relation(fields: [clientCognitoId], references: [cognitoId])
+  client          Client            @relation(fields: [clientCognitoId], references: [cognitoId])
   psychologistId  Int
-  psychologist    Psychologist @relation(fields: [psychologistId], references: [id])
-  meetingLink     String       
+  psychologist    Psychologist      @relation(fields: [psychologistId], references: [id])
+  meetingLink     String
   date            DateTime
   Status          ApplicationStatus
   payment         Payment?
@@ -66,4 +68,15 @@ model Payment {
   paymentDate     DateTime
   isPaid          Boolean
   amount          Int
+}
+
+model CalendarAppointment {
+  id             Int          @id @default(autoincrement())
+  date           DateTime
+  startHour      String
+  patientName    String
+  psychologist   Psychologist @relation(fields: [psychologistId], references: [id])
+  psychologistId Int
+
+  @@map("appointments")
 }
