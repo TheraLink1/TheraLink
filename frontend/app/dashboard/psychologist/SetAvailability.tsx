@@ -9,6 +9,7 @@ import {
 } from '@mui/material';
 import { ArrowBack, ArrowForward } from '@mui/icons-material';
 import dayjs from 'dayjs';
+import { useCreateAvailabilityMutation, useGetAuthUserQuery } from '@/state/api';
 
 const primaryColor = '#2b6369';
 const hoverColor = '#224f54';
@@ -27,13 +28,13 @@ const generateTimeSlots = () => {
 const timeSlots = generateTimeSlots();
 
 const SetAvailability: React.FC = () => {
+  const { data: authUser } = useGetAuthUserQuery();
+  const psychologistId = authUser?.userInfo?.cognitoId;
+  console.log(psychologistId);
+  const [createAvailability, { isLoading, isSuccess, isError }] = useCreateAvailabilityMutation();
+
   const [startDate, setStartDate] = useState(dayjs());
   const [availability, setAvailability] = useState<Record<string, string[]>>({});
-
-  const [formattedAvailability, setFormattedAvailability] = useState<
-    { date: string; start_hour: string }[]
-  >([]);
-
 
   const today = dayjs().startOf('day');
   const weekDates = Array.from({ length: 7 }, (_, i) => startDate.add(i, 'day'));
@@ -108,6 +109,22 @@ const SetAvailability: React.FC = () => {
 
   const handleNextWeek = () => {
     setStartDate((prev: dayjs.Dayjs) => prev.add(7, 'day'));
+  };
+
+  const handleSave = async () => {
+    if (!psychologistId) return;
+    const entries = Object.entries(availability);
+    for (const [date, slots] of entries) {
+      for (const startHour of slots) {
+        await createAvailability({
+          psychologistId,
+          date,
+          startHour,
+          patientName: "",
+        });
+      }
+    }
+    setAvailability({});
   };
 
   return (
@@ -271,33 +288,22 @@ const SetAvailability: React.FC = () => {
                 backgroundColor: hoverColor,
               },
             }}
-            onClick={() => {
-              const formatted = Object.entries(availability).map(([date, timeSlots]) => ({
-                date,
-                start_hour: timeSlots.length > 0 ? timeSlots[0] : '',
-              }));
-              setFormattedAvailability(formatted);
-            }}
+            onClick={handleSave}
+            disabled={isLoading}
           >
             Save Availability
           </Button>
 
-          {/* For now, saving the availability just formats it for display */}
-
-          {formattedAvailability.length > 0 && (
-          <Box mt={4}>
-            <Typography variant="h6" sx={{ color: primaryColor, mb: 2 }}>
-              Selected Availability
+          {isSuccess && (
+            <Typography mt={2} color="success.main">
+              Availability saved successfully.
             </Typography>
-            <ul>
-              {formattedAvailability.map(({ date, start_hour }) => (
-                <li key={date}>
-                  {date} — {start_hour}
-                </li>
-              ))}
-            </ul>
-          </Box>
-        )}
+          )}
+          {isError && (
+            <Typography mt={2} color="error.main">
+              Error saving availability. Please try again.
+            </Typography>
+          )}
         </Box>
       </Box>
     </Box>

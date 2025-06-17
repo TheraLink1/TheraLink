@@ -1,5 +1,5 @@
-'use client';
-import { useGetAuthUserQuery } from '@/state/api';
+'use client'
+import { useGetAuthUserQuery, useGetAllPsychologistsQuery } from '@/state/api';
 import React, { useState, useMemo, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Card from './Card';
@@ -8,49 +8,61 @@ import { AnimatePresence, motion } from 'framer-motion';
 import Map from '../components/GMap';
 import { redirect } from 'next/navigation';
 
-import { Psychologist, mockPsychologists } from '../data/psychologists';
+import { Psychologist } from '../data/psychologists';
 import { MapProvider } from '../components/MapProvider';
 
 const Page: React.FC = () => {
   // Fetch auth user
   const { data: authUser } = useGetAuthUserQuery();
-  if (!authUser) {
-    // Redirect to sign-in page if not authenticated
-    redirect('/signin');
-  }
+  if (!authUser) redirect('/signin');
+
+  // Fetch all psychologists from backend
+  const { data: psychologistsData } = useGetAllPsychologistsQuery();
 
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [selected, setSelected] = useState<Psychologist | null>(null);
 
-  // Get params from URL
+  // Read params from URL
   const keywordParam = searchParams.get('keyword') || '';
   const locationParam = searchParams.get('location') || '';
 
-  // Controlled form state
+  // Inputs bind to params
   const [keyword, setKeyword] = useState(keywordParam);
   const [location, setLocation] = useState(locationParam);
 
-  // Update form fields when URL params change
+  // Sync input fields when params change (on router navigation)
   useEffect(() => {
     setKeyword(keywordParam);
     setLocation(locationParam);
   }, [keywordParam, locationParam]);
 
-  // Filter psychologists
+  // Update URL when user changes input
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (keyword) params.set('keyword', keyword);
+    if (location) params.set('location', location);
+    router.replace(`/view?${params.toString()}`);
+    // replace zamiast push (żeby nie zaśmiecać historii)
+    // możesz dać push jeśli chcesz możliwość cofania
+  }, [keyword, location]);
+
+  // Filtering
   const filteredPsychologists = useMemo(() => {
-    return mockPsychologists.filter((p) => {
+    if (!psychologistsData) return [];
+    return psychologistsData.filter((p) => {
       const matchesKeyword =
         !keyword ||
-        p.specialization.toLowerCase().includes(keyword.toLowerCase()) ||
-        p.name.toLowerCase().includes(keyword.toLowerCase());
+        (p.Specialization || '').toLowerCase().includes(keyword.toLowerCase()) ||
+        (p.name || '').toLowerCase().includes(keyword.toLowerCase());
 
       const matchesLocation =
-        !location || p.address.toLowerCase().includes(location.toLowerCase());
+        !location || (p.location || '').toLowerCase().includes(location.toLowerCase());
 
       return matchesKeyword && matchesLocation;
     });
-  }, [keyword, location]);
+  }, [keyword, location, psychologistsData]);
+
+  const [selected, setSelected] = useState<Psychologist | null>(null);
 
   const handleCardClick = (p: Psychologist) => {
     setSelected((prev) => (prev?.id === p.id ? null : p));
@@ -58,17 +70,11 @@ const Page: React.FC = () => {
 
   return (
     <div style={{ display: 'flex', height: '100vh', fontFamily: 'Arial, sans-serif' }}>
-      {/* Map Column */}
-       <div style={{ width: '30%', backgroundColor: '#e0f7fa' }}>
+      <div style={{ width: '30%', backgroundColor: '#e0f7fa' }}>
         <MapProvider>
-        <Map
-          psychologists={filteredPsychologists}
-          selected={selected}
-        />
+          <Map psychologists={filteredPsychologists} selected={selected} />
         </MapProvider>
       </div>
-
-      {/* List Column */}
       <div
         style={{
           flexGrow: 1,
@@ -112,7 +118,6 @@ const Page: React.FC = () => {
           <p>Brak wyników dla podanych filtrów.</p>
         )}
       </div>
-
       {/* Details Panel */}
       <AnimatePresence mode="wait">
         {selected && (

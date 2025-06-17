@@ -22,42 +22,14 @@ import {
 } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { format } from 'date-fns';
-
-// eksport interfejsu
-export interface Appointment {
-  id: number;
-  date: string;
-  meetingLink: string;
-  status: 'Pending' | 'Denied' | 'Approved';
-  psychologist: {
-    id: number;
-    name: string;
-    email: string;
-  };
-  payment?: {
-    amount: number;
-    isPaid: boolean;
-    paymentDate: string;
-  };
-}
-
-// Mock data: availability per psychologist.id
-const mockAvailability: Record<number, Record<string, string[]>> = {
-  // psycholog o id=1 ma dostępność 2 dni
-  1: {
-    '2025-05-20': ['09:00', '10:00', '11:00'],
-    '2025-05-21': ['14:00', '15:00'],
-  },
-  // inny psycholog
-  2: {
-    '2025-05-19': ['08:00', '12:00'],
-    '2025-05-22': ['10:00', '13:00', '16:00'],
-  },
-};
+import {
+  useGetAuthUserQuery,
+  useGetAppointmentsForClientQuery,
+  useGetAvailabilitiesForPsychologistQuery
+} from '@/state/api';
 
 const DARK_TEAL = '#2b6369';
 
-// Stylowany Card
 const StyledCard = styled(Card)({
   border: `1px solid ${DARK_TEAL}`,
   '&:hover': {
@@ -65,30 +37,54 @@ const StyledCard = styled(Card)({
   },
 });
 
-// Stylowany chip
 const StyledChip = styled(Chip)({
   borderColor: DARK_TEAL,
   color: DARK_TEAL,
 });
 
-// Stylowany tytuł
 const Title = styled(Typography)({
   color: DARK_TEAL,
   fontWeight: 600,
 });
 
-interface AppointmentHistoryProps {
-  appointments: Appointment[];
-}
+const AppointmentHistory: React.FC = () => {
+  const { data: authUser } = useGetAuthUserQuery();
+  const clientCognitoId = authUser?.userInfo?.cognitoId;
 
-const AppointmentHistory: React.FC<AppointmentHistoryProps> = ({ appointments }) => {
+  const { data: appointments = [], isLoading } = useGetAppointmentsForClientQuery(
+    clientCognitoId,
+    { skip: !clientCognitoId }
+  );
+
   const [openReschedule, setOpenReschedule] = useState(false);
-  const [selectedAppt, setSelectedAppt] = useState<Appointment | null>(null);
+  const [selectedAppt, setSelectedAppt] = useState<any>(null);
   const [pickedDate, setPickedDate] = useState<Date | null>(null);
   const [pickedTime, setPickedTime] = useState<string | null>(null);
 
-  // kiedy otwieramy dialog reschedule
-  const handleOpenReschedule = (appt: Appointment) => {
+  const { data: availabilities = [] } = useGetAvailabilitiesForPsychologistQuery(
+    selectedAppt?.psychologist?.cognitoId ?? '',
+    { skip: !selectedAppt }
+  );
+
+  const availableDates = useMemo<string[]>(() => {
+    if (!availabilities || availabilities.length === 0) return [];
+    const uniqueDates = Array.from(
+      new Set(
+        availabilities.map(avail => format(new Date(avail.date), 'yyyy-MM-dd'))
+      )
+    );
+    return uniqueDates;
+  }, [availabilities]);
+
+  const availableTimes = useMemo<string[]>(() => {
+    if (!availabilities || availabilities.length === 0 || !pickedDate) return [];
+    const selectedDateKey = format(pickedDate, 'yyyy-MM-dd');
+    return availabilities
+      .filter(avail => format(new Date(avail.date), 'yyyy-MM-dd') === selectedDateKey)
+      .map(avail => avail.startHour || avail.start_hour || avail.time); 
+  }, [availabilities, pickedDate]);
+
+  const handleOpenReschedule = (appt: any) => {
     setSelectedAppt(appt);
     setPickedDate(null);
     setPickedTime(null);
@@ -99,21 +95,7 @@ const AppointmentHistory: React.FC<AppointmentHistoryProps> = ({ appointments })
     setSelectedAppt(null);
   };
 
-  // dostępne daty dla wybranego psychologa
-  const availableDates = useMemo<string[]>(() => {
-    if (!selectedAppt) return [];
-    return Object.keys(mockAvailability[selectedAppt.psychologist.id] || {});
-  }, [selectedAppt]);
-
-  // dostępne godziny dla wybranego dnia
-  const availableTimes = useMemo<string[]>(() => {
-    if (!selectedAppt || !pickedDate) return [];
-    const key = format(pickedDate, 'yyyy-MM-dd');
-    return mockAvailability[selectedAppt.psychologist.id]?.[key] || [];
-  }, [selectedAppt, pickedDate]);
-
   const confirmReschedule = () => {
-    console.log('Rescheduling appt', selectedAppt?.id, 'to', pickedDate, pickedTime);
     handleClose();
   };
 
@@ -123,11 +105,13 @@ const AppointmentHistory: React.FC<AppointmentHistoryProps> = ({ appointments })
         <Title variant="h4" gutterBottom>
           Appointment History
         </Title>
-        {appointments.length === 0 ? (
+        {isLoading ? (
+          <Typography>Loading...</Typography>
+        ) : appointments.length === 0 ? (
           <Typography>No past appointments found.</Typography>
         ) : (
           <Stack spacing={3}>
-            {appointments.map(appt => {
+            {appointments.map((appt: any) => {
               const modifiable = appt.status === 'Pending' || appt.status === 'Approved';
               return (
                 <StyledCard key={appt.id} variant="outlined">
@@ -137,13 +121,13 @@ const AppointmentHistory: React.FC<AppointmentHistoryProps> = ({ appointments })
                         {new Date(appt.date).toLocaleString()}
                       </Typography>
                       <Divider sx={{ borderColor: DARK_TEAL }} />
-                      <Typography><strong>Psychologist:</strong> {appt.psychologist.name}</Typography>
+                      <Typography><strong>Psychologist:</strong> {appt.psychologist?.name}</Typography>
                       <Typography variant="body2" color="text.secondary">
                         <Link
-                          href={`mailto:${appt.psychologist.email}`}
+                          href={`mailto:${appt.psychologist?.email}`}
                           style={{ color: DARK_TEAL }}
                         >
-                          {appt.psychologist.email}
+                          {appt.psychologist?.email}
                         </Link>
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
@@ -240,7 +224,7 @@ const AppointmentHistory: React.FC<AppointmentHistoryProps> = ({ appointments })
                 <Box
                   sx={{
                     display: 'grid',
-                    gridTemplateColumns: `repeat(${Math.ceil(availableTimes.length/3)}, 1fr)`,
+                    gridTemplateColumns: `repeat(${Math.ceil(availableTimes.length/3) || 1}, 1fr)`,
                     gap: 1,
                     mt: 1,
                   }}

@@ -5,19 +5,16 @@ import {
   getAllPsychologists,
   updatePsychologist,
 } from "../controllers/psychologistController";
+import { authMiddleware } from "../middleware/authMiddleware";
 
 const router = express.Router();
 
-// GET one psychologist by Cognito ID
-router.get("/psychologist/:cognitoId", getPsychologist);
+router.post("/", createPsychologist);
 
-// GET all psychologists
+router.get("/:cognitoId", getPsychologist);
+
 router.get("/", getAllPsychologists);
 
-// POST a new psychologist
-router.post("/:cognitoId", createPsychologist);
-
-// PUT (update) a psychologist by Cognito ID
-router.put("/:cognitoId", updatePsychologist);
+router.put("/:cognitoId", authMiddleware(["psychologist"]), updatePsychologist);
 
 export default router;

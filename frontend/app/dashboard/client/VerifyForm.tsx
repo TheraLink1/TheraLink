@@ -69,6 +69,9 @@ const VerifyForm: React.FC = () => {
     const [description, setDescription] = useState('');
     const [idFile, setIdFile] = useState<File | null>(null);
     const [educationProofFile, setEducationProofFile] = useState<File | null>(null);
+    const [loading, setLoading] = useState(false);
+    const [success, setSuccess] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const handleFileChange =
         (setter: React.Dispatch<React.SetStateAction<File | null>>) =>
@@ -78,10 +81,39 @@ const VerifyForm: React.FC = () => {
             }
         };
 
-    const handleSubmit = (event: React.FormEvent) => {
+    const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        // Handle form submission logic here
-        console.log({ hourlyRate, description, idFile, educationProofFile });
+        setLoading(true);
+        setSuccess(false);
+        setError(null);
+
+        try {
+            const formData = new FormData();
+            formData.append('hourlyRate', hourlyRate);
+            formData.append('description', description);
+            if (idFile) formData.append('idFile', idFile);
+            if (educationProofFile) formData.append('educationProofFile', educationProofFile);
+
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/upgrade-to-psychologist`, {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to submit form');
+            }
+
+            setHourlyRate('');
+            setDescription('');
+            setIdFile(null);
+            setEducationProofFile(null);
+            setSuccess(true);
+        } catch (err: any) {
+            setError(err.message || 'An unexpected error occurred');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -107,6 +139,7 @@ const VerifyForm: React.FC = () => {
                         placeholder="Enter hourly rate"
                         required
                         style={styles.input}
+                        disabled={loading}
                     />
                 </div>
 
@@ -121,6 +154,7 @@ const VerifyForm: React.FC = () => {
                         placeholder="Enter your description"
                         required
                         style={styles.textarea}
+                        disabled={loading}
                     />
                 </div>
 
@@ -135,6 +169,7 @@ const VerifyForm: React.FC = () => {
                         accept="image/*,application/pdf"
                         required
                         style={styles.fileInput}
+                        disabled={loading}
                     />
                 </div>
 
@@ -149,16 +184,29 @@ const VerifyForm: React.FC = () => {
                         accept="image/*,application/pdf"
                         required
                         style={styles.fileInput}
+                        disabled={loading}
                     />
                 </div>
+
+                {success && (
+                    <p style={{ color: 'green', marginBottom: '10px' }}>
+                        Your profile verification request has been submitted successfully.
+                    </p>
+                )}
+                {error && (
+                    <p style={{ color: 'red', marginBottom: '10px' }}>
+                        {error}
+                    </p>
+                )}
 
                 <button
                     type="submit"
                     style={styles.button}
-                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = hoverColor)}
-                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = primaryColor)}
+                    onMouseEnter={(e) => !loading && (e.currentTarget.style.backgroundColor = hoverColor)}
+                    onMouseLeave={(e) => !loading && (e.currentTarget.style.backgroundColor = primaryColor)}
+                    disabled={loading}
                 >
-                    Submit
+                    {loading ? 'Submitting...' : 'Submit'}
                 </button>
             </form>
         </div>

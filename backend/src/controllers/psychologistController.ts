@@ -3,25 +3,34 @@ import { Request, Response } from "express";
 
 const prisma = new PrismaClient();
 
-// create Psychologist
 export const createPsychologist = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   try {
-    const { cognitoId } = req.params;
-    const {location, hourlyRate, Description, Specialization } = req.body;
+    const {
+      cognitoId,
+      name = "",
+      email = "",
+      phoneNumber = "",
+      location = "",
+      hourlyRate = 0,
+      Description = "",
+      Specialization = ""
+    } = req.body;
 
-    const existingClient = await prisma.psychologist.findUnique({
-      where: { cognitoId },
-    });
-
-    if (existingClient) {
-      res.status(400).json({ message: "Error finding client" });
+    if (!cognitoId || !email) {
+      res.status(400).json({ message: "Missing required fields" });
       return;
     }
 
-    const { name, email, phoneNumber } = existingClient;
+    const existingPsychologist = await prisma.psychologist.findUnique({
+      where: { cognitoId },
+    });
+    if (existingPsychologist) {
+      res.status(400).json({ message: "Psychologist already exists" });
+      return;
+    }
 
     const psychologist = await prisma.psychologist.create({
       data: {
@@ -42,7 +51,7 @@ export const createPsychologist = async (
   }
 };
 
-// get Psychologist (id)
+
 
 export const getPsychologist = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -64,8 +73,6 @@ export const getPsychologist = async (req: Request, res: Response): Promise<void
   }
 };
 
-// get all Psychologists
-
 export const getAllPsychologists = async (req: Request, res: Response): Promise<void> => {
   try {
     const psychologists = await prisma.psychologist.findMany();
@@ -77,25 +84,24 @@ export const getAllPsychologists = async (req: Request, res: Response): Promise<
   }
 };
 
-// update Psychologist (id)
-
 export const updatePsychologist = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   try {
     const { cognitoId } = req.params;
-    const { email, phoneNumber, location, hourlyRate, Description, Specialization } = req.body;
+    const { name, email, phoneNumber, location, hourlyRate, Description, Specialization } = req.body;
 
     const updatedPsychologist = await prisma.psychologist.update({
       where: { cognitoId },
       data: {
-        email,
-        phoneNumber,
-        location,
-        hourlyRate,
-        Description,
-        Specialization
+        ...(name && { name }),
+        ...(email && { email }),
+        ...(phoneNumber && { phoneNumber }),
+        ...(location && { location }),
+        ...(hourlyRate && { hourlyRate }),
+        ...(Description && { Description }),
+        ...(Specialization && { Specialization }),
       },
     });
 
@@ -107,13 +113,85 @@ export const updatePsychologist = async (
   }
 };
 
-// create Availabilities for Psychologist
+export const createAvailability = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { psychologistId } = req.params;
+    const { date, startHour, patientName } = req.body;
+    if (!date || !startHour || !patientName) {
+      res.status(400).json({ message: "Missing required fields" });
+      return;
+    }
+    const availability = await prisma.calendarAppointment.create({
+      data: {
+        psychologistId,
+        date: new Date(date),
+        startHour,
+        patientName,
+      },
+    });
+    res.status(201).json(availability);
+  } catch (error: any) {
+    res.status(500).json({ message: `Error creating availability: ${error.message}` });
+  }
+};
 
-// get Availabilities for Psychologist
+export const getAvailabilitiesForPsychologist = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { psychologistId } = req.params;
+    const availabilities = await prisma.calendarAppointment.findMany({
+      where: { psychologistId },
+    });
+    res.json(availabilities);
+  } catch (error: any) {
+    res.status(500).json({ message: `Error retrieving availabilities: ${error.message}` });
+  }
+};
 
-// get Availability (date, psychologistId)
+export const getAvailability = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const availability = await prisma.calendarAppointment.findUnique({
+      where: { id: Number(id) },
+    });
+    if (availability) {
+      res.json(availability);
+    } else {
+      res.status(404).json({ message: "Availability not found" });
+    }
+  } catch (error: any) {
+    res.status(500).json({ message: `Error retrieving availability: ${error.message}` });
+  }
+};
 
-// update Availability (id)
+export const updateAvailability = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const { date, startHour, patientName } = req.body;
+    const updatedAvailability = await prisma.calendarAppointment.update({
+      where: { id: Number(id) },
+      data: {
+        ...(date && { date: new Date(date) }),
+        ...(startHour && { startHour }),
+        ...(patientName && { patientName }),
+      },
+    });
+    res.json(updatedAvailability);
+  } catch (error: any) {
+    res.status(500).json({ message: `Error updating availability: ${error.message}` });
+  }
+};
 
 
 

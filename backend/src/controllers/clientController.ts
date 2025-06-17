@@ -34,7 +34,7 @@ export const createClient = async (
       const client = await prisma.client.findUnique({
         where: { cognitoId },
       });
-  
+      console.log('GET CLIENT: ', cognitoId);
       if (client) {
         res.json(client);
       } else {

@@ -12,6 +12,7 @@ import {
 } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
 import { useRouter, usePathname } from "next/navigation";
+import { fetchAuthSession } from "aws-amplify/auth";
 
 Amplify.configure({
   Auth: {
@@ -144,11 +145,29 @@ const Auth = ({ children }: { children: React.ReactNode }) => {
   const isDashboardPage =
     pathname.startsWith("/clients") || pathname.startsWith("/psychologists");
 
-  useEffect(() => {
-    if (user && isAuthPage) {
-      router.push("/");
-    }
-  }, [user, isAuthPage, router]);
+    useEffect(() => {
+      if (user && isAuthPage) {
+        const syncRole = async () => {
+          try {
+            const session = await fetchAuthSession();
+            const token = session.tokens?.idToken?.toString();
+            if (token) {
+              await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sync-role`, {
+                method: "POST",
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  "Content-Type": "application/json",
+                },
+              });
+            }
+          } catch (err) {
+            console.error("Failed to sync user role", err);
+          }
+          router.push("/");
+        };
+        syncRole();
+      }
+    }, [user, isAuthPage, router]);
 
   if (!isAuthPage && !isDashboardPage) {
     return <>{children}</>;

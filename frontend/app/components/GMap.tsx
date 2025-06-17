@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { GoogleMap, MarkerF } from '@react-google-maps/api';
-import { Psychologist } from '../data/psychologists';
+import { Psychologist } from '@/types/prismaTypes'; // ścieżka dostosowana do faktycznego typu z backendu
 
 const DARK_TEAL = '#2b6369';
 const WARSAW = { lat: 52.2297, lng: 21.0122 };
@@ -24,7 +24,8 @@ export default function GMap({ psychologists, selected }: GMapProps) {
     Promise.all(
       psychologists.map(p =>
         new Promise<google.maps.LatLngLiteral>(resolve => {
-          geocoder.geocode({ address: p.address }, (results, status) => {
+          const address = p.location || p.address || 'Warszawa';
+          geocoder.geocode({ address }, (results, status) => {
             if (status === 'OK' && results?.[0]) {
               const loc = results[0].geometry.location;
               resolve({ lat: loc.lat(), lng: loc.lng() });
