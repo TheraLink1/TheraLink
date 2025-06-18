@@ -1,5 +1,3 @@
-// Calendar.tsx
-
 'use client';
 
 import React, { useState } from 'react';
@@ -55,14 +53,12 @@ const Calendar: React.FC<CalendarProps> = ({ availabilities, appointments }) => 
     patientName?: string;
   }[]> = {};
 
-  // 1. Wrzuć appointmenty
   appointments.forEach(({ date, start_hour, patientName }) => {
     const key = toDayKey(date);
     if (!blocksByDate[key]) blocksByDate[key] = [];
     blocksByDate[key].push({ type: 'appointment', start_hour, patientName });
   });
 
-  // 2. Wrzuć dostępności, tylko jeśli w danym slocie nie ma już wizyty
   availabilities.forEach(({ date, start_hour }) => {
     const key = toDayKey(date);
     const alreadyBooked = blocksByDate[key]?.some(b => b.start_hour === start_hour && b.type === 'appointment');
@@ -72,28 +68,25 @@ const Calendar: React.FC<CalendarProps> = ({ availabilities, appointments }) => 
     }
   });
 
-  // 3. Posortuj sloty
   for (const key of Object.keys(blocksByDate)) {
     blocksByDate[key] = sortSlots(blocksByDate[key]);
   }
 
   function renderRows() {
-    const rendered: Record<string, Record<string, boolean>> = {}; // date -> time -> rendered
+    const rendered: Record<string, Record<string, boolean>> = {}; 
     return timeSlots.map((time, rowIdx) => (
       <tr key={time}>
         <td style={{ color: '#555', fontWeight: 500 }}>{time}</td>
         {weekDates.map((date) => {
           const dateKey = date.format('YYYY-MM-DD');
           rendered[dateKey] = rendered[dateKey] || {};
-          if (rendered[dateKey][time]) return null; // already spanned by earlier block
+          if (rendered[dateKey][time]) return null; 
 
           const dayBlocks = blocksByDate[dateKey] || [];
           const block = dayBlocks.find(b => b.start_hour === time);
 
           if (block) {
-            // This is the start of a block
             rendered[dateKey][time] = true;
-            // Mark next 3 slots as spanned
             for (let i = 1; i < 4; i++) {
               const nextTime = timeSlots[rowIdx + i];
               if (nextTime) rendered[dateKey][nextTime] = true;
@@ -136,12 +129,11 @@ const Calendar: React.FC<CalendarProps> = ({ availabilities, appointments }) => 
               </td>
             );
           } else if (!rendered[dateKey][time]) {
-            // Empty cell, only if not spanned
             return (
               <td key={dateKey} style={{ background: '#f0f0f0', minWidth: 80, height: 28 }} />
             );
           } else {
-            return null; // this slot is spanned by a previous rowSpan
+            return null; 
           }
         })}
       </tr>

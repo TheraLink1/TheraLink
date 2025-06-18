@@ -24,7 +24,7 @@ const ConfirmationPage = () => {
   const [description, setDescription] = useState('');
   const [snackbar, setSnackbar] = useState<{ open: boolean; success: boolean; message: string }>({ open: false, success: false, message: '' });
 
-  const { data: authUser } = useGetAuthUserQuery();
+  const { data: authUser, isLoading: userLoading } = useGetAuthUserQuery();
 
   useEffect(() => {
     if (!psychologistId) return;
@@ -39,7 +39,10 @@ const ConfirmationPage = () => {
   const [createAppointment, { isLoading }] = useCreateAppointmentMutation();
 
   const handleConfirm = async () => {
-    if (!date || !time || !psychologistId) return;
+    if (!date || !time || !psychologistId || !authUser?.userInfo?.cognitoId) {
+      setSnackbar({ open: true, success: false, message: 'Nieprawidłowy użytkownik lub brak danych.' });
+      return;
+    }
   
     // Połącz date + time w jeden string DateTime
     const fullDateTimeString = `${date}T${time}:00`;
@@ -48,7 +51,7 @@ const ConfirmationPage = () => {
       await createAppointment({
         cognitoId: authUser?.userInfo?.cognitoId,
         psychologistId: psychologistId,
-        date: fullDateTimeString,  // <-- poprawka!
+        date: fullDateTimeString, 
         patientName: authUser?.userInfo?.name || 'Pacjent',
         description,
       }).unwrap();
@@ -61,7 +64,13 @@ const ConfirmationPage = () => {
     }
   };
 
-  if (loading) return <div>Ładowanie...</div>;
+  if (loading || userLoading) return <div>Ładowanie...</div>;
+
+  const canConfirm =
+    !!psychologist &&
+    !!date &&
+    !!time &&
+    !!authUser?.userInfo?.cognitoId;
 
   return (
     <Box
@@ -122,7 +131,7 @@ const ConfirmationPage = () => {
           fullWidth
           sx={{ backgroundColor: '#2b6369', color: '#fff' }}
           onClick={handleConfirm}
-          disabled={!psychologist || !date || !time}
+          disabled={!canConfirm}
         >
           Potwierdź wizytę
         </Button>
