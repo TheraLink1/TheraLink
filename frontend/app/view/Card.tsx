@@ -4,11 +4,11 @@ import { Typography, Box, Paper } from '@mui/material';
 
 interface Psychologist {
   name: string;
-  specialization: string;
-  address: string;
-  rate: number;
-  rating: number;
-  description?: string;
+  Specialization: string;
+  location: string;
+  hourlyRate: number;
+  Description?: string;
+  rating?: number; // opcjonalnie jeśli nie ma w bazie
 }
 
 interface CardProps {
@@ -37,17 +37,17 @@ const Card: React.FC<CardProps> = ({ psychologist }) => {
           {psychologist.name}
         </Typography>
         <Typography variant="body1" sx={{ color: '#2b6369', mb: 0.5 }}>
-          {psychologist.specialization}
+          {psychologist.Specialization}
         </Typography>
         <Typography variant="body2" sx={{ color: '#2b6369', mb: 0.5 }}>
-          Adres: {psychologist.address}
+          Adres: {psychologist.location}
         </Typography>
         <Typography variant="body2" sx={{ color: '#2b6369', mb: 0.5 }}>
-          Stawka: {psychologist.rate} zł
+          Stawka: {psychologist.hourlyRate} zł
         </Typography>
-        {psychologist.description && (
+        {psychologist.Description && (
           <Typography variant="body2" sx={{ color: '#2b6369' }}>
-            {psychologist.description}
+            {psychologist.Description}
           </Typography>
         )}
       </Box>
@@ -59,7 +59,7 @@ const Card: React.FC<CardProps> = ({ psychologist }) => {
         }}
       >
         <Typography variant="body1" sx={{ color: '#2b6369', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-          {psychologist.rating} <Star sx={{ color: '#2b6369', fontSize: 18, ml: 0.5 }} />
+          {psychologist.rating ?? 5} <Star sx={{ color: '#2b6369', fontSize: 18, ml: 0.5 }} />
         </Typography>
         <Typography
           variant="caption"

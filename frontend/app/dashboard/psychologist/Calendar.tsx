@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Typography,
@@ -12,8 +12,6 @@ import dayjs from 'dayjs';
 
 const primaryColor = '#2b6369';      // Availability color
 const appointmentColor = '#8bc34a';  // Appointment color (light green)
-const hoverColor = '#224f54';
-const appointmentHoverColor = '#689f38'; // Darker green for appointment hover
 
 const generateTimeSlots = () => {
   const slots: string[] = [];
@@ -27,48 +25,125 @@ const generateTimeSlots = () => {
 
 const timeSlots = generateTimeSlots();
 
-const expandTimeBlocks = (
-  entries: { date: string; start_hour: string; patientName?: string }[]
-) => {
-  const result: Record<string, { time: string; patientName?: string }[]> = {};
-  entries.forEach(({ date, start_hour, patientName }) => {
-    const startIndex = timeSlots.indexOf(start_hour);
-    if (startIndex !== -1 && startIndex + 3 < timeSlots.length) {
-      const block = timeSlots.slice(startIndex, startIndex + 4).map((time, idx) => ({
-        time,
-        patientName: idx === 1 ? patientName : undefined, // Assign patientName to the second tile
-      }));
-      if (!result[date]) {
-        result[date] = [];
-      }
-      result[date].push(...block);
-    }
-  });
-  return result;
-};
+function toDayKey(date: string) {
+  return dayjs(date).format('YYYY-MM-DD');
+}
+
+// Sort slots by time
+function sortSlots<T extends { start_hour: string }>(slots: T[]) {
+  return slots.slice().sort((a, b) =>
+    timeSlots.indexOf(a.start_hour) - timeSlots.indexOf(b.start_hour)
+  );
+}
 
 interface CalendarProps {
   availabilities: { date: string; start_hour: string }[];
-  appointments: { date: string; start_hour: string, patientName: string}[];
+  appointments: { date: string; start_hour: string; patientName: string }[];
 }
 
 const Calendar: React.FC<CalendarProps> = ({ availabilities, appointments }) => {
-  const [availabilitiesExpanded, setAvailabilitiesExpanded] = useState<Record<string, { time: string; patientName?: string }[]>>({});
-  const [appointmentsExpanded, setAppointmentsExpanded] = useState<Record<string, { time: string; patientName?: string }[]>>({});
-
-  useEffect(() => {
-    setAvailabilitiesExpanded(expandTimeBlocks(availabilities));
-    setAppointmentsExpanded(expandTimeBlocks(appointments));
-  }, [availabilities, appointments]);
-
   const [startDate, setStartDate] = useState(dayjs());
   const today = dayjs().startOf('day');
   const weekDates = Array.from({ length: 7 }, (_, i) => startDate.add(i, 'day'));
 
+  // Najpierw zbuduj blocksByDate z appointmentami (one mają priorytet)
+  const blocksByDate: Record<string, {
+    type: 'availability' | 'appointment';
+    start_hour: string;
+    patientName?: string;
+  }[]> = {};
+
+  appointments.forEach(({ date, start_hour, patientName }) => {
+    const key = toDayKey(date);
+    if (!blocksByDate[key]) blocksByDate[key] = [];
+    blocksByDate[key].push({ type: 'appointment', start_hour, patientName });
+  });
+
+  availabilities.forEach(({ date, start_hour }) => {
+    const key = toDayKey(date);
+    const alreadyBooked = blocksByDate[key]?.some(b => b.start_hour === start_hour && b.type === 'appointment');
+    if (!alreadyBooked) {
+      if (!blocksByDate[key]) blocksByDate[key] = [];
+      blocksByDate[key].push({ type: 'availability', start_hour });
+    }
+  });
+
+  for (const key of Object.keys(blocksByDate)) {
+    blocksByDate[key] = sortSlots(blocksByDate[key]);
+  }
+
+  function renderRows() {
+    const rendered: Record<string, Record<string, boolean>> = {}; 
+    return timeSlots.map((time, rowIdx) => (
+      <tr key={time}>
+        <td style={{ color: '#555', fontWeight: 500 }}>{time}</td>
+        {weekDates.map((date) => {
+          const dateKey = date.format('YYYY-MM-DD');
+          rendered[dateKey] = rendered[dateKey] || {};
+          if (rendered[dateKey][time]) return null; 
+
+          const dayBlocks = blocksByDate[dateKey] || [];
+          const block = dayBlocks.find(b => b.start_hour === time);
+
+          if (block) {
+            rendered[dateKey][time] = true;
+            for (let i = 1; i < 4; i++) {
+              const nextTime = timeSlots[rowIdx + i];
+              if (nextTime) rendered[dateKey][nextTime] = true;
+            }
+            return (
+              <td
+                key={dateKey}
+                rowSpan={4}
+                style={{
+                  backgroundColor: block.type === 'appointment' ? appointmentColor : primaryColor,
+                  color: '#fff',
+                  fontWeight: 600,
+                  textAlign: 'center',
+                  verticalAlign: 'middle',
+                  fontSize: '1.05rem',
+                  borderRadius: 6,
+                  boxShadow: '0 2px 8px rgba(40,80,80,0.07)',
+                  cursor: 'pointer',
+                  minWidth: 80,
+                }}
+                title={
+                  block.type === 'appointment'
+                    ? `Appointment${block.patientName ? ` with ${block.patientName}` : ''}`
+                    : 'Available'
+                }
+              >
+                <div>
+                  {block.type === 'appointment' && (
+                    <div style={{ fontWeight: 700, fontSize: 15 }}>{block.patientName}</div>
+                  )}
+                  <div>
+                    <span>{time}</span>
+                    <span style={{ margin: '0 2px' }}>–</span>
+                    <span>{timeSlots[rowIdx + 3]}</span>
+                  </div>
+                  <div style={{ fontSize: 12, opacity: 0.7 }}>
+                    {block.type === 'appointment' ? 'Appointment' : 'Availability'}
+                  </div>
+                </div>
+              </td>
+            );
+          } else if (!rendered[dateKey][time]) {
+            return (
+              <td key={dateKey} style={{ background: '#f0f0f0', minWidth: 80, height: 28 }} />
+            );
+          } else {
+            return null; 
+          }
+        })}
+      </tr>
+    ));
+  }
+
   const handlePreviousWeek = () => {
     const newStartDate = startDate.subtract(7, 'day');
     if (newStartDate.endOf('week').isBefore(today, 'day')) {
-      return; // Prevent navigating fully into the past
+      return;
     }
     setStartDate(newStartDate);
   };
@@ -154,81 +229,7 @@ const Calendar: React.FC<CalendarProps> = ({ availabilities, appointments }) => 
               </tr>
             </thead>
             <tbody>
-                {timeSlots.map((time, timeIndex) => (
-                <tr key={time}>
-                  <td>{time}</td>
-                  {weekDates.map((date) => {
-                    const dateKey = date.format('YYYY-MM-DD');
-                    const availTimes = availabilitiesExpanded[dateKey] || [];
-                    const apptTimes = appointmentsExpanded[dateKey] || [];
-
-                    const isAvailable = availTimes.some((entry) => entry.time === time);
-                    const apptEntry = apptTimes.find((entry) => entry.time === time);
-                    const isAppointment = !!apptEntry;
-                    const isPast = date.isBefore(today, 'day');
-
-                    let backgroundColor = isPast ? '#cccccc' : '#e0e0e0';
-                    if (isAvailable) backgroundColor = primaryColor;
-                    if (isAppointment) backgroundColor = appointmentColor;
-
-                    // Determine if this is the start or end of a 4-slot block
-                    const isBlockStart = timeIndex % 4 === 0;
-                    const isBlockEnd = timeIndex % 4 === 3;
-
-                    // Determine if the current time is part of a block
-                    const isInBlock = isAvailable || isAppointment;
-
-                    // Display start time on the first tile and end time on the last tile
-                    let displayContent: React.ReactNode = null;
-                    if (isInBlock && isBlockStart) {
-                      displayContent = (
-                        <span style={{ fontWeight: 'bold' }}>
-                          {time}
-                        </span>
-                      );
-                    } else if (isInBlock && isBlockEnd && timeIndex + 1 < timeSlots.length) {
-                      displayContent = (
-                        <span style={{ fontWeight: 'bold' }}>
-                          {timeSlots[timeIndex + 1]}
-                        </span>
-                      );
-                    }
-
-                    // Display patient name on the second tile of the appointment block
-                    if (isAppointment && apptEntry?.patientName) {
-                      const blockStartIndex = timeSlots.indexOf(apptEntry.time) - 1;
-                      if (blockStartIndex >= 0 && timeSlots[blockStartIndex + 1] === time) {
-                        displayContent = (
-                          <span style={{ fontSize: '0.85rem' }}>
-                            {apptEntry.patientName}
-                          </span>
-                        );
-                      }
-                    }
-
-                    return (
-                      <td
-                        key={`${dateKey}-${time}`}
-                        style={{
-                          backgroundColor,
-                          color: '#fff',
-                          textAlign: 'center',
-                          cursor: 'default',
-                        }}
-                        title={
-                          isAvailable
-                            ? `Available at ${time}`
-                            : isAppointment
-                            ? `Appointment at ${time}`
-                            : ''
-                        }
-                      >
-                        {displayContent}
-                      </td>
-                    );
-                  })}
-                </tr>
-              ))}
+              {renderRows()}
             </tbody>
           </table>
         </Box>

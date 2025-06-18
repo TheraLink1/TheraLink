@@ -4,33 +4,23 @@ import React from 'react';
 import { useGetAuthUserQuery } from '@/state/api';
 import ClientDashboard from '../dashboard/client/ClientDashboard';
 import PsychologistDashboard from '../dashboard/psychologist/PsychologistDashboard';
-import {mockPsychologists } from '../data/psychologists';
 
 const Dashboard: React.FC = () => {
   // Fetch auth user
+  const { data: authUser, isLoading } = useGetAuthUserQuery();
 
-  const { data: authUser } = useGetAuthUserQuery();
-  if (!authUser) {
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!authUser || !authUser.userRole) {
     // Redirect to sign-in page if not authenticated
-    window.location.href = '/signin';
+    if (typeof window !== 'undefined') window.location.href = '/signin';
+    return null;
   }
 
-  // get user data
-  const authuser = authUser?authUser : null;
+  const { userRole, userInfo } = authUser;
 
-  //mock the psychologist data using the first psychologist from the list psychologists in psychologist.ts
-  const mockPsychologist = mockPsychologists.find((p) => p.id === 1) || null;
-
-  // mock the ordinary client
-  const mockUser = {
-    id: 1,
-    name: 'Andrzej Tatowski',
-    email: 'andrzejt8@gmail.com',
-    role: 'client',
-  }
-
-  const chosenPsychologist = true  //mock the user (client or psychologist)
-  
   return (
     <div
       style={{
@@ -40,18 +30,15 @@ const Dashboard: React.FC = () => {
         fontFamily: 'Arial, sans-serif',
       }}
     >
-
       <div
         style={{
           flex: 1,
           display: 'flex',
           border: '1px solid #ccc',
           borderRadius: '8px',
-          overflow: 'hidden', // ensures children don't overflow rounded corners
+          overflow: 'hidden',
         }}
       >
-
-        {/* Main content area */}
         <main
           style={{
             flex: 1,
@@ -59,14 +46,12 @@ const Dashboard: React.FC = () => {
             backgroundColor: '#ffffff',
           }}
         >
-          {chosenPsychologist ? (
-            mockPsychologist ? (
-              <PsychologistDashboard psychologist={mockPsychologist} />
-            ) : (
-              <div>No psychologist data available.</div>
-            )
+          {userRole === 'psychologist' ? (
+            <PsychologistDashboard psychologist={userInfo} />
+          ) : userRole === 'client' ? (
+            <ClientDashboard user={userInfo} />
           ) : (
-            <ClientDashboard user={mockUser} />
+            <div>No dashboard available for your role.</div>
           )}
         </main>
       </div>

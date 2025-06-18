@@ -14,11 +14,6 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
 
 
 /**
- * Model User
- * 
- */
-export type User = $Result.DefaultSelection<Prisma.$UserPayload>
-/**
  * Model Client
  * 
  */
@@ -29,11 +24,6 @@ export type Client = $Result.DefaultSelection<Prisma.$ClientPayload>
  */
 export type Psychologist = $Result.DefaultSelection<Prisma.$PsychologistPayload>
 /**
- * Model Location
- * 
- */
-export type Location = $Result.DefaultSelection<Prisma.$LocationPayload>
-/**
  * Model Appointment
  * 
  */
@@ -43,6 +33,43 @@ export type Appointment = $Result.DefaultSelection<Prisma.$AppointmentPayload>
  * 
  */
 export type Payment = $Result.DefaultSelection<Prisma.$PaymentPayload>
+/**
+ * Model CalendarAppointment
+ * 
+ */
+export type CalendarAppointment = $Result.DefaultSelection<Prisma.$CalendarAppointmentPayload>
+
+/**
+ * Enums
+ */
+export namespace $Enums {
+  export const ApplicationStatus: {
+  Pending: 'Pending',
+  Denied: 'Denied',
+  Approved: 'Approved'
+};
+
+export type ApplicationStatus = (typeof ApplicationStatus)[keyof typeof ApplicationStatus]
+
+
+export const PaymentStatus: {
+  Pending: 'Pending',
+  Paid: 'Paid',
+  PartiallyPaid: 'PartiallyPaid',
+  Overdue: 'Overdue'
+};
+
+export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
+
+}
+
+export type ApplicationStatus = $Enums.ApplicationStatus
+
+export const ApplicationStatus: typeof $Enums.ApplicationStatus
+
+export type PaymentStatus = $Enums.PaymentStatus
+
+export const PaymentStatus: typeof $Enums.PaymentStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -51,8 +78,8 @@ export type Payment = $Result.DefaultSelection<Prisma.$PaymentPayload>
  * @example
  * ```
  * const prisma = new PrismaClient()
- * // Fetch zero or more Users
- * const users = await prisma.user.findMany()
+ * // Fetch zero or more Clients
+ * const clients = await prisma.client.findMany()
  * ```
  *
  *
@@ -72,8 +99,8 @@ export class PrismaClient<
    * @example
    * ```
    * const prisma = new PrismaClient()
-   * // Fetch zero or more Users
-   * const users = await prisma.user.findMany()
+   * // Fetch zero or more Clients
+   * const clients = await prisma.client.findMany()
    * ```
    *
    *
@@ -170,16 +197,6 @@ export class PrismaClient<
   }>>
 
       /**
-   * `prisma.user`: Exposes CRUD operations for the **User** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Users
-    * const users = await prisma.user.findMany()
-    * ```
-    */
-  get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
-
-  /**
    * `prisma.client`: Exposes CRUD operations for the **Client** model.
     * Example usage:
     * ```ts
@@ -200,16 +217,6 @@ export class PrismaClient<
   get psychologist(): Prisma.PsychologistDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.location`: Exposes CRUD operations for the **Location** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Locations
-    * const locations = await prisma.location.findMany()
-    * ```
-    */
-  get location(): Prisma.LocationDelegate<ExtArgs, ClientOptions>;
-
-  /**
    * `prisma.appointment`: Exposes CRUD operations for the **Appointment** model.
     * Example usage:
     * ```ts
@@ -228,6 +235,16 @@ export class PrismaClient<
     * ```
     */
   get payment(): Prisma.PaymentDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.calendarAppointment`: Exposes CRUD operations for the **CalendarAppointment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CalendarAppointments
+    * const calendarAppointments = await prisma.calendarAppointment.findMany()
+    * ```
+    */
+  get calendarAppointment(): Prisma.CalendarAppointmentDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -668,12 +685,11 @@ export namespace Prisma {
 
 
   export const ModelName: {
-    User: 'User',
     Client: 'Client',
     Psychologist: 'Psychologist',
-    Location: 'Location',
     Appointment: 'Appointment',
-    Payment: 'Payment'
+    Payment: 'Payment',
+    CalendarAppointment: 'CalendarAppointment'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -692,84 +708,10 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "client" | "psychologist" | "location" | "appointment" | "payment"
+      modelProps: "client" | "psychologist" | "appointment" | "payment" | "calendarAppointment"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
-      User: {
-        payload: Prisma.$UserPayload<ExtArgs>
-        fields: Prisma.UserFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.UserFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.UserFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserPayload>
-          }
-          findFirst: {
-            args: Prisma.UserFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.UserFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserPayload>
-          }
-          findMany: {
-            args: Prisma.UserFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserPayload>[]
-          }
-          create: {
-            args: Prisma.UserCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserPayload>
-          }
-          createMany: {
-            args: Prisma.UserCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.UserCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserPayload>[]
-          }
-          delete: {
-            args: Prisma.UserDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserPayload>
-          }
-          update: {
-            args: Prisma.UserUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserPayload>
-          }
-          deleteMany: {
-            args: Prisma.UserDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.UserUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.UserUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserPayload>[]
-          }
-          upsert: {
-            args: Prisma.UserUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UserPayload>
-          }
-          aggregate: {
-            args: Prisma.UserAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateUser>
-          }
-          groupBy: {
-            args: Prisma.UserGroupByArgs<ExtArgs>
-            result: $Utils.Optional<UserGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.UserCountArgs<ExtArgs>
-            result: $Utils.Optional<UserCountAggregateOutputType> | number
-          }
-        }
-      }
       Client: {
         payload: Prisma.$ClientPayload<ExtArgs>
         fields: Prisma.ClientFieldRefs
@@ -915,64 +857,6 @@ export namespace Prisma {
           count: {
             args: Prisma.PsychologistCountArgs<ExtArgs>
             result: $Utils.Optional<PsychologistCountAggregateOutputType> | number
-          }
-        }
-      }
-      Location: {
-        payload: Prisma.$LocationPayload<ExtArgs>
-        fields: Prisma.LocationFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.LocationFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LocationPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.LocationFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LocationPayload>
-          }
-          findFirst: {
-            args: Prisma.LocationFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LocationPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.LocationFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LocationPayload>
-          }
-          findMany: {
-            args: Prisma.LocationFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LocationPayload>[]
-          }
-          delete: {
-            args: Prisma.LocationDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LocationPayload>
-          }
-          update: {
-            args: Prisma.LocationUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LocationPayload>
-          }
-          deleteMany: {
-            args: Prisma.LocationDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.LocationUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.LocationUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$LocationPayload>[]
-          }
-          aggregate: {
-            args: Prisma.LocationAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateLocation>
-          }
-          groupBy: {
-            args: Prisma.LocationGroupByArgs<ExtArgs>
-            result: $Utils.Optional<LocationGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.LocationCountArgs<ExtArgs>
-            result: $Utils.Optional<LocationCountAggregateOutputType> | number
           }
         }
       }
@@ -1124,6 +1008,80 @@ export namespace Prisma {
           }
         }
       }
+      CalendarAppointment: {
+        payload: Prisma.$CalendarAppointmentPayload<ExtArgs>
+        fields: Prisma.CalendarAppointmentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CalendarAppointmentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CalendarAppointmentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CalendarAppointmentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CalendarAppointmentPayload>
+          }
+          findFirst: {
+            args: Prisma.CalendarAppointmentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CalendarAppointmentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CalendarAppointmentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CalendarAppointmentPayload>
+          }
+          findMany: {
+            args: Prisma.CalendarAppointmentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CalendarAppointmentPayload>[]
+          }
+          create: {
+            args: Prisma.CalendarAppointmentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CalendarAppointmentPayload>
+          }
+          createMany: {
+            args: Prisma.CalendarAppointmentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CalendarAppointmentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CalendarAppointmentPayload>[]
+          }
+          delete: {
+            args: Prisma.CalendarAppointmentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CalendarAppointmentPayload>
+          }
+          update: {
+            args: Prisma.CalendarAppointmentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CalendarAppointmentPayload>
+          }
+          deleteMany: {
+            args: Prisma.CalendarAppointmentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CalendarAppointmentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CalendarAppointmentUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CalendarAppointmentPayload>[]
+          }
+          upsert: {
+            args: Prisma.CalendarAppointmentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CalendarAppointmentPayload>
+          }
+          aggregate: {
+            args: Prisma.CalendarAppointmentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCalendarAppointment>
+          }
+          groupBy: {
+            args: Prisma.CalendarAppointmentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CalendarAppointmentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CalendarAppointmentCountArgs<ExtArgs>
+            result: $Utils.Optional<CalendarAppointmentCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1208,12 +1166,11 @@ export namespace Prisma {
     omit?: Prisma.GlobalOmitConfig
   }
   export type GlobalOmitConfig = {
-    user?: UserOmit
     client?: ClientOmit
     psychologist?: PsychologistOmit
-    location?: LocationOmit
     appointment?: AppointmentOmit
     payment?: PaymentOmit
+    calendarAppointment?: CalendarAppointmentOmit
   }
 
   /* Types for Logging */
@@ -1349,10 +1306,12 @@ export namespace Prisma {
 
   export type PsychologistCountOutputType = {
     appointments: number
+    CalendarAppointment: number
   }
 
   export type PsychologistCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     appointments?: boolean | PsychologistCountOutputTypeCountAppointmentsArgs
+    CalendarAppointment?: boolean | PsychologistCountOutputTypeCountCalendarAppointmentArgs
   }
 
   // Custom InputTypes
@@ -1373,1200 +1332,17 @@ export namespace Prisma {
     where?: AppointmentWhereInput
   }
 
-
   /**
-   * Count Type LocationCountOutputType
+   * PsychologistCountOutputType without action
    */
-
-  export type LocationCountOutputType = {
-    psychologists: number
-  }
-
-  export type LocationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    psychologists?: boolean | LocationCountOutputTypeCountPsychologistsArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * LocationCountOutputType without action
-   */
-  export type LocationCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the LocationCountOutputType
-     */
-    select?: LocationCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * LocationCountOutputType without action
-   */
-  export type LocationCountOutputTypeCountPsychologistsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PsychologistWhereInput
+  export type PsychologistCountOutputTypeCountCalendarAppointmentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CalendarAppointmentWhereInput
   }
 
 
   /**
    * Models
    */
-
-  /**
-   * Model User
-   */
-
-  export type AggregateUser = {
-    _count: UserCountAggregateOutputType | null
-    _avg: UserAvgAggregateOutputType | null
-    _sum: UserSumAggregateOutputType | null
-    _min: UserMinAggregateOutputType | null
-    _max: UserMaxAggregateOutputType | null
-  }
-
-  export type UserAvgAggregateOutputType = {
-    id: number | null
-  }
-
-  export type UserSumAggregateOutputType = {
-    id: number | null
-  }
-
-  export type UserMinAggregateOutputType = {
-    id: number | null
-    role: string | null
-    email: string | null
-    password: string | null
-    firstName: string | null
-    lastName: string | null
-    phone: string | null
-    dateOfBirth: Date | null
-  }
-
-  export type UserMaxAggregateOutputType = {
-    id: number | null
-    role: string | null
-    email: string | null
-    password: string | null
-    firstName: string | null
-    lastName: string | null
-    phone: string | null
-    dateOfBirth: Date | null
-  }
-
-  export type UserCountAggregateOutputType = {
-    id: number
-    role: number
-    email: number
-    password: number
-    firstName: number
-    lastName: number
-    phone: number
-    dateOfBirth: number
-    _all: number
-  }
-
-
-  export type UserAvgAggregateInputType = {
-    id?: true
-  }
-
-  export type UserSumAggregateInputType = {
-    id?: true
-  }
-
-  export type UserMinAggregateInputType = {
-    id?: true
-    role?: true
-    email?: true
-    password?: true
-    firstName?: true
-    lastName?: true
-    phone?: true
-    dateOfBirth?: true
-  }
-
-  export type UserMaxAggregateInputType = {
-    id?: true
-    role?: true
-    email?: true
-    password?: true
-    firstName?: true
-    lastName?: true
-    phone?: true
-    dateOfBirth?: true
-  }
-
-  export type UserCountAggregateInputType = {
-    id?: true
-    role?: true
-    email?: true
-    password?: true
-    firstName?: true
-    lastName?: true
-    phone?: true
-    dateOfBirth?: true
-    _all?: true
-  }
-
-  export type UserAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which User to aggregate.
-     */
-    where?: UserWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Users to fetch.
-     */
-    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: UserWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Users from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Users.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned Users
-    **/
-    _count?: true | UserCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: UserAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: UserSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: UserMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: UserMaxAggregateInputType
-  }
-
-  export type GetUserAggregateType<T extends UserAggregateArgs> = {
-        [P in keyof T & keyof AggregateUser]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateUser[P]>
-      : GetScalarType<T[P], AggregateUser[P]>
-  }
-
-
-
-
-  export type UserGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: UserWhereInput
-    orderBy?: UserOrderByWithAggregationInput | UserOrderByWithAggregationInput[]
-    by: UserScalarFieldEnum[] | UserScalarFieldEnum
-    having?: UserScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: UserCountAggregateInputType | true
-    _avg?: UserAvgAggregateInputType
-    _sum?: UserSumAggregateInputType
-    _min?: UserMinAggregateInputType
-    _max?: UserMaxAggregateInputType
-  }
-
-  export type UserGroupByOutputType = {
-    id: number
-    role: string
-    email: string
-    password: string
-    firstName: string
-    lastName: string
-    phone: string
-    dateOfBirth: Date
-    _count: UserCountAggregateOutputType | null
-    _avg: UserAvgAggregateOutputType | null
-    _sum: UserSumAggregateOutputType | null
-    _min: UserMinAggregateOutputType | null
-    _max: UserMaxAggregateOutputType | null
-  }
-
-  type GetUserGroupByPayload<T extends UserGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<UserGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof UserGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], UserGroupByOutputType[P]>
-            : GetScalarType<T[P], UserGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type UserSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    role?: boolean
-    email?: boolean
-    password?: boolean
-    firstName?: boolean
-    lastName?: boolean
-    phone?: boolean
-    dateOfBirth?: boolean
-    client?: boolean | User$clientArgs<ExtArgs>
-    psychologist?: boolean | User$psychologistArgs<ExtArgs>
-  }, ExtArgs["result"]["user"]>
-
-  export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    role?: boolean
-    email?: boolean
-    password?: boolean
-    firstName?: boolean
-    lastName?: boolean
-    phone?: boolean
-    dateOfBirth?: boolean
-  }, ExtArgs["result"]["user"]>
-
-  export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    role?: boolean
-    email?: boolean
-    password?: boolean
-    firstName?: boolean
-    lastName?: boolean
-    phone?: boolean
-    dateOfBirth?: boolean
-  }, ExtArgs["result"]["user"]>
-
-  export type UserSelectScalar = {
-    id?: boolean
-    role?: boolean
-    email?: boolean
-    password?: boolean
-    firstName?: boolean
-    lastName?: boolean
-    phone?: boolean
-    dateOfBirth?: boolean
-  }
-
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "role" | "email" | "password" | "firstName" | "lastName" | "phone" | "dateOfBirth", ExtArgs["result"]["user"]>
-  export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    client?: boolean | User$clientArgs<ExtArgs>
-    psychologist?: boolean | User$psychologistArgs<ExtArgs>
-  }
-  export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type UserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-
-  export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "User"
-    objects: {
-      client: Prisma.$ClientPayload<ExtArgs> | null
-      psychologist: Prisma.$PsychologistPayload<ExtArgs> | null
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: number
-      role: string
-      email: string
-      password: string
-      firstName: string
-      lastName: string
-      phone: string
-      dateOfBirth: Date
-    }, ExtArgs["result"]["user"]>
-    composites: {}
-  }
-
-  type UserGetPayload<S extends boolean | null | undefined | UserDefaultArgs> = $Result.GetResult<Prisma.$UserPayload, S>
-
-  type UserCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<UserFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: UserCountAggregateInputType | true
-    }
-
-  export interface UserDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['User'], meta: { name: 'User' } }
-    /**
-     * Find zero or one User that matches the filter.
-     * @param {UserFindUniqueArgs} args - Arguments to find a User
-     * @example
-     * // Get one User
-     * const user = await prisma.user.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends UserFindUniqueArgs>(args: SelectSubset<T, UserFindUniqueArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one User that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {UserFindUniqueOrThrowArgs} args - Arguments to find a User
-     * @example
-     * // Get one User
-     * const user = await prisma.user.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends UserFindUniqueOrThrowArgs>(args: SelectSubset<T, UserFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first User that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {UserFindFirstArgs} args - Arguments to find a User
-     * @example
-     * // Get one User
-     * const user = await prisma.user.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends UserFindFirstArgs>(args?: SelectSubset<T, UserFindFirstArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first User that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {UserFindFirstOrThrowArgs} args - Arguments to find a User
-     * @example
-     * // Get one User
-     * const user = await prisma.user.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends UserFindFirstOrThrowArgs>(args?: SelectSubset<T, UserFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Users that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {UserFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Users
-     * const users = await prisma.user.findMany()
-     * 
-     * // Get first 10 Users
-     * const users = await prisma.user.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const userWithIdOnly = await prisma.user.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends UserFindManyArgs>(args?: SelectSubset<T, UserFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a User.
-     * @param {UserCreateArgs} args - Arguments to create a User.
-     * @example
-     * // Create one User
-     * const User = await prisma.user.create({
-     *   data: {
-     *     // ... data to create a User
-     *   }
-     * })
-     * 
-     */
-    create<T extends UserCreateArgs>(args: SelectSubset<T, UserCreateArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Users.
-     * @param {UserCreateManyArgs} args - Arguments to create many Users.
-     * @example
-     * // Create many Users
-     * const user = await prisma.user.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends UserCreateManyArgs>(args?: SelectSubset<T, UserCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Users and returns the data saved in the database.
-     * @param {UserCreateManyAndReturnArgs} args - Arguments to create many Users.
-     * @example
-     * // Create many Users
-     * const user = await prisma.user.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Users and only return the `id`
-     * const userWithIdOnly = await prisma.user.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends UserCreateManyAndReturnArgs>(args?: SelectSubset<T, UserCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a User.
-     * @param {UserDeleteArgs} args - Arguments to delete one User.
-     * @example
-     * // Delete one User
-     * const User = await prisma.user.delete({
-     *   where: {
-     *     // ... filter to delete one User
-     *   }
-     * })
-     * 
-     */
-    delete<T extends UserDeleteArgs>(args: SelectSubset<T, UserDeleteArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one User.
-     * @param {UserUpdateArgs} args - Arguments to update one User.
-     * @example
-     * // Update one User
-     * const user = await prisma.user.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends UserUpdateArgs>(args: SelectSubset<T, UserUpdateArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Users.
-     * @param {UserDeleteManyArgs} args - Arguments to filter Users to delete.
-     * @example
-     * // Delete a few Users
-     * const { count } = await prisma.user.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends UserDeleteManyArgs>(args?: SelectSubset<T, UserDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Users.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {UserUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Users
-     * const user = await prisma.user.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends UserUpdateManyArgs>(args: SelectSubset<T, UserUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Users and returns the data updated in the database.
-     * @param {UserUpdateManyAndReturnArgs} args - Arguments to update many Users.
-     * @example
-     * // Update many Users
-     * const user = await prisma.user.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Users and only return the `id`
-     * const userWithIdOnly = await prisma.user.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends UserUpdateManyAndReturnArgs>(args: SelectSubset<T, UserUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one User.
-     * @param {UserUpsertArgs} args - Arguments to update or create a User.
-     * @example
-     * // Update or create a User
-     * const user = await prisma.user.upsert({
-     *   create: {
-     *     // ... data to create a User
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the User we want to update
-     *   }
-     * })
-     */
-    upsert<T extends UserUpsertArgs>(args: SelectSubset<T, UserUpsertArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Users.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {UserCountArgs} args - Arguments to filter Users to count.
-     * @example
-     * // Count the number of Users
-     * const count = await prisma.user.count({
-     *   where: {
-     *     // ... the filter for the Users we want to count
-     *   }
-     * })
-    **/
-    count<T extends UserCountArgs>(
-      args?: Subset<T, UserCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], UserCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a User.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {UserAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends UserAggregateArgs>(args: Subset<T, UserAggregateArgs>): Prisma.PrismaPromise<GetUserAggregateType<T>>
-
-    /**
-     * Group by User.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {UserGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends UserGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: UserGroupByArgs['orderBy'] }
-        : { orderBy?: UserGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, UserGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the User model
-   */
-  readonly fields: UserFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for User.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    client<T extends User$clientArgs<ExtArgs> = {}>(args?: Subset<T, User$clientArgs<ExtArgs>>): Prisma__ClientClient<$Result.GetResult<Prisma.$ClientPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    psychologist<T extends User$psychologistArgs<ExtArgs> = {}>(args?: Subset<T, User$psychologistArgs<ExtArgs>>): Prisma__PsychologistClient<$Result.GetResult<Prisma.$PsychologistPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the User model
-   */ 
-  interface UserFieldRefs {
-    readonly id: FieldRef<"User", 'Int'>
-    readonly role: FieldRef<"User", 'String'>
-    readonly email: FieldRef<"User", 'String'>
-    readonly password: FieldRef<"User", 'String'>
-    readonly firstName: FieldRef<"User", 'String'>
-    readonly lastName: FieldRef<"User", 'String'>
-    readonly phone: FieldRef<"User", 'String'>
-    readonly dateOfBirth: FieldRef<"User", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * User findUnique
-   */
-  export type UserFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserInclude<ExtArgs> | null
-    /**
-     * Filter, which User to fetch.
-     */
-    where: UserWhereUniqueInput
-  }
-
-  /**
-   * User findUniqueOrThrow
-   */
-  export type UserFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserInclude<ExtArgs> | null
-    /**
-     * Filter, which User to fetch.
-     */
-    where: UserWhereUniqueInput
-  }
-
-  /**
-   * User findFirst
-   */
-  export type UserFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserInclude<ExtArgs> | null
-    /**
-     * Filter, which User to fetch.
-     */
-    where?: UserWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Users to fetch.
-     */
-    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Users.
-     */
-    cursor?: UserWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Users from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Users.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Users.
-     */
-    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
-  }
-
-  /**
-   * User findFirstOrThrow
-   */
-  export type UserFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserInclude<ExtArgs> | null
-    /**
-     * Filter, which User to fetch.
-     */
-    where?: UserWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Users to fetch.
-     */
-    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Users.
-     */
-    cursor?: UserWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Users from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Users.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Users.
-     */
-    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
-  }
-
-  /**
-   * User findMany
-   */
-  export type UserFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserInclude<ExtArgs> | null
-    /**
-     * Filter, which Users to fetch.
-     */
-    where?: UserWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Users to fetch.
-     */
-    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing Users.
-     */
-    cursor?: UserWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Users from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Users.
-     */
-    skip?: number
-    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
-  }
-
-  /**
-   * User create
-   */
-  export type UserCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserInclude<ExtArgs> | null
-    /**
-     * The data needed to create a User.
-     */
-    data: XOR<UserCreateInput, UserUncheckedCreateInput>
-  }
-
-  /**
-   * User createMany
-   */
-  export type UserCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many Users.
-     */
-    data: UserCreateManyInput | UserCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * User createManyAndReturn
-   */
-  export type UserCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
-    /**
-     * The data used to create many Users.
-     */
-    data: UserCreateManyInput | UserCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * User update
-   */
-  export type UserUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserInclude<ExtArgs> | null
-    /**
-     * The data needed to update a User.
-     */
-    data: XOR<UserUpdateInput, UserUncheckedUpdateInput>
-    /**
-     * Choose, which User to update.
-     */
-    where: UserWhereUniqueInput
-  }
-
-  /**
-   * User updateMany
-   */
-  export type UserUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update Users.
-     */
-    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyInput>
-    /**
-     * Filter which Users to update
-     */
-    where?: UserWhereInput
-    /**
-     * Limit how many Users to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * User updateManyAndReturn
-   */
-  export type UserUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
-    /**
-     * The data used to update Users.
-     */
-    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyInput>
-    /**
-     * Filter which Users to update
-     */
-    where?: UserWhereInput
-    /**
-     * Limit how many Users to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * User upsert
-   */
-  export type UserUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserInclude<ExtArgs> | null
-    /**
-     * The filter to search for the User to update in case it exists.
-     */
-    where: UserWhereUniqueInput
-    /**
-     * In case the User found by the `where` argument doesn't exist, create a new User with this data.
-     */
-    create: XOR<UserCreateInput, UserUncheckedCreateInput>
-    /**
-     * In case the User was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<UserUpdateInput, UserUncheckedUpdateInput>
-  }
-
-  /**
-   * User delete
-   */
-  export type UserDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserInclude<ExtArgs> | null
-    /**
-     * Filter which User to delete.
-     */
-    where: UserWhereUniqueInput
-  }
-
-  /**
-   * User deleteMany
-   */
-  export type UserDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Users to delete
-     */
-    where?: UserWhereInput
-    /**
-     * Limit how many Users to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * User.client
-   */
-  export type User$clientArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Client
-     */
-    select?: ClientSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Client
-     */
-    omit?: ClientOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ClientInclude<ExtArgs> | null
-    where?: ClientWhereInput
-  }
-
-  /**
-   * User.psychologist
-   */
-  export type User$psychologistArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Psychologist
-     */
-    select?: PsychologistSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Psychologist
-     */
-    omit?: PsychologistOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PsychologistInclude<ExtArgs> | null
-    where?: PsychologistWhereInput
-  }
-
-  /**
-   * User without action
-   */
-  export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserInclude<ExtArgs> | null
-  }
-
 
   /**
    * Model Client
@@ -2582,29 +1358,36 @@ export namespace Prisma {
 
   export type ClientAvgAggregateOutputType = {
     id: number | null
-    userId: number | null
   }
 
   export type ClientSumAggregateOutputType = {
     id: number | null
-    userId: number | null
   }
 
   export type ClientMinAggregateOutputType = {
     id: number | null
-    userId: number | null
+    cognitoId: string | null
+    name: string | null
+    email: string | null
+    phoneNumber: string | null
     history: string | null
   }
 
   export type ClientMaxAggregateOutputType = {
     id: number | null
-    userId: number | null
+    cognitoId: string | null
+    name: string | null
+    email: string | null
+    phoneNumber: string | null
     history: string | null
   }
 
   export type ClientCountAggregateOutputType = {
     id: number
-    userId: number
+    cognitoId: number
+    name: number
+    email: number
+    phoneNumber: number
     history: number
     _all: number
   }
@@ -2612,29 +1395,36 @@ export namespace Prisma {
 
   export type ClientAvgAggregateInputType = {
     id?: true
-    userId?: true
   }
 
   export type ClientSumAggregateInputType = {
     id?: true
-    userId?: true
   }
 
   export type ClientMinAggregateInputType = {
     id?: true
-    userId?: true
+    cognitoId?: true
+    name?: true
+    email?: true
+    phoneNumber?: true
     history?: true
   }
 
   export type ClientMaxAggregateInputType = {
     id?: true
-    userId?: true
+    cognitoId?: true
+    name?: true
+    email?: true
+    phoneNumber?: true
     history?: true
   }
 
   export type ClientCountAggregateInputType = {
     id?: true
-    userId?: true
+    cognitoId?: true
+    name?: true
+    email?: true
+    phoneNumber?: true
     history?: true
     _all?: true
   }
@@ -2727,7 +1517,10 @@ export namespace Prisma {
 
   export type ClientGroupByOutputType = {
     id: number
-    userId: number
+    cognitoId: string
+    name: string
+    email: string
+    phoneNumber: string
     history: string | null
     _count: ClientCountAggregateOutputType | null
     _avg: ClientAvgAggregateOutputType | null
@@ -2752,9 +1545,11 @@ export namespace Prisma {
 
   export type ClientSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    userId?: boolean
+    cognitoId?: boolean
+    name?: boolean
+    email?: boolean
+    phoneNumber?: boolean
     history?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
     appointments?: boolean | Client$appointmentsArgs<ExtArgs>
     payments?: boolean | Client$paymentsArgs<ExtArgs>
     _count?: boolean | ClientCountOutputTypeDefaultArgs<ExtArgs>
@@ -2762,48 +1557,52 @@ export namespace Prisma {
 
   export type ClientSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    userId?: boolean
+    cognitoId?: boolean
+    name?: boolean
+    email?: boolean
+    phoneNumber?: boolean
     history?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["client"]>
 
   export type ClientSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    userId?: boolean
+    cognitoId?: boolean
+    name?: boolean
+    email?: boolean
+    phoneNumber?: boolean
     history?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["client"]>
 
   export type ClientSelectScalar = {
     id?: boolean
-    userId?: boolean
+    cognitoId?: boolean
+    name?: boolean
+    email?: boolean
+    phoneNumber?: boolean
     history?: boolean
   }
 
-  export type ClientOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "history", ExtArgs["result"]["client"]>
+  export type ClientOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "cognitoId" | "name" | "email" | "phoneNumber" | "history", ExtArgs["result"]["client"]>
   export type ClientInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
     appointments?: boolean | Client$appointmentsArgs<ExtArgs>
     payments?: boolean | Client$paymentsArgs<ExtArgs>
     _count?: boolean | ClientCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type ClientIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
-  }
-  export type ClientIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
-  }
+  export type ClientIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type ClientIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $ClientPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Client"
     objects: {
-      user: Prisma.$UserPayload<ExtArgs>
       appointments: Prisma.$AppointmentPayload<ExtArgs>[]
       payments: Prisma.$PaymentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
-      userId: number
+      cognitoId: string
+      name: string
+      email: string
+      phoneNumber: string
       history: string | null
     }, ExtArgs["result"]["client"]>
     composites: {}
@@ -3199,7 +1998,6 @@ export namespace Prisma {
    */
   export interface Prisma__ClientClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     appointments<T extends Client$appointmentsArgs<ExtArgs> = {}>(args?: Subset<T, Client$appointmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppointmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     payments<T extends Client$paymentsArgs<ExtArgs> = {}>(args?: Subset<T, Client$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -3232,7 +2030,10 @@ export namespace Prisma {
    */ 
   interface ClientFieldRefs {
     readonly id: FieldRef<"Client", 'Int'>
-    readonly userId: FieldRef<"Client", 'Int'>
+    readonly cognitoId: FieldRef<"Client", 'String'>
+    readonly name: FieldRef<"Client", 'String'>
+    readonly email: FieldRef<"Client", 'String'>
+    readonly phoneNumber: FieldRef<"Client", 'String'>
     readonly history: FieldRef<"Client", 'String'>
   }
     
@@ -3483,10 +2284,6 @@ export namespace Prisma {
      */
     data: ClientCreateManyInput | ClientCreateManyInput[]
     skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ClientIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -3557,10 +2354,6 @@ export namespace Prisma {
      * Limit how many Clients to update.
      */
     limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ClientIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -3710,86 +2503,96 @@ export namespace Prisma {
 
   export type PsychologistAvgAggregateOutputType = {
     id: number | null
-    userId: number | null
-    price: Decimal | null
-    locationId: number | null
+    hourlyRate: number | null
   }
 
   export type PsychologistSumAggregateOutputType = {
     id: number | null
-    userId: number | null
-    price: Decimal | null
-    locationId: number | null
+    hourlyRate: number | null
   }
 
   export type PsychologistMinAggregateOutputType = {
     id: number | null
-    userId: number | null
-    specialization: string | null
-    price: Decimal | null
-    availability: Date | null
-    locationId: number | null
+    cognitoId: string | null
+    name: string | null
+    email: string | null
+    phoneNumber: string | null
+    location: string | null
+    hourlyRate: number | null
+    Description: string | null
+    Specialization: string | null
   }
 
   export type PsychologistMaxAggregateOutputType = {
     id: number | null
-    userId: number | null
-    specialization: string | null
-    price: Decimal | null
-    availability: Date | null
-    locationId: number | null
+    cognitoId: string | null
+    name: string | null
+    email: string | null
+    phoneNumber: string | null
+    location: string | null
+    hourlyRate: number | null
+    Description: string | null
+    Specialization: string | null
   }
 
   export type PsychologistCountAggregateOutputType = {
     id: number
-    userId: number
-    specialization: number
-    price: number
-    availability: number
-    locationId: number
+    cognitoId: number
+    name: number
+    email: number
+    phoneNumber: number
+    location: number
+    hourlyRate: number
+    Description: number
+    Specialization: number
     _all: number
   }
 
 
   export type PsychologistAvgAggregateInputType = {
     id?: true
-    userId?: true
-    price?: true
-    locationId?: true
+    hourlyRate?: true
   }
 
   export type PsychologistSumAggregateInputType = {
     id?: true
-    userId?: true
-    price?: true
-    locationId?: true
+    hourlyRate?: true
   }
 
   export type PsychologistMinAggregateInputType = {
     id?: true
-    userId?: true
-    specialization?: true
-    price?: true
-    availability?: true
-    locationId?: true
+    cognitoId?: true
+    name?: true
+    email?: true
+    phoneNumber?: true
+    location?: true
+    hourlyRate?: true
+    Description?: true
+    Specialization?: true
   }
 
   export type PsychologistMaxAggregateInputType = {
     id?: true
-    userId?: true
-    specialization?: true
-    price?: true
-    availability?: true
-    locationId?: true
+    cognitoId?: true
+    name?: true
+    email?: true
+    phoneNumber?: true
+    location?: true
+    hourlyRate?: true
+    Description?: true
+    Specialization?: true
   }
 
   export type PsychologistCountAggregateInputType = {
     id?: true
-    userId?: true
-    specialization?: true
-    price?: true
-    availability?: true
-    locationId?: true
+    cognitoId?: true
+    name?: true
+    email?: true
+    phoneNumber?: true
+    location?: true
+    hourlyRate?: true
+    Description?: true
+    Specialization?: true
     _all?: true
   }
 
@@ -3881,11 +2684,14 @@ export namespace Prisma {
 
   export type PsychologistGroupByOutputType = {
     id: number
-    userId: number
-    specialization: string
-    price: Decimal
-    availability: Date
-    locationId: number
+    cognitoId: string
+    name: string
+    email: string
+    phoneNumber: string
+    location: string
+    hourlyRate: number
+    Description: string
+    Specialization: string
     _count: PsychologistCountAggregateOutputType | null
     _avg: PsychologistAvgAggregateOutputType | null
     _sum: PsychologistSumAggregateOutputType | null
@@ -3909,78 +2715,80 @@ export namespace Prisma {
 
   export type PsychologistSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    userId?: boolean
-    specialization?: boolean
-    price?: boolean
-    availability?: boolean
-    locationId?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
-    location?: boolean | LocationDefaultArgs<ExtArgs>
+    cognitoId?: boolean
+    name?: boolean
+    email?: boolean
+    phoneNumber?: boolean
+    location?: boolean
+    hourlyRate?: boolean
+    Description?: boolean
+    Specialization?: boolean
     appointments?: boolean | Psychologist$appointmentsArgs<ExtArgs>
+    CalendarAppointment?: boolean | Psychologist$CalendarAppointmentArgs<ExtArgs>
     _count?: boolean | PsychologistCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["psychologist"]>
 
   export type PsychologistSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    userId?: boolean
-    specialization?: boolean
-    price?: boolean
-    availability?: boolean
-    locationId?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
-    location?: boolean | LocationDefaultArgs<ExtArgs>
+    cognitoId?: boolean
+    name?: boolean
+    email?: boolean
+    phoneNumber?: boolean
+    location?: boolean
+    hourlyRate?: boolean
+    Description?: boolean
+    Specialization?: boolean
   }, ExtArgs["result"]["psychologist"]>
 
   export type PsychologistSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    userId?: boolean
-    specialization?: boolean
-    price?: boolean
-    availability?: boolean
-    locationId?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
-    location?: boolean | LocationDefaultArgs<ExtArgs>
+    cognitoId?: boolean
+    name?: boolean
+    email?: boolean
+    phoneNumber?: boolean
+    location?: boolean
+    hourlyRate?: boolean
+    Description?: boolean
+    Specialization?: boolean
   }, ExtArgs["result"]["psychologist"]>
 
   export type PsychologistSelectScalar = {
     id?: boolean
-    userId?: boolean
-    specialization?: boolean
-    price?: boolean
-    availability?: boolean
-    locationId?: boolean
+    cognitoId?: boolean
+    name?: boolean
+    email?: boolean
+    phoneNumber?: boolean
+    location?: boolean
+    hourlyRate?: boolean
+    Description?: boolean
+    Specialization?: boolean
   }
 
-  export type PsychologistOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "specialization" | "price" | "availability" | "locationId", ExtArgs["result"]["psychologist"]>
+  export type PsychologistOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "cognitoId" | "name" | "email" | "phoneNumber" | "location" | "hourlyRate" | "Description" | "Specialization", ExtArgs["result"]["psychologist"]>
   export type PsychologistInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
-    location?: boolean | LocationDefaultArgs<ExtArgs>
     appointments?: boolean | Psychologist$appointmentsArgs<ExtArgs>
+    CalendarAppointment?: boolean | Psychologist$CalendarAppointmentArgs<ExtArgs>
     _count?: boolean | PsychologistCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type PsychologistIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
-    location?: boolean | LocationDefaultArgs<ExtArgs>
-  }
-  export type PsychologistIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
-    location?: boolean | LocationDefaultArgs<ExtArgs>
-  }
+  export type PsychologistIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type PsychologistIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $PsychologistPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Psychologist"
     objects: {
-      user: Prisma.$UserPayload<ExtArgs>
-      location: Prisma.$LocationPayload<ExtArgs>
       appointments: Prisma.$AppointmentPayload<ExtArgs>[]
+      CalendarAppointment: Prisma.$CalendarAppointmentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
-      userId: number
-      specialization: string
-      price: Prisma.Decimal
-      availability: Date
-      locationId: number
+      cognitoId: string
+      name: string
+      email: string
+      phoneNumber: string
+      location: string
+      hourlyRate: number
+      Description: string
+      Specialization: string
     }, ExtArgs["result"]["psychologist"]>
     composites: {}
   }
@@ -4375,9 +3183,8 @@ export namespace Prisma {
    */
   export interface Prisma__PsychologistClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    location<T extends LocationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LocationDefaultArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     appointments<T extends Psychologist$appointmentsArgs<ExtArgs> = {}>(args?: Subset<T, Psychologist$appointmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppointmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    CalendarAppointment<T extends Psychologist$CalendarAppointmentArgs<ExtArgs> = {}>(args?: Subset<T, Psychologist$CalendarAppointmentArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CalendarAppointmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4408,11 +3215,14 @@ export namespace Prisma {
    */ 
   interface PsychologistFieldRefs {
     readonly id: FieldRef<"Psychologist", 'Int'>
-    readonly userId: FieldRef<"Psychologist", 'Int'>
-    readonly specialization: FieldRef<"Psychologist", 'String'>
-    readonly price: FieldRef<"Psychologist", 'Decimal'>
-    readonly availability: FieldRef<"Psychologist", 'DateTime'>
-    readonly locationId: FieldRef<"Psychologist", 'Int'>
+    readonly cognitoId: FieldRef<"Psychologist", 'String'>
+    readonly name: FieldRef<"Psychologist", 'String'>
+    readonly email: FieldRef<"Psychologist", 'String'>
+    readonly phoneNumber: FieldRef<"Psychologist", 'String'>
+    readonly location: FieldRef<"Psychologist", 'String'>
+    readonly hourlyRate: FieldRef<"Psychologist", 'Int'>
+    readonly Description: FieldRef<"Psychologist", 'String'>
+    readonly Specialization: FieldRef<"Psychologist", 'String'>
   }
     
 
@@ -4662,10 +3472,6 @@ export namespace Prisma {
      */
     data: PsychologistCreateManyInput | PsychologistCreateManyInput[]
     skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PsychologistIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -4736,10 +3542,6 @@ export namespace Prisma {
      * Limit how many Psychologists to update.
      */
     limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PsychologistIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -4833,6 +3635,30 @@ export namespace Prisma {
   }
 
   /**
+   * Psychologist.CalendarAppointment
+   */
+  export type Psychologist$CalendarAppointmentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CalendarAppointment
+     */
+    select?: CalendarAppointmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CalendarAppointment
+     */
+    omit?: CalendarAppointmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CalendarAppointmentInclude<ExtArgs> | null
+    where?: CalendarAppointmentWhereInput
+    orderBy?: CalendarAppointmentOrderByWithRelationInput | CalendarAppointmentOrderByWithRelationInput[]
+    cursor?: CalendarAppointmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CalendarAppointmentScalarFieldEnum | CalendarAppointmentScalarFieldEnum[]
+  }
+
+  /**
    * Psychologist without action
    */
   export type PsychologistDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4852,949 +3678,6 @@ export namespace Prisma {
 
 
   /**
-   * Model Location
-   */
-
-  export type AggregateLocation = {
-    _count: LocationCountAggregateOutputType | null
-    _avg: LocationAvgAggregateOutputType | null
-    _sum: LocationSumAggregateOutputType | null
-    _min: LocationMinAggregateOutputType | null
-    _max: LocationMaxAggregateOutputType | null
-  }
-
-  export type LocationAvgAggregateOutputType = {
-    id: number | null
-  }
-
-  export type LocationSumAggregateOutputType = {
-    id: number | null
-  }
-
-  export type LocationMinAggregateOutputType = {
-    id: number | null
-    street: string | null
-    city: string | null
-    houseNumber: string | null
-    postalCode: string | null
-  }
-
-  export type LocationMaxAggregateOutputType = {
-    id: number | null
-    street: string | null
-    city: string | null
-    houseNumber: string | null
-    postalCode: string | null
-  }
-
-  export type LocationCountAggregateOutputType = {
-    id: number
-    street: number
-    city: number
-    houseNumber: number
-    postalCode: number
-    _all: number
-  }
-
-
-  export type LocationAvgAggregateInputType = {
-    id?: true
-  }
-
-  export type LocationSumAggregateInputType = {
-    id?: true
-  }
-
-  export type LocationMinAggregateInputType = {
-    id?: true
-    street?: true
-    city?: true
-    houseNumber?: true
-    postalCode?: true
-  }
-
-  export type LocationMaxAggregateInputType = {
-    id?: true
-    street?: true
-    city?: true
-    houseNumber?: true
-    postalCode?: true
-  }
-
-  export type LocationCountAggregateInputType = {
-    id?: true
-    street?: true
-    city?: true
-    houseNumber?: true
-    postalCode?: true
-    _all?: true
-  }
-
-  export type LocationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Location to aggregate.
-     */
-    where?: LocationWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Locations to fetch.
-     */
-    orderBy?: LocationOrderByWithRelationInput | LocationOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: LocationWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Locations from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Locations.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned Locations
-    **/
-    _count?: true | LocationCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: LocationAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: LocationSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: LocationMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: LocationMaxAggregateInputType
-  }
-
-  export type GetLocationAggregateType<T extends LocationAggregateArgs> = {
-        [P in keyof T & keyof AggregateLocation]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateLocation[P]>
-      : GetScalarType<T[P], AggregateLocation[P]>
-  }
-
-
-
-
-  export type LocationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: LocationWhereInput
-    orderBy?: LocationOrderByWithAggregationInput | LocationOrderByWithAggregationInput[]
-    by: LocationScalarFieldEnum[] | LocationScalarFieldEnum
-    having?: LocationScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: LocationCountAggregateInputType | true
-    _avg?: LocationAvgAggregateInputType
-    _sum?: LocationSumAggregateInputType
-    _min?: LocationMinAggregateInputType
-    _max?: LocationMaxAggregateInputType
-  }
-
-  export type LocationGroupByOutputType = {
-    id: number
-    street: string
-    city: string
-    houseNumber: string
-    postalCode: string
-    _count: LocationCountAggregateOutputType | null
-    _avg: LocationAvgAggregateOutputType | null
-    _sum: LocationSumAggregateOutputType | null
-    _min: LocationMinAggregateOutputType | null
-    _max: LocationMaxAggregateOutputType | null
-  }
-
-  type GetLocationGroupByPayload<T extends LocationGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<LocationGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof LocationGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], LocationGroupByOutputType[P]>
-            : GetScalarType<T[P], LocationGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type LocationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    street?: boolean
-    city?: boolean
-    houseNumber?: boolean
-    postalCode?: boolean
-    psychologists?: boolean | Location$psychologistsArgs<ExtArgs>
-    _count?: boolean | LocationCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["location"]>
-
-
-  export type LocationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    street?: boolean
-    city?: boolean
-    houseNumber?: boolean
-    postalCode?: boolean
-  }, ExtArgs["result"]["location"]>
-
-  export type LocationSelectScalar = {
-    id?: boolean
-    street?: boolean
-    city?: boolean
-    houseNumber?: boolean
-    postalCode?: boolean
-  }
-
-  export type LocationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "street" | "city" | "houseNumber" | "postalCode", ExtArgs["result"]["location"]>
-  export type LocationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    psychologists?: boolean | Location$psychologistsArgs<ExtArgs>
-    _count?: boolean | LocationCountOutputTypeDefaultArgs<ExtArgs>
-  }
-  export type LocationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-
-  export type $LocationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Location"
-    objects: {
-      psychologists: Prisma.$PsychologistPayload<ExtArgs>[]
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: number
-      street: string
-      city: string
-      houseNumber: string
-      postalCode: string
-    }, ExtArgs["result"]["location"]>
-    composites: {}
-  }
-
-  type LocationGetPayload<S extends boolean | null | undefined | LocationDefaultArgs> = $Result.GetResult<Prisma.$LocationPayload, S>
-
-  type LocationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<LocationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: LocationCountAggregateInputType | true
-    }
-
-  export interface LocationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Location'], meta: { name: 'Location' } }
-    /**
-     * Find zero or one Location that matches the filter.
-     * @param {LocationFindUniqueArgs} args - Arguments to find a Location
-     * @example
-     * // Get one Location
-     * const location = await prisma.location.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends LocationFindUniqueArgs>(args: SelectSubset<T, LocationFindUniqueArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Location that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {LocationFindUniqueOrThrowArgs} args - Arguments to find a Location
-     * @example
-     * // Get one Location
-     * const location = await prisma.location.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends LocationFindUniqueOrThrowArgs>(args: SelectSubset<T, LocationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Location that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {LocationFindFirstArgs} args - Arguments to find a Location
-     * @example
-     * // Get one Location
-     * const location = await prisma.location.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends LocationFindFirstArgs>(args?: SelectSubset<T, LocationFindFirstArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Location that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {LocationFindFirstOrThrowArgs} args - Arguments to find a Location
-     * @example
-     * // Get one Location
-     * const location = await prisma.location.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends LocationFindFirstOrThrowArgs>(args?: SelectSubset<T, LocationFindFirstOrThrowArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Locations that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {LocationFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Locations
-     * const locations = await prisma.location.findMany()
-     * 
-     * // Get first 10 Locations
-     * const locations = await prisma.location.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const locationWithIdOnly = await prisma.location.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends LocationFindManyArgs>(args?: SelectSubset<T, LocationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Delete a Location.
-     * @param {LocationDeleteArgs} args - Arguments to delete one Location.
-     * @example
-     * // Delete one Location
-     * const Location = await prisma.location.delete({
-     *   where: {
-     *     // ... filter to delete one Location
-     *   }
-     * })
-     * 
-     */
-    delete<T extends LocationDeleteArgs>(args: SelectSubset<T, LocationDeleteArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Location.
-     * @param {LocationUpdateArgs} args - Arguments to update one Location.
-     * @example
-     * // Update one Location
-     * const location = await prisma.location.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends LocationUpdateArgs>(args: SelectSubset<T, LocationUpdateArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Locations.
-     * @param {LocationDeleteManyArgs} args - Arguments to filter Locations to delete.
-     * @example
-     * // Delete a few Locations
-     * const { count } = await prisma.location.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends LocationDeleteManyArgs>(args?: SelectSubset<T, LocationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Locations.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {LocationUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Locations
-     * const location = await prisma.location.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends LocationUpdateManyArgs>(args: SelectSubset<T, LocationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Locations and returns the data updated in the database.
-     * @param {LocationUpdateManyAndReturnArgs} args - Arguments to update many Locations.
-     * @example
-     * // Update many Locations
-     * const location = await prisma.location.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Locations and only return the `id`
-     * const locationWithIdOnly = await prisma.location.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends LocationUpdateManyAndReturnArgs>(args: SelectSubset<T, LocationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-
-    /**
-     * Count the number of Locations.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {LocationCountArgs} args - Arguments to filter Locations to count.
-     * @example
-     * // Count the number of Locations
-     * const count = await prisma.location.count({
-     *   where: {
-     *     // ... the filter for the Locations we want to count
-     *   }
-     * })
-    **/
-    count<T extends LocationCountArgs>(
-      args?: Subset<T, LocationCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], LocationCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Location.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {LocationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends LocationAggregateArgs>(args: Subset<T, LocationAggregateArgs>): Prisma.PrismaPromise<GetLocationAggregateType<T>>
-
-    /**
-     * Group by Location.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {LocationGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends LocationGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: LocationGroupByArgs['orderBy'] }
-        : { orderBy?: LocationGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, LocationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLocationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Location model
-   */
-  readonly fields: LocationFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Location.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__LocationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    psychologists<T extends Location$psychologistsArgs<ExtArgs> = {}>(args?: Subset<T, Location$psychologistsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PsychologistPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the Location model
-   */ 
-  interface LocationFieldRefs {
-    readonly id: FieldRef<"Location", 'Int'>
-    readonly street: FieldRef<"Location", 'String'>
-    readonly city: FieldRef<"Location", 'String'>
-    readonly houseNumber: FieldRef<"Location", 'String'>
-    readonly postalCode: FieldRef<"Location", 'String'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * Location findUnique
-   */
-  export type LocationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Location
-     */
-    select?: LocationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Location
-     */
-    omit?: LocationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LocationInclude<ExtArgs> | null
-    /**
-     * Filter, which Location to fetch.
-     */
-    where: LocationWhereUniqueInput
-  }
-
-  /**
-   * Location findUniqueOrThrow
-   */
-  export type LocationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Location
-     */
-    select?: LocationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Location
-     */
-    omit?: LocationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LocationInclude<ExtArgs> | null
-    /**
-     * Filter, which Location to fetch.
-     */
-    where: LocationWhereUniqueInput
-  }
-
-  /**
-   * Location findFirst
-   */
-  export type LocationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Location
-     */
-    select?: LocationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Location
-     */
-    omit?: LocationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LocationInclude<ExtArgs> | null
-    /**
-     * Filter, which Location to fetch.
-     */
-    where?: LocationWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Locations to fetch.
-     */
-    orderBy?: LocationOrderByWithRelationInput | LocationOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Locations.
-     */
-    cursor?: LocationWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Locations from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Locations.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Locations.
-     */
-    distinct?: LocationScalarFieldEnum | LocationScalarFieldEnum[]
-  }
-
-  /**
-   * Location findFirstOrThrow
-   */
-  export type LocationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Location
-     */
-    select?: LocationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Location
-     */
-    omit?: LocationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LocationInclude<ExtArgs> | null
-    /**
-     * Filter, which Location to fetch.
-     */
-    where?: LocationWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Locations to fetch.
-     */
-    orderBy?: LocationOrderByWithRelationInput | LocationOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Locations.
-     */
-    cursor?: LocationWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Locations from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Locations.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Locations.
-     */
-    distinct?: LocationScalarFieldEnum | LocationScalarFieldEnum[]
-  }
-
-  /**
-   * Location findMany
-   */
-  export type LocationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Location
-     */
-    select?: LocationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Location
-     */
-    omit?: LocationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LocationInclude<ExtArgs> | null
-    /**
-     * Filter, which Locations to fetch.
-     */
-    where?: LocationWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Locations to fetch.
-     */
-    orderBy?: LocationOrderByWithRelationInput | LocationOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing Locations.
-     */
-    cursor?: LocationWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Locations from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Locations.
-     */
-    skip?: number
-    distinct?: LocationScalarFieldEnum | LocationScalarFieldEnum[]
-  }
-
-  /**
-   * Location update
-   */
-  export type LocationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Location
-     */
-    select?: LocationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Location
-     */
-    omit?: LocationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LocationInclude<ExtArgs> | null
-    /**
-     * The data needed to update a Location.
-     */
-    data: XOR<LocationUpdateInput, LocationUncheckedUpdateInput>
-    /**
-     * Choose, which Location to update.
-     */
-    where: LocationWhereUniqueInput
-  }
-
-  /**
-   * Location updateMany
-   */
-  export type LocationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update Locations.
-     */
-    data: XOR<LocationUpdateManyMutationInput, LocationUncheckedUpdateManyInput>
-    /**
-     * Filter which Locations to update
-     */
-    where?: LocationWhereInput
-    /**
-     * Limit how many Locations to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Location updateManyAndReturn
-   */
-  export type LocationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Location
-     */
-    select?: LocationSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Location
-     */
-    omit?: LocationOmit<ExtArgs> | null
-    /**
-     * The data used to update Locations.
-     */
-    data: XOR<LocationUpdateManyMutationInput, LocationUncheckedUpdateManyInput>
-    /**
-     * Filter which Locations to update
-     */
-    where?: LocationWhereInput
-    /**
-     * Limit how many Locations to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Location delete
-   */
-  export type LocationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Location
-     */
-    select?: LocationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Location
-     */
-    omit?: LocationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LocationInclude<ExtArgs> | null
-    /**
-     * Filter which Location to delete.
-     */
-    where: LocationWhereUniqueInput
-  }
-
-  /**
-   * Location deleteMany
-   */
-  export type LocationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Locations to delete
-     */
-    where?: LocationWhereInput
-    /**
-     * Limit how many Locations to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * Location.psychologists
-   */
-  export type Location$psychologistsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Psychologist
-     */
-    select?: PsychologistSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Psychologist
-     */
-    omit?: PsychologistOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PsychologistInclude<ExtArgs> | null
-    where?: PsychologistWhereInput
-    orderBy?: PsychologistOrderByWithRelationInput | PsychologistOrderByWithRelationInput[]
-    cursor?: PsychologistWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: PsychologistScalarFieldEnum | PsychologistScalarFieldEnum[]
-  }
-
-  /**
-   * Location without action
-   */
-  export type LocationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Location
-     */
-    select?: LocationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Location
-     */
-    omit?: LocationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LocationInclude<ExtArgs> | null
-  }
-
-
-  /**
    * Model Appointment
    */
 
@@ -5808,82 +3691,78 @@ export namespace Prisma {
 
   export type AppointmentAvgAggregateOutputType = {
     id: number | null
-    clientId: number | null
     psychologistId: number | null
   }
 
   export type AppointmentSumAggregateOutputType = {
     id: number | null
-    clientId: number | null
     psychologistId: number | null
   }
 
   export type AppointmentMinAggregateOutputType = {
     id: number | null
-    clientId: number | null
+    clientCognitoId: string | null
     psychologistId: number | null
     meetingLink: string | null
     date: Date | null
-    isConfirmed: boolean | null
+    Status: $Enums.ApplicationStatus | null
   }
 
   export type AppointmentMaxAggregateOutputType = {
     id: number | null
-    clientId: number | null
+    clientCognitoId: string | null
     psychologistId: number | null
     meetingLink: string | null
     date: Date | null
-    isConfirmed: boolean | null
+    Status: $Enums.ApplicationStatus | null
   }
 
   export type AppointmentCountAggregateOutputType = {
     id: number
-    clientId: number
+    clientCognitoId: number
     psychologistId: number
     meetingLink: number
     date: number
-    isConfirmed: number
+    Status: number
     _all: number
   }
 
 
   export type AppointmentAvgAggregateInputType = {
     id?: true
-    clientId?: true
     psychologistId?: true
   }
 
   export type AppointmentSumAggregateInputType = {
     id?: true
-    clientId?: true
     psychologistId?: true
   }
 
   export type AppointmentMinAggregateInputType = {
     id?: true
-    clientId?: true
+    clientCognitoId?: true
     psychologistId?: true
     meetingLink?: true
     date?: true
-    isConfirmed?: true
+    Status?: true
   }
 
   export type AppointmentMaxAggregateInputType = {
     id?: true
-    clientId?: true
+    clientCognitoId?: true
     psychologistId?: true
     meetingLink?: true
     date?: true
-    isConfirmed?: true
+    Status?: true
   }
 
   export type AppointmentCountAggregateInputType = {
     id?: true
-    clientId?: true
+    clientCognitoId?: true
     psychologistId?: true
     meetingLink?: true
     date?: true
-    isConfirmed?: true
+    Status?: true
     _all?: true
   }
 
@@ -5975,11 +3854,11 @@ export namespace Prisma {
 
   export type AppointmentGroupByOutputType = {
     id: number
-    clientId: number
+    clientCognitoId: string
     psychologistId: number
     meetingLink: string
     date: Date
-    isConfirmed: boolean
+    Status: $Enums.ApplicationStatus
     _count: AppointmentCountAggregateOutputType | null
     _avg: AppointmentAvgAggregateOutputType | null
     _sum: AppointmentSumAggregateOutputType | null
@@ -6003,11 +3882,11 @@ export namespace Prisma {
 
   export type AppointmentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    clientId?: boolean
+    clientCognitoId?: boolean
     psychologistId?: boolean
     meetingLink?: boolean
     date?: boolean
-    isConfirmed?: boolean
+    Status?: boolean
     client?: boolean | ClientDefaultArgs<ExtArgs>
     psychologist?: boolean | PsychologistDefaultArgs<ExtArgs>
     payment?: boolean | Appointment$paymentArgs<ExtArgs>
@@ -6015,36 +3894,36 @@ export namespace Prisma {
 
   export type AppointmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    clientId?: boolean
+    clientCognitoId?: boolean
     psychologistId?: boolean
     meetingLink?: boolean
     date?: boolean
-    isConfirmed?: boolean
+    Status?: boolean
     client?: boolean | ClientDefaultArgs<ExtArgs>
     psychologist?: boolean | PsychologistDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["appointment"]>
 
   export type AppointmentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    clientId?: boolean
+    clientCognitoId?: boolean
     psychologistId?: boolean
     meetingLink?: boolean
     date?: boolean
-    isConfirmed?: boolean
+    Status?: boolean
     client?: boolean | ClientDefaultArgs<ExtArgs>
     psychologist?: boolean | PsychologistDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["appointment"]>
 
   export type AppointmentSelectScalar = {
     id?: boolean
-    clientId?: boolean
+    clientCognitoId?: boolean
     psychologistId?: boolean
     meetingLink?: boolean
     date?: boolean
-    isConfirmed?: boolean
+    Status?: boolean
   }
 
-  export type AppointmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "clientId" | "psychologistId" | "meetingLink" | "date" | "isConfirmed", ExtArgs["result"]["appointment"]>
+  export type AppointmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "clientCognitoId" | "psychologistId" | "meetingLink" | "date" | "Status", ExtArgs["result"]["appointment"]>
   export type AppointmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     client?: boolean | ClientDefaultArgs<ExtArgs>
     psychologist?: boolean | PsychologistDefaultArgs<ExtArgs>
@@ -6068,11 +3947,11 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
-      clientId: number
+      clientCognitoId: string
       psychologistId: number
       meetingLink: string
       date: Date
-      isConfirmed: boolean
+      Status: $Enums.ApplicationStatus
     }, ExtArgs["result"]["appointment"]>
     composites: {}
   }
@@ -6500,11 +4379,11 @@ export namespace Prisma {
    */ 
   interface AppointmentFieldRefs {
     readonly id: FieldRef<"Appointment", 'Int'>
-    readonly clientId: FieldRef<"Appointment", 'Int'>
+    readonly clientCognitoId: FieldRef<"Appointment", 'String'>
     readonly psychologistId: FieldRef<"Appointment", 'Int'>
     readonly meetingLink: FieldRef<"Appointment", 'String'>
     readonly date: FieldRef<"Appointment", 'DateTime'>
-    readonly isConfirmed: FieldRef<"Appointment", 'Boolean'>
+    readonly Status: FieldRef<"Appointment", 'ApplicationStatus'>
   }
     
 
@@ -6953,21 +4832,19 @@ export namespace Prisma {
   export type PaymentAvgAggregateOutputType = {
     id: number | null
     appointmentId: number | null
-    clientId: number | null
     amount: number | null
   }
 
   export type PaymentSumAggregateOutputType = {
     id: number | null
     appointmentId: number | null
-    clientId: number | null
     amount: number | null
   }
 
   export type PaymentMinAggregateOutputType = {
     id: number | null
     appointmentId: number | null
-    clientId: number | null
+    clientCognitoId: string | null
     paymentDate: Date | null
     isPaid: boolean | null
     amount: number | null
@@ -6976,7 +4853,7 @@ export namespace Prisma {
   export type PaymentMaxAggregateOutputType = {
     id: number | null
     appointmentId: number | null
-    clientId: number | null
+    clientCognitoId: string | null
     paymentDate: Date | null
     isPaid: boolean | null
     amount: number | null
@@ -6985,7 +4862,7 @@ export namespace Prisma {
   export type PaymentCountAggregateOutputType = {
     id: number
     appointmentId: number
-    clientId: number
+    clientCognitoId: number
     paymentDate: number
     isPaid: number
     amount: number
@@ -6996,21 +4873,19 @@ export namespace Prisma {
   export type PaymentAvgAggregateInputType = {
     id?: true
     appointmentId?: true
-    clientId?: true
     amount?: true
   }
 
   export type PaymentSumAggregateInputType = {
     id?: true
     appointmentId?: true
-    clientId?: true
     amount?: true
   }
 
   export type PaymentMinAggregateInputType = {
     id?: true
     appointmentId?: true
-    clientId?: true
+    clientCognitoId?: true
     paymentDate?: true
     isPaid?: true
     amount?: true
@@ -7019,7 +4894,7 @@ export namespace Prisma {
   export type PaymentMaxAggregateInputType = {
     id?: true
     appointmentId?: true
-    clientId?: true
+    clientCognitoId?: true
     paymentDate?: true
     isPaid?: true
     amount?: true
@@ -7028,7 +4903,7 @@ export namespace Prisma {
   export type PaymentCountAggregateInputType = {
     id?: true
     appointmentId?: true
-    clientId?: true
+    clientCognitoId?: true
     paymentDate?: true
     isPaid?: true
     amount?: true
@@ -7124,7 +4999,7 @@ export namespace Prisma {
   export type PaymentGroupByOutputType = {
     id: number
     appointmentId: number
-    clientId: number
+    clientCognitoId: string | null
     paymentDate: Date
     isPaid: boolean
     amount: number
@@ -7152,69 +5027,69 @@ export namespace Prisma {
   export type PaymentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     appointmentId?: boolean
-    clientId?: boolean
+    clientCognitoId?: boolean
     paymentDate?: boolean
     isPaid?: boolean
     amount?: boolean
     appointment?: boolean | AppointmentDefaultArgs<ExtArgs>
-    client?: boolean | ClientDefaultArgs<ExtArgs>
+    client?: boolean | Payment$clientArgs<ExtArgs>
   }, ExtArgs["result"]["payment"]>
 
   export type PaymentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     appointmentId?: boolean
-    clientId?: boolean
+    clientCognitoId?: boolean
     paymentDate?: boolean
     isPaid?: boolean
     amount?: boolean
     appointment?: boolean | AppointmentDefaultArgs<ExtArgs>
-    client?: boolean | ClientDefaultArgs<ExtArgs>
+    client?: boolean | Payment$clientArgs<ExtArgs>
   }, ExtArgs["result"]["payment"]>
 
   export type PaymentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     appointmentId?: boolean
-    clientId?: boolean
+    clientCognitoId?: boolean
     paymentDate?: boolean
     isPaid?: boolean
     amount?: boolean
     appointment?: boolean | AppointmentDefaultArgs<ExtArgs>
-    client?: boolean | ClientDefaultArgs<ExtArgs>
+    client?: boolean | Payment$clientArgs<ExtArgs>
   }, ExtArgs["result"]["payment"]>
 
   export type PaymentSelectScalar = {
     id?: boolean
     appointmentId?: boolean
-    clientId?: boolean
+    clientCognitoId?: boolean
     paymentDate?: boolean
     isPaid?: boolean
     amount?: boolean
   }
 
-  export type PaymentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "appointmentId" | "clientId" | "paymentDate" | "isPaid" | "amount", ExtArgs["result"]["payment"]>
+  export type PaymentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "appointmentId" | "clientCognitoId" | "paymentDate" | "isPaid" | "amount", ExtArgs["result"]["payment"]>
   export type PaymentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     appointment?: boolean | AppointmentDefaultArgs<ExtArgs>
-    client?: boolean | ClientDefaultArgs<ExtArgs>
+    client?: boolean | Payment$clientArgs<ExtArgs>
   }
   export type PaymentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     appointment?: boolean | AppointmentDefaultArgs<ExtArgs>
-    client?: boolean | ClientDefaultArgs<ExtArgs>
+    client?: boolean | Payment$clientArgs<ExtArgs>
   }
   export type PaymentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     appointment?: boolean | AppointmentDefaultArgs<ExtArgs>
-    client?: boolean | ClientDefaultArgs<ExtArgs>
+    client?: boolean | Payment$clientArgs<ExtArgs>
   }
 
   export type $PaymentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Payment"
     objects: {
       appointment: Prisma.$AppointmentPayload<ExtArgs>
-      client: Prisma.$ClientPayload<ExtArgs>
+      client: Prisma.$ClientPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       appointmentId: number
-      clientId: number
+      clientCognitoId: string | null
       paymentDate: Date
       isPaid: boolean
       amount: number
@@ -7613,7 +5488,7 @@ export namespace Prisma {
   export interface Prisma__PaymentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     appointment<T extends AppointmentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AppointmentDefaultArgs<ExtArgs>>): Prisma__AppointmentClient<$Result.GetResult<Prisma.$AppointmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    client<T extends ClientDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ClientDefaultArgs<ExtArgs>>): Prisma__ClientClient<$Result.GetResult<Prisma.$ClientPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    client<T extends Payment$clientArgs<ExtArgs> = {}>(args?: Subset<T, Payment$clientArgs<ExtArgs>>): Prisma__ClientClient<$Result.GetResult<Prisma.$ClientPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7645,7 +5520,7 @@ export namespace Prisma {
   interface PaymentFieldRefs {
     readonly id: FieldRef<"Payment", 'Int'>
     readonly appointmentId: FieldRef<"Payment", 'Int'>
-    readonly clientId: FieldRef<"Payment", 'Int'>
+    readonly clientCognitoId: FieldRef<"Payment", 'String'>
     readonly paymentDate: FieldRef<"Payment", 'DateTime'>
     readonly isPaid: FieldRef<"Payment", 'Boolean'>
     readonly amount: FieldRef<"Payment", 'Int'>
@@ -8045,6 +5920,25 @@ export namespace Prisma {
   }
 
   /**
+   * Payment.client
+   */
+  export type Payment$clientArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Client
+     */
+    select?: ClientSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Client
+     */
+    omit?: ClientOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ClientInclude<ExtArgs> | null
+    where?: ClientWhereInput
+  }
+
+  /**
    * Payment without action
    */
   export type PaymentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8064,6 +5958,1102 @@ export namespace Prisma {
 
 
   /**
+   * Model CalendarAppointment
+   */
+
+  export type AggregateCalendarAppointment = {
+    _count: CalendarAppointmentCountAggregateOutputType | null
+    _avg: CalendarAppointmentAvgAggregateOutputType | null
+    _sum: CalendarAppointmentSumAggregateOutputType | null
+    _min: CalendarAppointmentMinAggregateOutputType | null
+    _max: CalendarAppointmentMaxAggregateOutputType | null
+  }
+
+  export type CalendarAppointmentAvgAggregateOutputType = {
+    id: number | null
+    psychologistId: number | null
+  }
+
+  export type CalendarAppointmentSumAggregateOutputType = {
+    id: number | null
+    psychologistId: number | null
+  }
+
+  export type CalendarAppointmentMinAggregateOutputType = {
+    id: number | null
+    date: Date | null
+    startHour: string | null
+    patientName: string | null
+    psychologistId: number | null
+  }
+
+  export type CalendarAppointmentMaxAggregateOutputType = {
+    id: number | null
+    date: Date | null
+    startHour: string | null
+    patientName: string | null
+    psychologistId: number | null
+  }
+
+  export type CalendarAppointmentCountAggregateOutputType = {
+    id: number
+    date: number
+    startHour: number
+    patientName: number
+    psychologistId: number
+    _all: number
+  }
+
+
+  export type CalendarAppointmentAvgAggregateInputType = {
+    id?: true
+    psychologistId?: true
+  }
+
+  export type CalendarAppointmentSumAggregateInputType = {
+    id?: true
+    psychologistId?: true
+  }
+
+  export type CalendarAppointmentMinAggregateInputType = {
+    id?: true
+    date?: true
+    startHour?: true
+    patientName?: true
+    psychologistId?: true
+  }
+
+  export type CalendarAppointmentMaxAggregateInputType = {
+    id?: true
+    date?: true
+    startHour?: true
+    patientName?: true
+    psychologistId?: true
+  }
+
+  export type CalendarAppointmentCountAggregateInputType = {
+    id?: true
+    date?: true
+    startHour?: true
+    patientName?: true
+    psychologistId?: true
+    _all?: true
+  }
+
+  export type CalendarAppointmentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CalendarAppointment to aggregate.
+     */
+    where?: CalendarAppointmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CalendarAppointments to fetch.
+     */
+    orderBy?: CalendarAppointmentOrderByWithRelationInput | CalendarAppointmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CalendarAppointmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CalendarAppointments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CalendarAppointments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CalendarAppointments
+    **/
+    _count?: true | CalendarAppointmentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CalendarAppointmentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CalendarAppointmentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CalendarAppointmentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CalendarAppointmentMaxAggregateInputType
+  }
+
+  export type GetCalendarAppointmentAggregateType<T extends CalendarAppointmentAggregateArgs> = {
+        [P in keyof T & keyof AggregateCalendarAppointment]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCalendarAppointment[P]>
+      : GetScalarType<T[P], AggregateCalendarAppointment[P]>
+  }
+
+
+
+
+  export type CalendarAppointmentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CalendarAppointmentWhereInput
+    orderBy?: CalendarAppointmentOrderByWithAggregationInput | CalendarAppointmentOrderByWithAggregationInput[]
+    by: CalendarAppointmentScalarFieldEnum[] | CalendarAppointmentScalarFieldEnum
+    having?: CalendarAppointmentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CalendarAppointmentCountAggregateInputType | true
+    _avg?: CalendarAppointmentAvgAggregateInputType
+    _sum?: CalendarAppointmentSumAggregateInputType
+    _min?: CalendarAppointmentMinAggregateInputType
+    _max?: CalendarAppointmentMaxAggregateInputType
+  }
+
+  export type CalendarAppointmentGroupByOutputType = {
+    id: number
+    date: Date
+    startHour: string
+    patientName: string
+    psychologistId: number
+    _count: CalendarAppointmentCountAggregateOutputType | null
+    _avg: CalendarAppointmentAvgAggregateOutputType | null
+    _sum: CalendarAppointmentSumAggregateOutputType | null
+    _min: CalendarAppointmentMinAggregateOutputType | null
+    _max: CalendarAppointmentMaxAggregateOutputType | null
+  }
+
+  type GetCalendarAppointmentGroupByPayload<T extends CalendarAppointmentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CalendarAppointmentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CalendarAppointmentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CalendarAppointmentGroupByOutputType[P]>
+            : GetScalarType<T[P], CalendarAppointmentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CalendarAppointmentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    date?: boolean
+    startHour?: boolean
+    patientName?: boolean
+    psychologistId?: boolean
+    psychologist?: boolean | PsychologistDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["calendarAppointment"]>
+
+  export type CalendarAppointmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    date?: boolean
+    startHour?: boolean
+    patientName?: boolean
+    psychologistId?: boolean
+    psychologist?: boolean | PsychologistDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["calendarAppointment"]>
+
+  export type CalendarAppointmentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    date?: boolean
+    startHour?: boolean
+    patientName?: boolean
+    psychologistId?: boolean
+    psychologist?: boolean | PsychologistDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["calendarAppointment"]>
+
+  export type CalendarAppointmentSelectScalar = {
+    id?: boolean
+    date?: boolean
+    startHour?: boolean
+    patientName?: boolean
+    psychologistId?: boolean
+  }
+
+  export type CalendarAppointmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "date" | "startHour" | "patientName" | "psychologistId", ExtArgs["result"]["calendarAppointment"]>
+  export type CalendarAppointmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    psychologist?: boolean | PsychologistDefaultArgs<ExtArgs>
+  }
+  export type CalendarAppointmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    psychologist?: boolean | PsychologistDefaultArgs<ExtArgs>
+  }
+  export type CalendarAppointmentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    psychologist?: boolean | PsychologistDefaultArgs<ExtArgs>
+  }
+
+  export type $CalendarAppointmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CalendarAppointment"
+    objects: {
+      psychologist: Prisma.$PsychologistPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      date: Date
+      startHour: string
+      patientName: string
+      psychologistId: number
+    }, ExtArgs["result"]["calendarAppointment"]>
+    composites: {}
+  }
+
+  type CalendarAppointmentGetPayload<S extends boolean | null | undefined | CalendarAppointmentDefaultArgs> = $Result.GetResult<Prisma.$CalendarAppointmentPayload, S>
+
+  type CalendarAppointmentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CalendarAppointmentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CalendarAppointmentCountAggregateInputType | true
+    }
+
+  export interface CalendarAppointmentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CalendarAppointment'], meta: { name: 'CalendarAppointment' } }
+    /**
+     * Find zero or one CalendarAppointment that matches the filter.
+     * @param {CalendarAppointmentFindUniqueArgs} args - Arguments to find a CalendarAppointment
+     * @example
+     * // Get one CalendarAppointment
+     * const calendarAppointment = await prisma.calendarAppointment.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CalendarAppointmentFindUniqueArgs>(args: SelectSubset<T, CalendarAppointmentFindUniqueArgs<ExtArgs>>): Prisma__CalendarAppointmentClient<$Result.GetResult<Prisma.$CalendarAppointmentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CalendarAppointment that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CalendarAppointmentFindUniqueOrThrowArgs} args - Arguments to find a CalendarAppointment
+     * @example
+     * // Get one CalendarAppointment
+     * const calendarAppointment = await prisma.calendarAppointment.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CalendarAppointmentFindUniqueOrThrowArgs>(args: SelectSubset<T, CalendarAppointmentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CalendarAppointmentClient<$Result.GetResult<Prisma.$CalendarAppointmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CalendarAppointment that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CalendarAppointmentFindFirstArgs} args - Arguments to find a CalendarAppointment
+     * @example
+     * // Get one CalendarAppointment
+     * const calendarAppointment = await prisma.calendarAppointment.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CalendarAppointmentFindFirstArgs>(args?: SelectSubset<T, CalendarAppointmentFindFirstArgs<ExtArgs>>): Prisma__CalendarAppointmentClient<$Result.GetResult<Prisma.$CalendarAppointmentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CalendarAppointment that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CalendarAppointmentFindFirstOrThrowArgs} args - Arguments to find a CalendarAppointment
+     * @example
+     * // Get one CalendarAppointment
+     * const calendarAppointment = await prisma.calendarAppointment.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CalendarAppointmentFindFirstOrThrowArgs>(args?: SelectSubset<T, CalendarAppointmentFindFirstOrThrowArgs<ExtArgs>>): Prisma__CalendarAppointmentClient<$Result.GetResult<Prisma.$CalendarAppointmentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CalendarAppointments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CalendarAppointmentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CalendarAppointments
+     * const calendarAppointments = await prisma.calendarAppointment.findMany()
+     * 
+     * // Get first 10 CalendarAppointments
+     * const calendarAppointments = await prisma.calendarAppointment.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const calendarAppointmentWithIdOnly = await prisma.calendarAppointment.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CalendarAppointmentFindManyArgs>(args?: SelectSubset<T, CalendarAppointmentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CalendarAppointmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CalendarAppointment.
+     * @param {CalendarAppointmentCreateArgs} args - Arguments to create a CalendarAppointment.
+     * @example
+     * // Create one CalendarAppointment
+     * const CalendarAppointment = await prisma.calendarAppointment.create({
+     *   data: {
+     *     // ... data to create a CalendarAppointment
+     *   }
+     * })
+     * 
+     */
+    create<T extends CalendarAppointmentCreateArgs>(args: SelectSubset<T, CalendarAppointmentCreateArgs<ExtArgs>>): Prisma__CalendarAppointmentClient<$Result.GetResult<Prisma.$CalendarAppointmentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CalendarAppointments.
+     * @param {CalendarAppointmentCreateManyArgs} args - Arguments to create many CalendarAppointments.
+     * @example
+     * // Create many CalendarAppointments
+     * const calendarAppointment = await prisma.calendarAppointment.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CalendarAppointmentCreateManyArgs>(args?: SelectSubset<T, CalendarAppointmentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CalendarAppointments and returns the data saved in the database.
+     * @param {CalendarAppointmentCreateManyAndReturnArgs} args - Arguments to create many CalendarAppointments.
+     * @example
+     * // Create many CalendarAppointments
+     * const calendarAppointment = await prisma.calendarAppointment.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CalendarAppointments and only return the `id`
+     * const calendarAppointmentWithIdOnly = await prisma.calendarAppointment.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CalendarAppointmentCreateManyAndReturnArgs>(args?: SelectSubset<T, CalendarAppointmentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CalendarAppointmentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a CalendarAppointment.
+     * @param {CalendarAppointmentDeleteArgs} args - Arguments to delete one CalendarAppointment.
+     * @example
+     * // Delete one CalendarAppointment
+     * const CalendarAppointment = await prisma.calendarAppointment.delete({
+     *   where: {
+     *     // ... filter to delete one CalendarAppointment
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CalendarAppointmentDeleteArgs>(args: SelectSubset<T, CalendarAppointmentDeleteArgs<ExtArgs>>): Prisma__CalendarAppointmentClient<$Result.GetResult<Prisma.$CalendarAppointmentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CalendarAppointment.
+     * @param {CalendarAppointmentUpdateArgs} args - Arguments to update one CalendarAppointment.
+     * @example
+     * // Update one CalendarAppointment
+     * const calendarAppointment = await prisma.calendarAppointment.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CalendarAppointmentUpdateArgs>(args: SelectSubset<T, CalendarAppointmentUpdateArgs<ExtArgs>>): Prisma__CalendarAppointmentClient<$Result.GetResult<Prisma.$CalendarAppointmentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CalendarAppointments.
+     * @param {CalendarAppointmentDeleteManyArgs} args - Arguments to filter CalendarAppointments to delete.
+     * @example
+     * // Delete a few CalendarAppointments
+     * const { count } = await prisma.calendarAppointment.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CalendarAppointmentDeleteManyArgs>(args?: SelectSubset<T, CalendarAppointmentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CalendarAppointments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CalendarAppointmentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CalendarAppointments
+     * const calendarAppointment = await prisma.calendarAppointment.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CalendarAppointmentUpdateManyArgs>(args: SelectSubset<T, CalendarAppointmentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CalendarAppointments and returns the data updated in the database.
+     * @param {CalendarAppointmentUpdateManyAndReturnArgs} args - Arguments to update many CalendarAppointments.
+     * @example
+     * // Update many CalendarAppointments
+     * const calendarAppointment = await prisma.calendarAppointment.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CalendarAppointments and only return the `id`
+     * const calendarAppointmentWithIdOnly = await prisma.calendarAppointment.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CalendarAppointmentUpdateManyAndReturnArgs>(args: SelectSubset<T, CalendarAppointmentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CalendarAppointmentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one CalendarAppointment.
+     * @param {CalendarAppointmentUpsertArgs} args - Arguments to update or create a CalendarAppointment.
+     * @example
+     * // Update or create a CalendarAppointment
+     * const calendarAppointment = await prisma.calendarAppointment.upsert({
+     *   create: {
+     *     // ... data to create a CalendarAppointment
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CalendarAppointment we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CalendarAppointmentUpsertArgs>(args: SelectSubset<T, CalendarAppointmentUpsertArgs<ExtArgs>>): Prisma__CalendarAppointmentClient<$Result.GetResult<Prisma.$CalendarAppointmentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CalendarAppointments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CalendarAppointmentCountArgs} args - Arguments to filter CalendarAppointments to count.
+     * @example
+     * // Count the number of CalendarAppointments
+     * const count = await prisma.calendarAppointment.count({
+     *   where: {
+     *     // ... the filter for the CalendarAppointments we want to count
+     *   }
+     * })
+    **/
+    count<T extends CalendarAppointmentCountArgs>(
+      args?: Subset<T, CalendarAppointmentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CalendarAppointmentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CalendarAppointment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CalendarAppointmentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CalendarAppointmentAggregateArgs>(args: Subset<T, CalendarAppointmentAggregateArgs>): Prisma.PrismaPromise<GetCalendarAppointmentAggregateType<T>>
+
+    /**
+     * Group by CalendarAppointment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CalendarAppointmentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CalendarAppointmentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CalendarAppointmentGroupByArgs['orderBy'] }
+        : { orderBy?: CalendarAppointmentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CalendarAppointmentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCalendarAppointmentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CalendarAppointment model
+   */
+  readonly fields: CalendarAppointmentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CalendarAppointment.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CalendarAppointmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    psychologist<T extends PsychologistDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PsychologistDefaultArgs<ExtArgs>>): Prisma__PsychologistClient<$Result.GetResult<Prisma.$PsychologistPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CalendarAppointment model
+   */ 
+  interface CalendarAppointmentFieldRefs {
+    readonly id: FieldRef<"CalendarAppointment", 'Int'>
+    readonly date: FieldRef<"CalendarAppointment", 'DateTime'>
+    readonly startHour: FieldRef<"CalendarAppointment", 'String'>
+    readonly patientName: FieldRef<"CalendarAppointment", 'String'>
+    readonly psychologistId: FieldRef<"CalendarAppointment", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CalendarAppointment findUnique
+   */
+  export type CalendarAppointmentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CalendarAppointment
+     */
+    select?: CalendarAppointmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CalendarAppointment
+     */
+    omit?: CalendarAppointmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CalendarAppointmentInclude<ExtArgs> | null
+    /**
+     * Filter, which CalendarAppointment to fetch.
+     */
+    where: CalendarAppointmentWhereUniqueInput
+  }
+
+  /**
+   * CalendarAppointment findUniqueOrThrow
+   */
+  export type CalendarAppointmentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CalendarAppointment
+     */
+    select?: CalendarAppointmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CalendarAppointment
+     */
+    omit?: CalendarAppointmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CalendarAppointmentInclude<ExtArgs> | null
+    /**
+     * Filter, which CalendarAppointment to fetch.
+     */
+    where: CalendarAppointmentWhereUniqueInput
+  }
+
+  /**
+   * CalendarAppointment findFirst
+   */
+  export type CalendarAppointmentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CalendarAppointment
+     */
+    select?: CalendarAppointmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CalendarAppointment
+     */
+    omit?: CalendarAppointmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CalendarAppointmentInclude<ExtArgs> | null
+    /**
+     * Filter, which CalendarAppointment to fetch.
+     */
+    where?: CalendarAppointmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CalendarAppointments to fetch.
+     */
+    orderBy?: CalendarAppointmentOrderByWithRelationInput | CalendarAppointmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CalendarAppointments.
+     */
+    cursor?: CalendarAppointmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CalendarAppointments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CalendarAppointments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CalendarAppointments.
+     */
+    distinct?: CalendarAppointmentScalarFieldEnum | CalendarAppointmentScalarFieldEnum[]
+  }
+
+  /**
+   * CalendarAppointment findFirstOrThrow
+   */
+  export type CalendarAppointmentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CalendarAppointment
+     */
+    select?: CalendarAppointmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CalendarAppointment
+     */
+    omit?: CalendarAppointmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CalendarAppointmentInclude<ExtArgs> | null
+    /**
+     * Filter, which CalendarAppointment to fetch.
+     */
+    where?: CalendarAppointmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CalendarAppointments to fetch.
+     */
+    orderBy?: CalendarAppointmentOrderByWithRelationInput | CalendarAppointmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CalendarAppointments.
+     */
+    cursor?: CalendarAppointmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CalendarAppointments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CalendarAppointments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CalendarAppointments.
+     */
+    distinct?: CalendarAppointmentScalarFieldEnum | CalendarAppointmentScalarFieldEnum[]
+  }
+
+  /**
+   * CalendarAppointment findMany
+   */
+  export type CalendarAppointmentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CalendarAppointment
+     */
+    select?: CalendarAppointmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CalendarAppointment
+     */
+    omit?: CalendarAppointmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CalendarAppointmentInclude<ExtArgs> | null
+    /**
+     * Filter, which CalendarAppointments to fetch.
+     */
+    where?: CalendarAppointmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CalendarAppointments to fetch.
+     */
+    orderBy?: CalendarAppointmentOrderByWithRelationInput | CalendarAppointmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CalendarAppointments.
+     */
+    cursor?: CalendarAppointmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CalendarAppointments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CalendarAppointments.
+     */
+    skip?: number
+    distinct?: CalendarAppointmentScalarFieldEnum | CalendarAppointmentScalarFieldEnum[]
+  }
+
+  /**
+   * CalendarAppointment create
+   */
+  export type CalendarAppointmentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CalendarAppointment
+     */
+    select?: CalendarAppointmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CalendarAppointment
+     */
+    omit?: CalendarAppointmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CalendarAppointmentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CalendarAppointment.
+     */
+    data: XOR<CalendarAppointmentCreateInput, CalendarAppointmentUncheckedCreateInput>
+  }
+
+  /**
+   * CalendarAppointment createMany
+   */
+  export type CalendarAppointmentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CalendarAppointments.
+     */
+    data: CalendarAppointmentCreateManyInput | CalendarAppointmentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CalendarAppointment createManyAndReturn
+   */
+  export type CalendarAppointmentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CalendarAppointment
+     */
+    select?: CalendarAppointmentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CalendarAppointment
+     */
+    omit?: CalendarAppointmentOmit<ExtArgs> | null
+    /**
+     * The data used to create many CalendarAppointments.
+     */
+    data: CalendarAppointmentCreateManyInput | CalendarAppointmentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CalendarAppointmentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CalendarAppointment update
+   */
+  export type CalendarAppointmentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CalendarAppointment
+     */
+    select?: CalendarAppointmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CalendarAppointment
+     */
+    omit?: CalendarAppointmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CalendarAppointmentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CalendarAppointment.
+     */
+    data: XOR<CalendarAppointmentUpdateInput, CalendarAppointmentUncheckedUpdateInput>
+    /**
+     * Choose, which CalendarAppointment to update.
+     */
+    where: CalendarAppointmentWhereUniqueInput
+  }
+
+  /**
+   * CalendarAppointment updateMany
+   */
+  export type CalendarAppointmentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CalendarAppointments.
+     */
+    data: XOR<CalendarAppointmentUpdateManyMutationInput, CalendarAppointmentUncheckedUpdateManyInput>
+    /**
+     * Filter which CalendarAppointments to update
+     */
+    where?: CalendarAppointmentWhereInput
+    /**
+     * Limit how many CalendarAppointments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CalendarAppointment updateManyAndReturn
+   */
+  export type CalendarAppointmentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CalendarAppointment
+     */
+    select?: CalendarAppointmentSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CalendarAppointment
+     */
+    omit?: CalendarAppointmentOmit<ExtArgs> | null
+    /**
+     * The data used to update CalendarAppointments.
+     */
+    data: XOR<CalendarAppointmentUpdateManyMutationInput, CalendarAppointmentUncheckedUpdateManyInput>
+    /**
+     * Filter which CalendarAppointments to update
+     */
+    where?: CalendarAppointmentWhereInput
+    /**
+     * Limit how many CalendarAppointments to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CalendarAppointmentIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CalendarAppointment upsert
+   */
+  export type CalendarAppointmentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CalendarAppointment
+     */
+    select?: CalendarAppointmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CalendarAppointment
+     */
+    omit?: CalendarAppointmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CalendarAppointmentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CalendarAppointment to update in case it exists.
+     */
+    where: CalendarAppointmentWhereUniqueInput
+    /**
+     * In case the CalendarAppointment found by the `where` argument doesn't exist, create a new CalendarAppointment with this data.
+     */
+    create: XOR<CalendarAppointmentCreateInput, CalendarAppointmentUncheckedCreateInput>
+    /**
+     * In case the CalendarAppointment was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CalendarAppointmentUpdateInput, CalendarAppointmentUncheckedUpdateInput>
+  }
+
+  /**
+   * CalendarAppointment delete
+   */
+  export type CalendarAppointmentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CalendarAppointment
+     */
+    select?: CalendarAppointmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CalendarAppointment
+     */
+    omit?: CalendarAppointmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CalendarAppointmentInclude<ExtArgs> | null
+    /**
+     * Filter which CalendarAppointment to delete.
+     */
+    where: CalendarAppointmentWhereUniqueInput
+  }
+
+  /**
+   * CalendarAppointment deleteMany
+   */
+  export type CalendarAppointmentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CalendarAppointments to delete
+     */
+    where?: CalendarAppointmentWhereInput
+    /**
+     * Limit how many CalendarAppointments to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CalendarAppointment without action
+   */
+  export type CalendarAppointmentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CalendarAppointment
+     */
+    select?: CalendarAppointmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CalendarAppointment
+     */
+    omit?: CalendarAppointmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CalendarAppointmentInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -8077,23 +7067,12 @@ export namespace Prisma {
   export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-  export const UserScalarFieldEnum: {
-    id: 'id',
-    role: 'role',
-    email: 'email',
-    password: 'password',
-    firstName: 'firstName',
-    lastName: 'lastName',
-    phone: 'phone',
-    dateOfBirth: 'dateOfBirth'
-  };
-
-  export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
-
-
   export const ClientScalarFieldEnum: {
     id: 'id',
-    userId: 'userId',
+    cognitoId: 'cognitoId',
+    name: 'name',
+    email: 'email',
+    phoneNumber: 'phoneNumber',
     history: 'history'
   };
 
@@ -8102,34 +7081,26 @@ export namespace Prisma {
 
   export const PsychologistScalarFieldEnum: {
     id: 'id',
-    userId: 'userId',
-    specialization: 'specialization',
-    price: 'price',
-    availability: 'availability',
-    locationId: 'locationId'
+    cognitoId: 'cognitoId',
+    name: 'name',
+    email: 'email',
+    phoneNumber: 'phoneNumber',
+    location: 'location',
+    hourlyRate: 'hourlyRate',
+    Description: 'Description',
+    Specialization: 'Specialization'
   };
 
   export type PsychologistScalarFieldEnum = (typeof PsychologistScalarFieldEnum)[keyof typeof PsychologistScalarFieldEnum]
 
 
-  export const LocationScalarFieldEnum: {
-    id: 'id',
-    street: 'street',
-    city: 'city',
-    houseNumber: 'houseNumber',
-    postalCode: 'postalCode'
-  };
-
-  export type LocationScalarFieldEnum = (typeof LocationScalarFieldEnum)[keyof typeof LocationScalarFieldEnum]
-
-
   export const AppointmentScalarFieldEnum: {
     id: 'id',
-    clientId: 'clientId',
+    clientCognitoId: 'clientCognitoId',
     psychologistId: 'psychologistId',
     meetingLink: 'meetingLink',
     date: 'date',
-    isConfirmed: 'isConfirmed'
+    Status: 'Status'
   };
 
   export type AppointmentScalarFieldEnum = (typeof AppointmentScalarFieldEnum)[keyof typeof AppointmentScalarFieldEnum]
@@ -8138,13 +7109,24 @@ export namespace Prisma {
   export const PaymentScalarFieldEnum: {
     id: 'id',
     appointmentId: 'appointmentId',
-    clientId: 'clientId',
+    clientCognitoId: 'clientCognitoId',
     paymentDate: 'paymentDate',
     isPaid: 'isPaid',
     amount: 'amount'
   };
 
   export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
+
+
+  export const CalendarAppointmentScalarFieldEnum: {
+    id: 'id',
+    date: 'date',
+    startHour: 'startHour',
+    patientName: 'patientName',
+    psychologistId: 'psychologistId'
+  };
+
+  export type CalendarAppointmentScalarFieldEnum = (typeof CalendarAppointmentScalarFieldEnum)[keyof typeof CalendarAppointmentScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -8219,16 +7201,16 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Decimal'
+   * Reference to a field of type 'ApplicationStatus'
    */
-  export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
+  export type EnumApplicationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ApplicationStatus'>
     
 
 
   /**
-   * Reference to a field of type 'Decimal[]'
+   * Reference to a field of type 'ApplicationStatus[]'
    */
-  export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
+  export type ListEnumApplicationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ApplicationStatus[]'>
     
 
 
@@ -8256,117 +7238,51 @@ export namespace Prisma {
    */
 
 
-  export type UserWhereInput = {
-    AND?: UserWhereInput | UserWhereInput[]
-    OR?: UserWhereInput[]
-    NOT?: UserWhereInput | UserWhereInput[]
-    id?: IntFilter<"User"> | number
-    role?: StringFilter<"User"> | string
-    email?: StringFilter<"User"> | string
-    password?: StringFilter<"User"> | string
-    firstName?: StringFilter<"User"> | string
-    lastName?: StringFilter<"User"> | string
-    phone?: StringFilter<"User"> | string
-    dateOfBirth?: DateTimeFilter<"User"> | Date | string
-    client?: XOR<ClientNullableScalarRelationFilter, ClientWhereInput> | null
-    psychologist?: XOR<PsychologistNullableScalarRelationFilter, PsychologistWhereInput> | null
-  }
-
-  export type UserOrderByWithRelationInput = {
-    id?: SortOrder
-    role?: SortOrder
-    email?: SortOrder
-    password?: SortOrder
-    firstName?: SortOrder
-    lastName?: SortOrder
-    phone?: SortOrder
-    dateOfBirth?: SortOrder
-    client?: ClientOrderByWithRelationInput
-    psychologist?: PsychologistOrderByWithRelationInput
-  }
-
-  export type UserWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    email?: string
-    AND?: UserWhereInput | UserWhereInput[]
-    OR?: UserWhereInput[]
-    NOT?: UserWhereInput | UserWhereInput[]
-    role?: StringFilter<"User"> | string
-    password?: StringFilter<"User"> | string
-    firstName?: StringFilter<"User"> | string
-    lastName?: StringFilter<"User"> | string
-    phone?: StringFilter<"User"> | string
-    dateOfBirth?: DateTimeFilter<"User"> | Date | string
-    client?: XOR<ClientNullableScalarRelationFilter, ClientWhereInput> | null
-    psychologist?: XOR<PsychologistNullableScalarRelationFilter, PsychologistWhereInput> | null
-  }, "id" | "email">
-
-  export type UserOrderByWithAggregationInput = {
-    id?: SortOrder
-    role?: SortOrder
-    email?: SortOrder
-    password?: SortOrder
-    firstName?: SortOrder
-    lastName?: SortOrder
-    phone?: SortOrder
-    dateOfBirth?: SortOrder
-    _count?: UserCountOrderByAggregateInput
-    _avg?: UserAvgOrderByAggregateInput
-    _max?: UserMaxOrderByAggregateInput
-    _min?: UserMinOrderByAggregateInput
-    _sum?: UserSumOrderByAggregateInput
-  }
-
-  export type UserScalarWhereWithAggregatesInput = {
-    AND?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
-    OR?: UserScalarWhereWithAggregatesInput[]
-    NOT?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"User"> | number
-    role?: StringWithAggregatesFilter<"User"> | string
-    email?: StringWithAggregatesFilter<"User"> | string
-    password?: StringWithAggregatesFilter<"User"> | string
-    firstName?: StringWithAggregatesFilter<"User"> | string
-    lastName?: StringWithAggregatesFilter<"User"> | string
-    phone?: StringWithAggregatesFilter<"User"> | string
-    dateOfBirth?: DateTimeWithAggregatesFilter<"User"> | Date | string
-  }
-
   export type ClientWhereInput = {
     AND?: ClientWhereInput | ClientWhereInput[]
     OR?: ClientWhereInput[]
     NOT?: ClientWhereInput | ClientWhereInput[]
     id?: IntFilter<"Client"> | number
-    userId?: IntFilter<"Client"> | number
+    cognitoId?: StringFilter<"Client"> | string
+    name?: StringFilter<"Client"> | string
+    email?: StringFilter<"Client"> | string
+    phoneNumber?: StringFilter<"Client"> | string
     history?: StringNullableFilter<"Client"> | string | null
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     appointments?: AppointmentListRelationFilter
     payments?: PaymentListRelationFilter
   }
 
   export type ClientOrderByWithRelationInput = {
     id?: SortOrder
-    userId?: SortOrder
+    cognitoId?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    phoneNumber?: SortOrder
     history?: SortOrderInput | SortOrder
-    user?: UserOrderByWithRelationInput
     appointments?: AppointmentOrderByRelationAggregateInput
     payments?: PaymentOrderByRelationAggregateInput
   }
 
   export type ClientWhereUniqueInput = Prisma.AtLeast<{
     id?: number
-    userId?: number
+    cognitoId?: string
     AND?: ClientWhereInput | ClientWhereInput[]
     OR?: ClientWhereInput[]
     NOT?: ClientWhereInput | ClientWhereInput[]
+    name?: StringFilter<"Client"> | string
+    email?: StringFilter<"Client"> | string
+    phoneNumber?: StringFilter<"Client"> | string
     history?: StringNullableFilter<"Client"> | string | null
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     appointments?: AppointmentListRelationFilter
     payments?: PaymentListRelationFilter
-  }, "id" | "userId">
+  }, "id" | "cognitoId">
 
   export type ClientOrderByWithAggregationInput = {
     id?: SortOrder
-    userId?: SortOrder
+    cognitoId?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    phoneNumber?: SortOrder
     history?: SortOrderInput | SortOrder
     _count?: ClientCountOrderByAggregateInput
     _avg?: ClientAvgOrderByAggregateInput
@@ -8380,7 +7296,10 @@ export namespace Prisma {
     OR?: ClientScalarWhereWithAggregatesInput[]
     NOT?: ClientScalarWhereWithAggregatesInput | ClientScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Client"> | number
-    userId?: IntWithAggregatesFilter<"Client"> | number
+    cognitoId?: StringWithAggregatesFilter<"Client"> | string
+    name?: StringWithAggregatesFilter<"Client"> | string
+    email?: StringWithAggregatesFilter<"Client"> | string
+    phoneNumber?: StringWithAggregatesFilter<"Client"> | string
     history?: StringNullableWithAggregatesFilter<"Client"> | string | null
   }
 
@@ -8389,50 +7308,59 @@ export namespace Prisma {
     OR?: PsychologistWhereInput[]
     NOT?: PsychologistWhereInput | PsychologistWhereInput[]
     id?: IntFilter<"Psychologist"> | number
-    userId?: IntFilter<"Psychologist"> | number
-    specialization?: StringFilter<"Psychologist"> | string
-    price?: DecimalFilter<"Psychologist"> | Decimal | DecimalJsLike | number | string
-    availability?: DateTimeFilter<"Psychologist"> | Date | string
-    locationId?: IntFilter<"Psychologist"> | number
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
-    location?: XOR<LocationScalarRelationFilter, LocationWhereInput>
+    cognitoId?: StringFilter<"Psychologist"> | string
+    name?: StringFilter<"Psychologist"> | string
+    email?: StringFilter<"Psychologist"> | string
+    phoneNumber?: StringFilter<"Psychologist"> | string
+    location?: StringFilter<"Psychologist"> | string
+    hourlyRate?: IntFilter<"Psychologist"> | number
+    Description?: StringFilter<"Psychologist"> | string
+    Specialization?: StringFilter<"Psychologist"> | string
     appointments?: AppointmentListRelationFilter
+    CalendarAppointment?: CalendarAppointmentListRelationFilter
   }
 
   export type PsychologistOrderByWithRelationInput = {
     id?: SortOrder
-    userId?: SortOrder
-    specialization?: SortOrder
-    price?: SortOrder
-    availability?: SortOrder
-    locationId?: SortOrder
-    user?: UserOrderByWithRelationInput
-    location?: LocationOrderByWithRelationInput
+    cognitoId?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    phoneNumber?: SortOrder
+    location?: SortOrder
+    hourlyRate?: SortOrder
+    Description?: SortOrder
+    Specialization?: SortOrder
     appointments?: AppointmentOrderByRelationAggregateInput
+    CalendarAppointment?: CalendarAppointmentOrderByRelationAggregateInput
   }
 
   export type PsychologistWhereUniqueInput = Prisma.AtLeast<{
     id?: number
-    userId?: number
+    cognitoId?: string
     AND?: PsychologistWhereInput | PsychologistWhereInput[]
     OR?: PsychologistWhereInput[]
     NOT?: PsychologistWhereInput | PsychologistWhereInput[]
-    specialization?: StringFilter<"Psychologist"> | string
-    price?: DecimalFilter<"Psychologist"> | Decimal | DecimalJsLike | number | string
-    availability?: DateTimeFilter<"Psychologist"> | Date | string
-    locationId?: IntFilter<"Psychologist"> | number
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
-    location?: XOR<LocationScalarRelationFilter, LocationWhereInput>
+    name?: StringFilter<"Psychologist"> | string
+    email?: StringFilter<"Psychologist"> | string
+    phoneNumber?: StringFilter<"Psychologist"> | string
+    location?: StringFilter<"Psychologist"> | string
+    hourlyRate?: IntFilter<"Psychologist"> | number
+    Description?: StringFilter<"Psychologist"> | string
+    Specialization?: StringFilter<"Psychologist"> | string
     appointments?: AppointmentListRelationFilter
-  }, "id" | "userId">
+    CalendarAppointment?: CalendarAppointmentListRelationFilter
+  }, "id" | "cognitoId">
 
   export type PsychologistOrderByWithAggregationInput = {
     id?: SortOrder
-    userId?: SortOrder
-    specialization?: SortOrder
-    price?: SortOrder
-    availability?: SortOrder
-    locationId?: SortOrder
+    cognitoId?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    phoneNumber?: SortOrder
+    location?: SortOrder
+    hourlyRate?: SortOrder
+    Description?: SortOrder
+    Specialization?: SortOrder
     _count?: PsychologistCountOrderByAggregateInput
     _avg?: PsychologistAvgOrderByAggregateInput
     _max?: PsychologistMaxOrderByAggregateInput
@@ -8445,68 +7373,14 @@ export namespace Prisma {
     OR?: PsychologistScalarWhereWithAggregatesInput[]
     NOT?: PsychologistScalarWhereWithAggregatesInput | PsychologistScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Psychologist"> | number
-    userId?: IntWithAggregatesFilter<"Psychologist"> | number
-    specialization?: StringWithAggregatesFilter<"Psychologist"> | string
-    price?: DecimalWithAggregatesFilter<"Psychologist"> | Decimal | DecimalJsLike | number | string
-    availability?: DateTimeWithAggregatesFilter<"Psychologist"> | Date | string
-    locationId?: IntWithAggregatesFilter<"Psychologist"> | number
-  }
-
-  export type LocationWhereInput = {
-    AND?: LocationWhereInput | LocationWhereInput[]
-    OR?: LocationWhereInput[]
-    NOT?: LocationWhereInput | LocationWhereInput[]
-    id?: IntFilter<"Location"> | number
-    street?: StringFilter<"Location"> | string
-    city?: StringFilter<"Location"> | string
-    houseNumber?: StringFilter<"Location"> | string
-    postalCode?: StringFilter<"Location"> | string
-    psychologists?: PsychologistListRelationFilter
-  }
-
-  export type LocationOrderByWithRelationInput = {
-    id?: SortOrder
-    street?: SortOrder
-    city?: SortOrder
-    houseNumber?: SortOrder
-    postalCode?: SortOrder
-    psychologists?: PsychologistOrderByRelationAggregateInput
-  }
-
-  export type LocationWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    AND?: LocationWhereInput | LocationWhereInput[]
-    OR?: LocationWhereInput[]
-    NOT?: LocationWhereInput | LocationWhereInput[]
-    street?: StringFilter<"Location"> | string
-    city?: StringFilter<"Location"> | string
-    houseNumber?: StringFilter<"Location"> | string
-    postalCode?: StringFilter<"Location"> | string
-    psychologists?: PsychologistListRelationFilter
-  }, "id">
-
-  export type LocationOrderByWithAggregationInput = {
-    id?: SortOrder
-    street?: SortOrder
-    city?: SortOrder
-    houseNumber?: SortOrder
-    postalCode?: SortOrder
-    _count?: LocationCountOrderByAggregateInput
-    _avg?: LocationAvgOrderByAggregateInput
-    _max?: LocationMaxOrderByAggregateInput
-    _min?: LocationMinOrderByAggregateInput
-    _sum?: LocationSumOrderByAggregateInput
-  }
-
-  export type LocationScalarWhereWithAggregatesInput = {
-    AND?: LocationScalarWhereWithAggregatesInput | LocationScalarWhereWithAggregatesInput[]
-    OR?: LocationScalarWhereWithAggregatesInput[]
-    NOT?: LocationScalarWhereWithAggregatesInput | LocationScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"Location"> | number
-    street?: StringWithAggregatesFilter<"Location"> | string
-    city?: StringWithAggregatesFilter<"Location"> | string
-    houseNumber?: StringWithAggregatesFilter<"Location"> | string
-    postalCode?: StringWithAggregatesFilter<"Location"> | string
+    cognitoId?: StringWithAggregatesFilter<"Psychologist"> | string
+    name?: StringWithAggregatesFilter<"Psychologist"> | string
+    email?: StringWithAggregatesFilter<"Psychologist"> | string
+    phoneNumber?: StringWithAggregatesFilter<"Psychologist"> | string
+    location?: StringWithAggregatesFilter<"Psychologist"> | string
+    hourlyRate?: IntWithAggregatesFilter<"Psychologist"> | number
+    Description?: StringWithAggregatesFilter<"Psychologist"> | string
+    Specialization?: StringWithAggregatesFilter<"Psychologist"> | string
   }
 
   export type AppointmentWhereInput = {
@@ -8514,11 +7388,11 @@ export namespace Prisma {
     OR?: AppointmentWhereInput[]
     NOT?: AppointmentWhereInput | AppointmentWhereInput[]
     id?: IntFilter<"Appointment"> | number
-    clientId?: IntFilter<"Appointment"> | number
+    clientCognitoId?: StringFilter<"Appointment"> | string
     psychologistId?: IntFilter<"Appointment"> | number
     meetingLink?: StringFilter<"Appointment"> | string
     date?: DateTimeFilter<"Appointment"> | Date | string
-    isConfirmed?: BoolFilter<"Appointment"> | boolean
+    Status?: EnumApplicationStatusFilter<"Appointment"> | $Enums.ApplicationStatus
     client?: XOR<ClientScalarRelationFilter, ClientWhereInput>
     psychologist?: XOR<PsychologistScalarRelationFilter, PsychologistWhereInput>
     payment?: XOR<PaymentNullableScalarRelationFilter, PaymentWhereInput> | null
@@ -8526,11 +7400,11 @@ export namespace Prisma {
 
   export type AppointmentOrderByWithRelationInput = {
     id?: SortOrder
-    clientId?: SortOrder
+    clientCognitoId?: SortOrder
     psychologistId?: SortOrder
     meetingLink?: SortOrder
     date?: SortOrder
-    isConfirmed?: SortOrder
+    Status?: SortOrder
     client?: ClientOrderByWithRelationInput
     psychologist?: PsychologistOrderByWithRelationInput
     payment?: PaymentOrderByWithRelationInput
@@ -8541,11 +7415,11 @@ export namespace Prisma {
     AND?: AppointmentWhereInput | AppointmentWhereInput[]
     OR?: AppointmentWhereInput[]
     NOT?: AppointmentWhereInput | AppointmentWhereInput[]
-    clientId?: IntFilter<"Appointment"> | number
+    clientCognitoId?: StringFilter<"Appointment"> | string
     psychologistId?: IntFilter<"Appointment"> | number
     meetingLink?: StringFilter<"Appointment"> | string
     date?: DateTimeFilter<"Appointment"> | Date | string
-    isConfirmed?: BoolFilter<"Appointment"> | boolean
+    Status?: EnumApplicationStatusFilter<"Appointment"> | $Enums.ApplicationStatus
     client?: XOR<ClientScalarRelationFilter, ClientWhereInput>
     psychologist?: XOR<PsychologistScalarRelationFilter, PsychologistWhereInput>
     payment?: XOR<PaymentNullableScalarRelationFilter, PaymentWhereInput> | null
@@ -8553,11 +7427,11 @@ export namespace Prisma {
 
   export type AppointmentOrderByWithAggregationInput = {
     id?: SortOrder
-    clientId?: SortOrder
+    clientCognitoId?: SortOrder
     psychologistId?: SortOrder
     meetingLink?: SortOrder
     date?: SortOrder
-    isConfirmed?: SortOrder
+    Status?: SortOrder
     _count?: AppointmentCountOrderByAggregateInput
     _avg?: AppointmentAvgOrderByAggregateInput
     _max?: AppointmentMaxOrderByAggregateInput
@@ -8570,11 +7444,11 @@ export namespace Prisma {
     OR?: AppointmentScalarWhereWithAggregatesInput[]
     NOT?: AppointmentScalarWhereWithAggregatesInput | AppointmentScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Appointment"> | number
-    clientId?: IntWithAggregatesFilter<"Appointment"> | number
+    clientCognitoId?: StringWithAggregatesFilter<"Appointment"> | string
     psychologistId?: IntWithAggregatesFilter<"Appointment"> | number
     meetingLink?: StringWithAggregatesFilter<"Appointment"> | string
     date?: DateTimeWithAggregatesFilter<"Appointment"> | Date | string
-    isConfirmed?: BoolWithAggregatesFilter<"Appointment"> | boolean
+    Status?: EnumApplicationStatusWithAggregatesFilter<"Appointment"> | $Enums.ApplicationStatus
   }
 
   export type PaymentWhereInput = {
@@ -8583,18 +7457,18 @@ export namespace Prisma {
     NOT?: PaymentWhereInput | PaymentWhereInput[]
     id?: IntFilter<"Payment"> | number
     appointmentId?: IntFilter<"Payment"> | number
-    clientId?: IntFilter<"Payment"> | number
+    clientCognitoId?: StringNullableFilter<"Payment"> | string | null
     paymentDate?: DateTimeFilter<"Payment"> | Date | string
     isPaid?: BoolFilter<"Payment"> | boolean
     amount?: IntFilter<"Payment"> | number
     appointment?: XOR<AppointmentScalarRelationFilter, AppointmentWhereInput>
-    client?: XOR<ClientScalarRelationFilter, ClientWhereInput>
+    client?: XOR<ClientNullableScalarRelationFilter, ClientWhereInput> | null
   }
 
   export type PaymentOrderByWithRelationInput = {
     id?: SortOrder
     appointmentId?: SortOrder
-    clientId?: SortOrder
+    clientCognitoId?: SortOrderInput | SortOrder
     paymentDate?: SortOrder
     isPaid?: SortOrder
     amount?: SortOrder
@@ -8608,18 +7482,18 @@ export namespace Prisma {
     AND?: PaymentWhereInput | PaymentWhereInput[]
     OR?: PaymentWhereInput[]
     NOT?: PaymentWhereInput | PaymentWhereInput[]
-    clientId?: IntFilter<"Payment"> | number
+    clientCognitoId?: StringNullableFilter<"Payment"> | string | null
     paymentDate?: DateTimeFilter<"Payment"> | Date | string
     isPaid?: BoolFilter<"Payment"> | boolean
     amount?: IntFilter<"Payment"> | number
     appointment?: XOR<AppointmentScalarRelationFilter, AppointmentWhereInput>
-    client?: XOR<ClientScalarRelationFilter, ClientWhereInput>
+    client?: XOR<ClientNullableScalarRelationFilter, ClientWhereInput> | null
   }, "id" | "appointmentId">
 
   export type PaymentOrderByWithAggregationInput = {
     id?: SortOrder
     appointmentId?: SortOrder
-    clientId?: SortOrder
+    clientCognitoId?: SortOrderInput | SortOrder
     paymentDate?: SortOrder
     isPaid?: SortOrder
     amount?: SortOrder
@@ -8636,119 +7510,106 @@ export namespace Prisma {
     NOT?: PaymentScalarWhereWithAggregatesInput | PaymentScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Payment"> | number
     appointmentId?: IntWithAggregatesFilter<"Payment"> | number
-    clientId?: IntWithAggregatesFilter<"Payment"> | number
+    clientCognitoId?: StringNullableWithAggregatesFilter<"Payment"> | string | null
     paymentDate?: DateTimeWithAggregatesFilter<"Payment"> | Date | string
     isPaid?: BoolWithAggregatesFilter<"Payment"> | boolean
     amount?: IntWithAggregatesFilter<"Payment"> | number
   }
 
-  export type UserCreateInput = {
-    role: string
-    email: string
-    password: string
-    firstName: string
-    lastName: string
-    phone: string
-    dateOfBirth: Date | string
-    client?: ClientCreateNestedOneWithoutUserInput
-    psychologist?: PsychologistCreateNestedOneWithoutUserInput
+  export type CalendarAppointmentWhereInput = {
+    AND?: CalendarAppointmentWhereInput | CalendarAppointmentWhereInput[]
+    OR?: CalendarAppointmentWhereInput[]
+    NOT?: CalendarAppointmentWhereInput | CalendarAppointmentWhereInput[]
+    id?: IntFilter<"CalendarAppointment"> | number
+    date?: DateTimeFilter<"CalendarAppointment"> | Date | string
+    startHour?: StringFilter<"CalendarAppointment"> | string
+    patientName?: StringFilter<"CalendarAppointment"> | string
+    psychologistId?: IntFilter<"CalendarAppointment"> | number
+    psychologist?: XOR<PsychologistScalarRelationFilter, PsychologistWhereInput>
   }
 
-  export type UserUncheckedCreateInput = {
+  export type CalendarAppointmentOrderByWithRelationInput = {
+    id?: SortOrder
+    date?: SortOrder
+    startHour?: SortOrder
+    patientName?: SortOrder
+    psychologistId?: SortOrder
+    psychologist?: PsychologistOrderByWithRelationInput
+  }
+
+  export type CalendarAppointmentWhereUniqueInput = Prisma.AtLeast<{
     id?: number
-    role: string
-    email: string
-    password: string
-    firstName: string
-    lastName: string
-    phone: string
-    dateOfBirth: Date | string
-    client?: ClientUncheckedCreateNestedOneWithoutUserInput
-    psychologist?: PsychologistUncheckedCreateNestedOneWithoutUserInput
+    AND?: CalendarAppointmentWhereInput | CalendarAppointmentWhereInput[]
+    OR?: CalendarAppointmentWhereInput[]
+    NOT?: CalendarAppointmentWhereInput | CalendarAppointmentWhereInput[]
+    date?: DateTimeFilter<"CalendarAppointment"> | Date | string
+    startHour?: StringFilter<"CalendarAppointment"> | string
+    patientName?: StringFilter<"CalendarAppointment"> | string
+    psychologistId?: IntFilter<"CalendarAppointment"> | number
+    psychologist?: XOR<PsychologistScalarRelationFilter, PsychologistWhereInput>
+  }, "id">
+
+  export type CalendarAppointmentOrderByWithAggregationInput = {
+    id?: SortOrder
+    date?: SortOrder
+    startHour?: SortOrder
+    patientName?: SortOrder
+    psychologistId?: SortOrder
+    _count?: CalendarAppointmentCountOrderByAggregateInput
+    _avg?: CalendarAppointmentAvgOrderByAggregateInput
+    _max?: CalendarAppointmentMaxOrderByAggregateInput
+    _min?: CalendarAppointmentMinOrderByAggregateInput
+    _sum?: CalendarAppointmentSumOrderByAggregateInput
   }
 
-  export type UserUpdateInput = {
-    role?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
-    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
-    client?: ClientUpdateOneWithoutUserNestedInput
-    psychologist?: PsychologistUpdateOneWithoutUserNestedInput
-  }
-
-  export type UserUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    role?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
-    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
-    client?: ClientUncheckedUpdateOneWithoutUserNestedInput
-    psychologist?: PsychologistUncheckedUpdateOneWithoutUserNestedInput
-  }
-
-  export type UserCreateManyInput = {
-    id?: number
-    role: string
-    email: string
-    password: string
-    firstName: string
-    lastName: string
-    phone: string
-    dateOfBirth: Date | string
-  }
-
-  export type UserUpdateManyMutationInput = {
-    role?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
-    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type UserUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    role?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
-    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
+  export type CalendarAppointmentScalarWhereWithAggregatesInput = {
+    AND?: CalendarAppointmentScalarWhereWithAggregatesInput | CalendarAppointmentScalarWhereWithAggregatesInput[]
+    OR?: CalendarAppointmentScalarWhereWithAggregatesInput[]
+    NOT?: CalendarAppointmentScalarWhereWithAggregatesInput | CalendarAppointmentScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"CalendarAppointment"> | number
+    date?: DateTimeWithAggregatesFilter<"CalendarAppointment"> | Date | string
+    startHour?: StringWithAggregatesFilter<"CalendarAppointment"> | string
+    patientName?: StringWithAggregatesFilter<"CalendarAppointment"> | string
+    psychologistId?: IntWithAggregatesFilter<"CalendarAppointment"> | number
   }
 
   export type ClientCreateInput = {
+    cognitoId: string
+    name: string
+    email: string
+    phoneNumber: string
     history?: string | null
-    user: UserCreateNestedOneWithoutClientInput
     appointments?: AppointmentCreateNestedManyWithoutClientInput
     payments?: PaymentCreateNestedManyWithoutClientInput
   }
 
   export type ClientUncheckedCreateInput = {
     id?: number
-    userId: number
+    cognitoId: string
+    name: string
+    email: string
+    phoneNumber: string
     history?: string | null
     appointments?: AppointmentUncheckedCreateNestedManyWithoutClientInput
     payments?: PaymentUncheckedCreateNestedManyWithoutClientInput
   }
 
   export type ClientUpdateInput = {
+    cognitoId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: StringFieldUpdateOperationsInput | string
     history?: NullableStringFieldUpdateOperationsInput | string | null
-    user?: UserUpdateOneRequiredWithoutClientNestedInput
     appointments?: AppointmentUpdateManyWithoutClientNestedInput
     payments?: PaymentUpdateManyWithoutClientNestedInput
   }
 
   export type ClientUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    userId?: IntFieldUpdateOperationsInput | number
+    cognitoId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: StringFieldUpdateOperationsInput | string
     history?: NullableStringFieldUpdateOperationsInput | string | null
     appointments?: AppointmentUncheckedUpdateManyWithoutClientNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutClientNestedInput
@@ -8756,118 +7617,123 @@ export namespace Prisma {
 
   export type ClientCreateManyInput = {
     id?: number
-    userId: number
+    cognitoId: string
+    name: string
+    email: string
+    phoneNumber: string
     history?: string | null
   }
 
   export type ClientUpdateManyMutationInput = {
+    cognitoId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: StringFieldUpdateOperationsInput | string
     history?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ClientUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    userId?: IntFieldUpdateOperationsInput | number
+    cognitoId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: StringFieldUpdateOperationsInput | string
     history?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type PsychologistCreateInput = {
-    specialization: string
-    price: Decimal | DecimalJsLike | number | string
-    availability: Date | string
-    user: UserCreateNestedOneWithoutPsychologistInput
-    location: LocationCreateNestedOneWithoutPsychologistsInput
+    cognitoId: string
+    name: string
+    email: string
+    phoneNumber: string
+    location?: string
+    hourlyRate: number
+    Description: string
+    Specialization: string
     appointments?: AppointmentCreateNestedManyWithoutPsychologistInput
+    CalendarAppointment?: CalendarAppointmentCreateNestedManyWithoutPsychologistInput
   }
 
   export type PsychologistUncheckedCreateInput = {
     id?: number
-    userId: number
-    specialization: string
-    price: Decimal | DecimalJsLike | number | string
-    availability: Date | string
-    locationId: number
+    cognitoId: string
+    name: string
+    email: string
+    phoneNumber: string
+    location?: string
+    hourlyRate: number
+    Description: string
+    Specialization: string
     appointments?: AppointmentUncheckedCreateNestedManyWithoutPsychologistInput
+    CalendarAppointment?: CalendarAppointmentUncheckedCreateNestedManyWithoutPsychologistInput
   }
 
   export type PsychologistUpdateInput = {
-    specialization?: StringFieldUpdateOperationsInput | string
-    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    availability?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutPsychologistNestedInput
-    location?: LocationUpdateOneRequiredWithoutPsychologistsNestedInput
+    cognitoId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    hourlyRate?: IntFieldUpdateOperationsInput | number
+    Description?: StringFieldUpdateOperationsInput | string
+    Specialization?: StringFieldUpdateOperationsInput | string
     appointments?: AppointmentUpdateManyWithoutPsychologistNestedInput
+    CalendarAppointment?: CalendarAppointmentUpdateManyWithoutPsychologistNestedInput
   }
 
   export type PsychologistUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    userId?: IntFieldUpdateOperationsInput | number
-    specialization?: StringFieldUpdateOperationsInput | string
-    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    availability?: DateTimeFieldUpdateOperationsInput | Date | string
-    locationId?: IntFieldUpdateOperationsInput | number
+    cognitoId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    hourlyRate?: IntFieldUpdateOperationsInput | number
+    Description?: StringFieldUpdateOperationsInput | string
+    Specialization?: StringFieldUpdateOperationsInput | string
     appointments?: AppointmentUncheckedUpdateManyWithoutPsychologistNestedInput
+    CalendarAppointment?: CalendarAppointmentUncheckedUpdateManyWithoutPsychologistNestedInput
   }
 
   export type PsychologistCreateManyInput = {
     id?: number
-    userId: number
-    specialization: string
-    price: Decimal | DecimalJsLike | number | string
-    availability: Date | string
-    locationId: number
+    cognitoId: string
+    name: string
+    email: string
+    phoneNumber: string
+    location?: string
+    hourlyRate: number
+    Description: string
+    Specialization: string
   }
 
   export type PsychologistUpdateManyMutationInput = {
-    specialization?: StringFieldUpdateOperationsInput | string
-    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    availability?: DateTimeFieldUpdateOperationsInput | Date | string
+    cognitoId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    hourlyRate?: IntFieldUpdateOperationsInput | number
+    Description?: StringFieldUpdateOperationsInput | string
+    Specialization?: StringFieldUpdateOperationsInput | string
   }
 
   export type PsychologistUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    userId?: IntFieldUpdateOperationsInput | number
-    specialization?: StringFieldUpdateOperationsInput | string
-    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    availability?: DateTimeFieldUpdateOperationsInput | Date | string
-    locationId?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type LocationUpdateInput = {
-    street?: StringFieldUpdateOperationsInput | string
-    city?: StringFieldUpdateOperationsInput | string
-    houseNumber?: StringFieldUpdateOperationsInput | string
-    postalCode?: StringFieldUpdateOperationsInput | string
-    psychologists?: PsychologistUpdateManyWithoutLocationNestedInput
-  }
-
-  export type LocationUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    street?: StringFieldUpdateOperationsInput | string
-    city?: StringFieldUpdateOperationsInput | string
-    houseNumber?: StringFieldUpdateOperationsInput | string
-    postalCode?: StringFieldUpdateOperationsInput | string
-    psychologists?: PsychologistUncheckedUpdateManyWithoutLocationNestedInput
-  }
-
-  export type LocationUpdateManyMutationInput = {
-    street?: StringFieldUpdateOperationsInput | string
-    city?: StringFieldUpdateOperationsInput | string
-    houseNumber?: StringFieldUpdateOperationsInput | string
-    postalCode?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type LocationUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    street?: StringFieldUpdateOperationsInput | string
-    city?: StringFieldUpdateOperationsInput | string
-    houseNumber?: StringFieldUpdateOperationsInput | string
-    postalCode?: StringFieldUpdateOperationsInput | string
+    cognitoId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    hourlyRate?: IntFieldUpdateOperationsInput | number
+    Description?: StringFieldUpdateOperationsInput | string
+    Specialization?: StringFieldUpdateOperationsInput | string
   }
 
   export type AppointmentCreateInput = {
     meetingLink: string
     date: Date | string
-    isConfirmed: boolean
+    Status: $Enums.ApplicationStatus
     client: ClientCreateNestedOneWithoutAppointmentsInput
     psychologist: PsychologistCreateNestedOneWithoutAppointmentsInput
     payment?: PaymentCreateNestedOneWithoutAppointmentInput
@@ -8875,18 +7741,18 @@ export namespace Prisma {
 
   export type AppointmentUncheckedCreateInput = {
     id?: number
-    clientId: number
+    clientCognitoId: string
     psychologistId: number
     meetingLink: string
     date: Date | string
-    isConfirmed: boolean
+    Status: $Enums.ApplicationStatus
     payment?: PaymentUncheckedCreateNestedOneWithoutAppointmentInput
   }
 
   export type AppointmentUpdateInput = {
     meetingLink?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
+    Status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     client?: ClientUpdateOneRequiredWithoutAppointmentsNestedInput
     psychologist?: PsychologistUpdateOneRequiredWithoutAppointmentsNestedInput
     payment?: PaymentUpdateOneWithoutAppointmentNestedInput
@@ -8894,36 +7760,36 @@ export namespace Prisma {
 
   export type AppointmentUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    clientId?: IntFieldUpdateOperationsInput | number
+    clientCognitoId?: StringFieldUpdateOperationsInput | string
     psychologistId?: IntFieldUpdateOperationsInput | number
     meetingLink?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
+    Status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     payment?: PaymentUncheckedUpdateOneWithoutAppointmentNestedInput
   }
 
   export type AppointmentCreateManyInput = {
     id?: number
-    clientId: number
+    clientCognitoId: string
     psychologistId: number
     meetingLink: string
     date: Date | string
-    isConfirmed: boolean
+    Status: $Enums.ApplicationStatus
   }
 
   export type AppointmentUpdateManyMutationInput = {
     meetingLink?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
+    Status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
   }
 
   export type AppointmentUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    clientId?: IntFieldUpdateOperationsInput | number
+    clientCognitoId?: StringFieldUpdateOperationsInput | string
     psychologistId?: IntFieldUpdateOperationsInput | number
     meetingLink?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
+    Status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
   }
 
   export type PaymentCreateInput = {
@@ -8931,13 +7797,13 @@ export namespace Prisma {
     isPaid: boolean
     amount: number
     appointment: AppointmentCreateNestedOneWithoutPaymentInput
-    client: ClientCreateNestedOneWithoutPaymentsInput
+    client?: ClientCreateNestedOneWithoutPaymentsInput
   }
 
   export type PaymentUncheckedCreateInput = {
     id?: number
     appointmentId: number
-    clientId: number
+    clientCognitoId?: string | null
     paymentDate: Date | string
     isPaid: boolean
     amount: number
@@ -8948,13 +7814,13 @@ export namespace Prisma {
     isPaid?: BoolFieldUpdateOperationsInput | boolean
     amount?: IntFieldUpdateOperationsInput | number
     appointment?: AppointmentUpdateOneRequiredWithoutPaymentNestedInput
-    client?: ClientUpdateOneRequiredWithoutPaymentsNestedInput
+    client?: ClientUpdateOneWithoutPaymentsNestedInput
   }
 
   export type PaymentUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     appointmentId?: IntFieldUpdateOperationsInput | number
-    clientId?: IntFieldUpdateOperationsInput | number
+    clientCognitoId?: NullableStringFieldUpdateOperationsInput | string | null
     paymentDate?: DateTimeFieldUpdateOperationsInput | Date | string
     isPaid?: BoolFieldUpdateOperationsInput | boolean
     amount?: IntFieldUpdateOperationsInput | number
@@ -8963,7 +7829,7 @@ export namespace Prisma {
   export type PaymentCreateManyInput = {
     id?: number
     appointmentId: number
-    clientId: number
+    clientCognitoId?: string | null
     paymentDate: Date | string
     isPaid: boolean
     amount: number
@@ -8978,10 +7844,62 @@ export namespace Prisma {
   export type PaymentUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     appointmentId?: IntFieldUpdateOperationsInput | number
-    clientId?: IntFieldUpdateOperationsInput | number
+    clientCognitoId?: NullableStringFieldUpdateOperationsInput | string | null
     paymentDate?: DateTimeFieldUpdateOperationsInput | Date | string
     isPaid?: BoolFieldUpdateOperationsInput | boolean
     amount?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type CalendarAppointmentCreateInput = {
+    date: Date | string
+    startHour: string
+    patientName: string
+    psychologist: PsychologistCreateNestedOneWithoutCalendarAppointmentInput
+  }
+
+  export type CalendarAppointmentUncheckedCreateInput = {
+    id?: number
+    date: Date | string
+    startHour: string
+    patientName: string
+    psychologistId: number
+  }
+
+  export type CalendarAppointmentUpdateInput = {
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    startHour?: StringFieldUpdateOperationsInput | string
+    patientName?: StringFieldUpdateOperationsInput | string
+    psychologist?: PsychologistUpdateOneRequiredWithoutCalendarAppointmentNestedInput
+  }
+
+  export type CalendarAppointmentUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    startHour?: StringFieldUpdateOperationsInput | string
+    patientName?: StringFieldUpdateOperationsInput | string
+    psychologistId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type CalendarAppointmentCreateManyInput = {
+    id?: number
+    date: Date | string
+    startHour: string
+    patientName: string
+    psychologistId: number
+  }
+
+  export type CalendarAppointmentUpdateManyMutationInput = {
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    startHour?: StringFieldUpdateOperationsInput | string
+    patientName?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type CalendarAppointmentUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    startHour?: StringFieldUpdateOperationsInput | string
+    patientName?: StringFieldUpdateOperationsInput | string
+    psychologistId?: IntFieldUpdateOperationsInput | number
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -9010,65 +7928,78 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
-  export type DateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type ClientNullableScalarRelationFilter = {
-    is?: ClientWhereInput | null
-    isNot?: ClientWhereInput | null
+  export type AppointmentListRelationFilter = {
+    every?: AppointmentWhereInput
+    some?: AppointmentWhereInput
+    none?: AppointmentWhereInput
   }
 
-  export type PsychologistNullableScalarRelationFilter = {
-    is?: PsychologistWhereInput | null
-    isNot?: PsychologistWhereInput | null
+  export type PaymentListRelationFilter = {
+    every?: PaymentWhereInput
+    some?: PaymentWhereInput
+    none?: PaymentWhereInput
   }
 
-  export type UserCountOrderByAggregateInput = {
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
+  }
+
+  export type AppointmentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PaymentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ClientCountOrderByAggregateInput = {
     id?: SortOrder
-    role?: SortOrder
+    cognitoId?: SortOrder
+    name?: SortOrder
     email?: SortOrder
-    password?: SortOrder
-    firstName?: SortOrder
-    lastName?: SortOrder
-    phone?: SortOrder
-    dateOfBirth?: SortOrder
+    phoneNumber?: SortOrder
+    history?: SortOrder
   }
 
-  export type UserAvgOrderByAggregateInput = {
+  export type ClientAvgOrderByAggregateInput = {
     id?: SortOrder
   }
 
-  export type UserMaxOrderByAggregateInput = {
+  export type ClientMaxOrderByAggregateInput = {
     id?: SortOrder
-    role?: SortOrder
+    cognitoId?: SortOrder
+    name?: SortOrder
     email?: SortOrder
-    password?: SortOrder
-    firstName?: SortOrder
-    lastName?: SortOrder
-    phone?: SortOrder
-    dateOfBirth?: SortOrder
+    phoneNumber?: SortOrder
+    history?: SortOrder
   }
 
-  export type UserMinOrderByAggregateInput = {
+  export type ClientMinOrderByAggregateInput = {
     id?: SortOrder
-    role?: SortOrder
+    cognitoId?: SortOrder
+    name?: SortOrder
     email?: SortOrder
-    password?: SortOrder
-    firstName?: SortOrder
-    lastName?: SortOrder
-    phone?: SortOrder
-    dateOfBirth?: SortOrder
+    phoneNumber?: SortOrder
+    history?: SortOrder
   }
 
-  export type UserSumOrderByAggregateInput = {
+  export type ClientSumOrderByAggregateInput = {
     id?: SortOrder
   }
 
@@ -9106,93 +8037,6 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
-  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
-  export type StringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
-  export type UserScalarRelationFilter = {
-    is?: UserWhereInput
-    isNot?: UserWhereInput
-  }
-
-  export type AppointmentListRelationFilter = {
-    every?: AppointmentWhereInput
-    some?: AppointmentWhereInput
-    none?: AppointmentWhereInput
-  }
-
-  export type PaymentListRelationFilter = {
-    every?: PaymentWhereInput
-    some?: PaymentWhereInput
-    none?: PaymentWhereInput
-  }
-
-  export type SortOrderInput = {
-    sort: SortOrder
-    nulls?: NullsOrder
-  }
-
-  export type AppointmentOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type PaymentOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type ClientCountOrderByAggregateInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    history?: SortOrder
-  }
-
-  export type ClientAvgOrderByAggregateInput = {
-    id?: SortOrder
-    userId?: SortOrder
-  }
-
-  export type ClientMaxOrderByAggregateInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    history?: SortOrder
-  }
-
-  export type ClientMinOrderByAggregateInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    history?: SortOrder
-  }
-
-  export type ClientSumOrderByAggregateInput = {
-    id?: SortOrder
-    userId?: SortOrder
-  }
-
   export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -9211,124 +8055,78 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type DecimalFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+  export type CalendarAppointmentListRelationFilter = {
+    every?: CalendarAppointmentWhereInput
+    some?: CalendarAppointmentWhereInput
+    none?: CalendarAppointmentWhereInput
   }
 
-  export type LocationScalarRelationFilter = {
-    is?: LocationWhereInput
-    isNot?: LocationWhereInput
+  export type CalendarAppointmentOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type PsychologistCountOrderByAggregateInput = {
     id?: SortOrder
-    userId?: SortOrder
-    specialization?: SortOrder
-    price?: SortOrder
-    availability?: SortOrder
-    locationId?: SortOrder
+    cognitoId?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    phoneNumber?: SortOrder
+    location?: SortOrder
+    hourlyRate?: SortOrder
+    Description?: SortOrder
+    Specialization?: SortOrder
   }
 
   export type PsychologistAvgOrderByAggregateInput = {
     id?: SortOrder
-    userId?: SortOrder
-    price?: SortOrder
-    locationId?: SortOrder
+    hourlyRate?: SortOrder
   }
 
   export type PsychologistMaxOrderByAggregateInput = {
     id?: SortOrder
-    userId?: SortOrder
-    specialization?: SortOrder
-    price?: SortOrder
-    availability?: SortOrder
-    locationId?: SortOrder
+    cognitoId?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    phoneNumber?: SortOrder
+    location?: SortOrder
+    hourlyRate?: SortOrder
+    Description?: SortOrder
+    Specialization?: SortOrder
   }
 
   export type PsychologistMinOrderByAggregateInput = {
     id?: SortOrder
-    userId?: SortOrder
-    specialization?: SortOrder
-    price?: SortOrder
-    availability?: SortOrder
-    locationId?: SortOrder
+    cognitoId?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    phoneNumber?: SortOrder
+    location?: SortOrder
+    hourlyRate?: SortOrder
+    Description?: SortOrder
+    Specialization?: SortOrder
   }
 
   export type PsychologistSumOrderByAggregateInput = {
     id?: SortOrder
-    userId?: SortOrder
-    price?: SortOrder
-    locationId?: SortOrder
+    hourlyRate?: SortOrder
   }
 
-  export type DecimalWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedDecimalFilter<$PrismaModel>
-    _sum?: NestedDecimalFilter<$PrismaModel>
-    _min?: NestedDecimalFilter<$PrismaModel>
-    _max?: NestedDecimalFilter<$PrismaModel>
+  export type DateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type PsychologistListRelationFilter = {
-    every?: PsychologistWhereInput
-    some?: PsychologistWhereInput
-    none?: PsychologistWhereInput
-  }
-
-  export type PsychologistOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type LocationCountOrderByAggregateInput = {
-    id?: SortOrder
-    street?: SortOrder
-    city?: SortOrder
-    houseNumber?: SortOrder
-    postalCode?: SortOrder
-  }
-
-  export type LocationAvgOrderByAggregateInput = {
-    id?: SortOrder
-  }
-
-  export type LocationMaxOrderByAggregateInput = {
-    id?: SortOrder
-    street?: SortOrder
-    city?: SortOrder
-    houseNumber?: SortOrder
-    postalCode?: SortOrder
-  }
-
-  export type LocationMinOrderByAggregateInput = {
-    id?: SortOrder
-    street?: SortOrder
-    city?: SortOrder
-    houseNumber?: SortOrder
-    postalCode?: SortOrder
-  }
-
-  export type LocationSumOrderByAggregateInput = {
-    id?: SortOrder
-  }
-
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
+  export type EnumApplicationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ApplicationStatus | EnumApplicationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ApplicationStatus[] | ListEnumApplicationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ApplicationStatus[] | ListEnumApplicationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumApplicationStatusFilter<$PrismaModel> | $Enums.ApplicationStatus
   }
 
   export type ClientScalarRelationFilter = {
@@ -9348,41 +8146,117 @@ export namespace Prisma {
 
   export type AppointmentCountOrderByAggregateInput = {
     id?: SortOrder
-    clientId?: SortOrder
+    clientCognitoId?: SortOrder
     psychologistId?: SortOrder
     meetingLink?: SortOrder
     date?: SortOrder
-    isConfirmed?: SortOrder
+    Status?: SortOrder
   }
 
   export type AppointmentAvgOrderByAggregateInput = {
     id?: SortOrder
-    clientId?: SortOrder
     psychologistId?: SortOrder
   }
 
   export type AppointmentMaxOrderByAggregateInput = {
     id?: SortOrder
-    clientId?: SortOrder
+    clientCognitoId?: SortOrder
     psychologistId?: SortOrder
     meetingLink?: SortOrder
     date?: SortOrder
-    isConfirmed?: SortOrder
+    Status?: SortOrder
   }
 
   export type AppointmentMinOrderByAggregateInput = {
     id?: SortOrder
-    clientId?: SortOrder
+    clientCognitoId?: SortOrder
     psychologistId?: SortOrder
     meetingLink?: SortOrder
     date?: SortOrder
-    isConfirmed?: SortOrder
+    Status?: SortOrder
   }
 
   export type AppointmentSumOrderByAggregateInput = {
     id?: SortOrder
-    clientId?: SortOrder
     psychologistId?: SortOrder
+  }
+
+  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type EnumApplicationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ApplicationStatus | EnumApplicationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ApplicationStatus[] | ListEnumApplicationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ApplicationStatus[] | ListEnumApplicationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumApplicationStatusWithAggregatesFilter<$PrismaModel> | $Enums.ApplicationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumApplicationStatusFilter<$PrismaModel>
+    _max?: NestedEnumApplicationStatusFilter<$PrismaModel>
+  }
+
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type AppointmentScalarRelationFilter = {
+    is?: AppointmentWhereInput
+    isNot?: AppointmentWhereInput
+  }
+
+  export type ClientNullableScalarRelationFilter = {
+    is?: ClientWhereInput | null
+    isNot?: ClientWhereInput | null
+  }
+
+  export type PaymentCountOrderByAggregateInput = {
+    id?: SortOrder
+    appointmentId?: SortOrder
+    clientCognitoId?: SortOrder
+    paymentDate?: SortOrder
+    isPaid?: SortOrder
+    amount?: SortOrder
+  }
+
+  export type PaymentAvgOrderByAggregateInput = {
+    id?: SortOrder
+    appointmentId?: SortOrder
+    amount?: SortOrder
+  }
+
+  export type PaymentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    appointmentId?: SortOrder
+    clientCognitoId?: SortOrder
+    paymentDate?: SortOrder
+    isPaid?: SortOrder
+    amount?: SortOrder
+  }
+
+  export type PaymentMinOrderByAggregateInput = {
+    id?: SortOrder
+    appointmentId?: SortOrder
+    clientCognitoId?: SortOrder
+    paymentDate?: SortOrder
+    isPaid?: SortOrder
+    amount?: SortOrder
+  }
+
+  export type PaymentSumOrderByAggregateInput = {
+    id?: SortOrder
+    appointmentId?: SortOrder
+    amount?: SortOrder
   }
 
   export type BoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -9393,136 +8267,38 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
-  export type AppointmentScalarRelationFilter = {
-    is?: AppointmentWhereInput
-    isNot?: AppointmentWhereInput
-  }
-
-  export type PaymentCountOrderByAggregateInput = {
+  export type CalendarAppointmentCountOrderByAggregateInput = {
     id?: SortOrder
-    appointmentId?: SortOrder
-    clientId?: SortOrder
-    paymentDate?: SortOrder
-    isPaid?: SortOrder
-    amount?: SortOrder
+    date?: SortOrder
+    startHour?: SortOrder
+    patientName?: SortOrder
+    psychologistId?: SortOrder
   }
 
-  export type PaymentAvgOrderByAggregateInput = {
+  export type CalendarAppointmentAvgOrderByAggregateInput = {
     id?: SortOrder
-    appointmentId?: SortOrder
-    clientId?: SortOrder
-    amount?: SortOrder
+    psychologistId?: SortOrder
   }
 
-  export type PaymentMaxOrderByAggregateInput = {
+  export type CalendarAppointmentMaxOrderByAggregateInput = {
     id?: SortOrder
-    appointmentId?: SortOrder
-    clientId?: SortOrder
-    paymentDate?: SortOrder
-    isPaid?: SortOrder
-    amount?: SortOrder
+    date?: SortOrder
+    startHour?: SortOrder
+    patientName?: SortOrder
+    psychologistId?: SortOrder
   }
 
-  export type PaymentMinOrderByAggregateInput = {
+  export type CalendarAppointmentMinOrderByAggregateInput = {
     id?: SortOrder
-    appointmentId?: SortOrder
-    clientId?: SortOrder
-    paymentDate?: SortOrder
-    isPaid?: SortOrder
-    amount?: SortOrder
+    date?: SortOrder
+    startHour?: SortOrder
+    patientName?: SortOrder
+    psychologistId?: SortOrder
   }
 
-  export type PaymentSumOrderByAggregateInput = {
+  export type CalendarAppointmentSumOrderByAggregateInput = {
     id?: SortOrder
-    appointmentId?: SortOrder
-    clientId?: SortOrder
-    amount?: SortOrder
-  }
-
-  export type ClientCreateNestedOneWithoutUserInput = {
-    create?: XOR<ClientCreateWithoutUserInput, ClientUncheckedCreateWithoutUserInput>
-    connectOrCreate?: ClientCreateOrConnectWithoutUserInput
-    connect?: ClientWhereUniqueInput
-  }
-
-  export type PsychologistCreateNestedOneWithoutUserInput = {
-    create?: XOR<PsychologistCreateWithoutUserInput, PsychologistUncheckedCreateWithoutUserInput>
-    connectOrCreate?: PsychologistCreateOrConnectWithoutUserInput
-    connect?: PsychologistWhereUniqueInput
-  }
-
-  export type ClientUncheckedCreateNestedOneWithoutUserInput = {
-    create?: XOR<ClientCreateWithoutUserInput, ClientUncheckedCreateWithoutUserInput>
-    connectOrCreate?: ClientCreateOrConnectWithoutUserInput
-    connect?: ClientWhereUniqueInput
-  }
-
-  export type PsychologistUncheckedCreateNestedOneWithoutUserInput = {
-    create?: XOR<PsychologistCreateWithoutUserInput, PsychologistUncheckedCreateWithoutUserInput>
-    connectOrCreate?: PsychologistCreateOrConnectWithoutUserInput
-    connect?: PsychologistWhereUniqueInput
-  }
-
-  export type StringFieldUpdateOperationsInput = {
-    set?: string
-  }
-
-  export type DateTimeFieldUpdateOperationsInput = {
-    set?: Date | string
-  }
-
-  export type ClientUpdateOneWithoutUserNestedInput = {
-    create?: XOR<ClientCreateWithoutUserInput, ClientUncheckedCreateWithoutUserInput>
-    connectOrCreate?: ClientCreateOrConnectWithoutUserInput
-    upsert?: ClientUpsertWithoutUserInput
-    disconnect?: ClientWhereInput | boolean
-    delete?: ClientWhereInput | boolean
-    connect?: ClientWhereUniqueInput
-    update?: XOR<XOR<ClientUpdateToOneWithWhereWithoutUserInput, ClientUpdateWithoutUserInput>, ClientUncheckedUpdateWithoutUserInput>
-  }
-
-  export type PsychologistUpdateOneWithoutUserNestedInput = {
-    create?: XOR<PsychologistCreateWithoutUserInput, PsychologistUncheckedCreateWithoutUserInput>
-    connectOrCreate?: PsychologistCreateOrConnectWithoutUserInput
-    upsert?: PsychologistUpsertWithoutUserInput
-    disconnect?: PsychologistWhereInput | boolean
-    delete?: PsychologistWhereInput | boolean
-    connect?: PsychologistWhereUniqueInput
-    update?: XOR<XOR<PsychologistUpdateToOneWithWhereWithoutUserInput, PsychologistUpdateWithoutUserInput>, PsychologistUncheckedUpdateWithoutUserInput>
-  }
-
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
-  export type ClientUncheckedUpdateOneWithoutUserNestedInput = {
-    create?: XOR<ClientCreateWithoutUserInput, ClientUncheckedCreateWithoutUserInput>
-    connectOrCreate?: ClientCreateOrConnectWithoutUserInput
-    upsert?: ClientUpsertWithoutUserInput
-    disconnect?: ClientWhereInput | boolean
-    delete?: ClientWhereInput | boolean
-    connect?: ClientWhereUniqueInput
-    update?: XOR<XOR<ClientUpdateToOneWithWhereWithoutUserInput, ClientUpdateWithoutUserInput>, ClientUncheckedUpdateWithoutUserInput>
-  }
-
-  export type PsychologistUncheckedUpdateOneWithoutUserNestedInput = {
-    create?: XOR<PsychologistCreateWithoutUserInput, PsychologistUncheckedCreateWithoutUserInput>
-    connectOrCreate?: PsychologistCreateOrConnectWithoutUserInput
-    upsert?: PsychologistUpsertWithoutUserInput
-    disconnect?: PsychologistWhereInput | boolean
-    delete?: PsychologistWhereInput | boolean
-    connect?: PsychologistWhereUniqueInput
-    update?: XOR<XOR<PsychologistUpdateToOneWithWhereWithoutUserInput, PsychologistUpdateWithoutUserInput>, PsychologistUncheckedUpdateWithoutUserInput>
-  }
-
-  export type UserCreateNestedOneWithoutClientInput = {
-    create?: XOR<UserCreateWithoutClientInput, UserUncheckedCreateWithoutClientInput>
-    connectOrCreate?: UserCreateOrConnectWithoutClientInput
-    connect?: UserWhereUniqueInput
+    psychologistId?: SortOrder
   }
 
   export type AppointmentCreateNestedManyWithoutClientInput = {
@@ -9553,16 +8329,12 @@ export namespace Prisma {
     connect?: PaymentWhereUniqueInput | PaymentWhereUniqueInput[]
   }
 
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null
+  export type StringFieldUpdateOperationsInput = {
+    set?: string
   }
 
-  export type UserUpdateOneRequiredWithoutClientNestedInput = {
-    create?: XOR<UserCreateWithoutClientInput, UserUncheckedCreateWithoutClientInput>
-    connectOrCreate?: UserCreateOrConnectWithoutClientInput
-    upsert?: UserUpsertWithoutClientInput
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutClientInput, UserUpdateWithoutClientInput>, UserUncheckedUpdateWithoutClientInput>
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
   }
 
   export type AppointmentUpdateManyWithoutClientNestedInput = {
@@ -9593,6 +8365,14 @@ export namespace Prisma {
     deleteMany?: PaymentScalarWhereInput | PaymentScalarWhereInput[]
   }
 
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type AppointmentUncheckedUpdateManyWithoutClientNestedInput = {
     create?: XOR<AppointmentCreateWithoutClientInput, AppointmentUncheckedCreateWithoutClientInput> | AppointmentCreateWithoutClientInput[] | AppointmentUncheckedCreateWithoutClientInput[]
     connectOrCreate?: AppointmentCreateOrConnectWithoutClientInput | AppointmentCreateOrConnectWithoutClientInput[]
@@ -9621,21 +8401,18 @@ export namespace Prisma {
     deleteMany?: PaymentScalarWhereInput | PaymentScalarWhereInput[]
   }
 
-  export type UserCreateNestedOneWithoutPsychologistInput = {
-    create?: XOR<UserCreateWithoutPsychologistInput, UserUncheckedCreateWithoutPsychologistInput>
-    connectOrCreate?: UserCreateOrConnectWithoutPsychologistInput
-    connect?: UserWhereUniqueInput
-  }
-
-  export type LocationCreateNestedOneWithoutPsychologistsInput = {
-    connect?: LocationWhereUniqueInput
-  }
-
   export type AppointmentCreateNestedManyWithoutPsychologistInput = {
     create?: XOR<AppointmentCreateWithoutPsychologistInput, AppointmentUncheckedCreateWithoutPsychologistInput> | AppointmentCreateWithoutPsychologistInput[] | AppointmentUncheckedCreateWithoutPsychologistInput[]
     connectOrCreate?: AppointmentCreateOrConnectWithoutPsychologistInput | AppointmentCreateOrConnectWithoutPsychologistInput[]
     createMany?: AppointmentCreateManyPsychologistInputEnvelope
     connect?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
+  }
+
+  export type CalendarAppointmentCreateNestedManyWithoutPsychologistInput = {
+    create?: XOR<CalendarAppointmentCreateWithoutPsychologistInput, CalendarAppointmentUncheckedCreateWithoutPsychologistInput> | CalendarAppointmentCreateWithoutPsychologistInput[] | CalendarAppointmentUncheckedCreateWithoutPsychologistInput[]
+    connectOrCreate?: CalendarAppointmentCreateOrConnectWithoutPsychologistInput | CalendarAppointmentCreateOrConnectWithoutPsychologistInput[]
+    createMany?: CalendarAppointmentCreateManyPsychologistInputEnvelope
+    connect?: CalendarAppointmentWhereUniqueInput | CalendarAppointmentWhereUniqueInput[]
   }
 
   export type AppointmentUncheckedCreateNestedManyWithoutPsychologistInput = {
@@ -9645,25 +8422,11 @@ export namespace Prisma {
     connect?: AppointmentWhereUniqueInput | AppointmentWhereUniqueInput[]
   }
 
-  export type DecimalFieldUpdateOperationsInput = {
-    set?: Decimal | DecimalJsLike | number | string
-    increment?: Decimal | DecimalJsLike | number | string
-    decrement?: Decimal | DecimalJsLike | number | string
-    multiply?: Decimal | DecimalJsLike | number | string
-    divide?: Decimal | DecimalJsLike | number | string
-  }
-
-  export type UserUpdateOneRequiredWithoutPsychologistNestedInput = {
-    create?: XOR<UserCreateWithoutPsychologistInput, UserUncheckedCreateWithoutPsychologistInput>
-    connectOrCreate?: UserCreateOrConnectWithoutPsychologistInput
-    upsert?: UserUpsertWithoutPsychologistInput
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPsychologistInput, UserUpdateWithoutPsychologistInput>, UserUncheckedUpdateWithoutPsychologistInput>
-  }
-
-  export type LocationUpdateOneRequiredWithoutPsychologistsNestedInput = {
-    connect?: LocationWhereUniqueInput
-    update?: XOR<XOR<LocationUpdateToOneWithWhereWithoutPsychologistsInput, LocationUpdateWithoutPsychologistsInput>, LocationUncheckedUpdateWithoutPsychologistsInput>
+  export type CalendarAppointmentUncheckedCreateNestedManyWithoutPsychologistInput = {
+    create?: XOR<CalendarAppointmentCreateWithoutPsychologistInput, CalendarAppointmentUncheckedCreateWithoutPsychologistInput> | CalendarAppointmentCreateWithoutPsychologistInput[] | CalendarAppointmentUncheckedCreateWithoutPsychologistInput[]
+    connectOrCreate?: CalendarAppointmentCreateOrConnectWithoutPsychologistInput | CalendarAppointmentCreateOrConnectWithoutPsychologistInput[]
+    createMany?: CalendarAppointmentCreateManyPsychologistInputEnvelope
+    connect?: CalendarAppointmentWhereUniqueInput | CalendarAppointmentWhereUniqueInput[]
   }
 
   export type AppointmentUpdateManyWithoutPsychologistNestedInput = {
@@ -9680,6 +8443,20 @@ export namespace Prisma {
     deleteMany?: AppointmentScalarWhereInput | AppointmentScalarWhereInput[]
   }
 
+  export type CalendarAppointmentUpdateManyWithoutPsychologistNestedInput = {
+    create?: XOR<CalendarAppointmentCreateWithoutPsychologistInput, CalendarAppointmentUncheckedCreateWithoutPsychologistInput> | CalendarAppointmentCreateWithoutPsychologistInput[] | CalendarAppointmentUncheckedCreateWithoutPsychologistInput[]
+    connectOrCreate?: CalendarAppointmentCreateOrConnectWithoutPsychologistInput | CalendarAppointmentCreateOrConnectWithoutPsychologistInput[]
+    upsert?: CalendarAppointmentUpsertWithWhereUniqueWithoutPsychologistInput | CalendarAppointmentUpsertWithWhereUniqueWithoutPsychologistInput[]
+    createMany?: CalendarAppointmentCreateManyPsychologistInputEnvelope
+    set?: CalendarAppointmentWhereUniqueInput | CalendarAppointmentWhereUniqueInput[]
+    disconnect?: CalendarAppointmentWhereUniqueInput | CalendarAppointmentWhereUniqueInput[]
+    delete?: CalendarAppointmentWhereUniqueInput | CalendarAppointmentWhereUniqueInput[]
+    connect?: CalendarAppointmentWhereUniqueInput | CalendarAppointmentWhereUniqueInput[]
+    update?: CalendarAppointmentUpdateWithWhereUniqueWithoutPsychologistInput | CalendarAppointmentUpdateWithWhereUniqueWithoutPsychologistInput[]
+    updateMany?: CalendarAppointmentUpdateManyWithWhereWithoutPsychologistInput | CalendarAppointmentUpdateManyWithWhereWithoutPsychologistInput[]
+    deleteMany?: CalendarAppointmentScalarWhereInput | CalendarAppointmentScalarWhereInput[]
+  }
+
   export type AppointmentUncheckedUpdateManyWithoutPsychologistNestedInput = {
     create?: XOR<AppointmentCreateWithoutPsychologistInput, AppointmentUncheckedCreateWithoutPsychologistInput> | AppointmentCreateWithoutPsychologistInput[] | AppointmentUncheckedCreateWithoutPsychologistInput[]
     connectOrCreate?: AppointmentCreateOrConnectWithoutPsychologistInput | AppointmentCreateOrConnectWithoutPsychologistInput[]
@@ -9694,32 +8471,18 @@ export namespace Prisma {
     deleteMany?: AppointmentScalarWhereInput | AppointmentScalarWhereInput[]
   }
 
-  export type PsychologistUpdateManyWithoutLocationNestedInput = {
-    create?: XOR<PsychologistCreateWithoutLocationInput, PsychologistUncheckedCreateWithoutLocationInput> | PsychologistCreateWithoutLocationInput[] | PsychologistUncheckedCreateWithoutLocationInput[]
-    connectOrCreate?: PsychologistCreateOrConnectWithoutLocationInput | PsychologistCreateOrConnectWithoutLocationInput[]
-    upsert?: PsychologistUpsertWithWhereUniqueWithoutLocationInput | PsychologistUpsertWithWhereUniqueWithoutLocationInput[]
-    createMany?: PsychologistCreateManyLocationInputEnvelope
-    set?: PsychologistWhereUniqueInput | PsychologistWhereUniqueInput[]
-    disconnect?: PsychologistWhereUniqueInput | PsychologistWhereUniqueInput[]
-    delete?: PsychologistWhereUniqueInput | PsychologistWhereUniqueInput[]
-    connect?: PsychologistWhereUniqueInput | PsychologistWhereUniqueInput[]
-    update?: PsychologistUpdateWithWhereUniqueWithoutLocationInput | PsychologistUpdateWithWhereUniqueWithoutLocationInput[]
-    updateMany?: PsychologistUpdateManyWithWhereWithoutLocationInput | PsychologistUpdateManyWithWhereWithoutLocationInput[]
-    deleteMany?: PsychologistScalarWhereInput | PsychologistScalarWhereInput[]
-  }
-
-  export type PsychologistUncheckedUpdateManyWithoutLocationNestedInput = {
-    create?: XOR<PsychologistCreateWithoutLocationInput, PsychologistUncheckedCreateWithoutLocationInput> | PsychologistCreateWithoutLocationInput[] | PsychologistUncheckedCreateWithoutLocationInput[]
-    connectOrCreate?: PsychologistCreateOrConnectWithoutLocationInput | PsychologistCreateOrConnectWithoutLocationInput[]
-    upsert?: PsychologistUpsertWithWhereUniqueWithoutLocationInput | PsychologistUpsertWithWhereUniqueWithoutLocationInput[]
-    createMany?: PsychologistCreateManyLocationInputEnvelope
-    set?: PsychologistWhereUniqueInput | PsychologistWhereUniqueInput[]
-    disconnect?: PsychologistWhereUniqueInput | PsychologistWhereUniqueInput[]
-    delete?: PsychologistWhereUniqueInput | PsychologistWhereUniqueInput[]
-    connect?: PsychologistWhereUniqueInput | PsychologistWhereUniqueInput[]
-    update?: PsychologistUpdateWithWhereUniqueWithoutLocationInput | PsychologistUpdateWithWhereUniqueWithoutLocationInput[]
-    updateMany?: PsychologistUpdateManyWithWhereWithoutLocationInput | PsychologistUpdateManyWithWhereWithoutLocationInput[]
-    deleteMany?: PsychologistScalarWhereInput | PsychologistScalarWhereInput[]
+  export type CalendarAppointmentUncheckedUpdateManyWithoutPsychologistNestedInput = {
+    create?: XOR<CalendarAppointmentCreateWithoutPsychologistInput, CalendarAppointmentUncheckedCreateWithoutPsychologistInput> | CalendarAppointmentCreateWithoutPsychologistInput[] | CalendarAppointmentUncheckedCreateWithoutPsychologistInput[]
+    connectOrCreate?: CalendarAppointmentCreateOrConnectWithoutPsychologistInput | CalendarAppointmentCreateOrConnectWithoutPsychologistInput[]
+    upsert?: CalendarAppointmentUpsertWithWhereUniqueWithoutPsychologistInput | CalendarAppointmentUpsertWithWhereUniqueWithoutPsychologistInput[]
+    createMany?: CalendarAppointmentCreateManyPsychologistInputEnvelope
+    set?: CalendarAppointmentWhereUniqueInput | CalendarAppointmentWhereUniqueInput[]
+    disconnect?: CalendarAppointmentWhereUniqueInput | CalendarAppointmentWhereUniqueInput[]
+    delete?: CalendarAppointmentWhereUniqueInput | CalendarAppointmentWhereUniqueInput[]
+    connect?: CalendarAppointmentWhereUniqueInput | CalendarAppointmentWhereUniqueInput[]
+    update?: CalendarAppointmentUpdateWithWhereUniqueWithoutPsychologistInput | CalendarAppointmentUpdateWithWhereUniqueWithoutPsychologistInput[]
+    updateMany?: CalendarAppointmentUpdateManyWithWhereWithoutPsychologistInput | CalendarAppointmentUpdateManyWithWhereWithoutPsychologistInput[]
+    deleteMany?: CalendarAppointmentScalarWhereInput | CalendarAppointmentScalarWhereInput[]
   }
 
   export type ClientCreateNestedOneWithoutAppointmentsInput = {
@@ -9746,8 +8509,12 @@ export namespace Prisma {
     connect?: PaymentWhereUniqueInput
   }
 
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
+  export type DateTimeFieldUpdateOperationsInput = {
+    set?: Date | string
+  }
+
+  export type EnumApplicationStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ApplicationStatus
   }
 
   export type ClientUpdateOneRequiredWithoutAppointmentsNestedInput = {
@@ -9798,6 +8565,10 @@ export namespace Prisma {
     connect?: ClientWhereUniqueInput
   }
 
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
   export type AppointmentUpdateOneRequiredWithoutPaymentNestedInput = {
     create?: XOR<AppointmentCreateWithoutPaymentInput, AppointmentUncheckedCreateWithoutPaymentInput>
     connectOrCreate?: AppointmentCreateOrConnectWithoutPaymentInput
@@ -9806,12 +8577,28 @@ export namespace Prisma {
     update?: XOR<XOR<AppointmentUpdateToOneWithWhereWithoutPaymentInput, AppointmentUpdateWithoutPaymentInput>, AppointmentUncheckedUpdateWithoutPaymentInput>
   }
 
-  export type ClientUpdateOneRequiredWithoutPaymentsNestedInput = {
+  export type ClientUpdateOneWithoutPaymentsNestedInput = {
     create?: XOR<ClientCreateWithoutPaymentsInput, ClientUncheckedCreateWithoutPaymentsInput>
     connectOrCreate?: ClientCreateOrConnectWithoutPaymentsInput
     upsert?: ClientUpsertWithoutPaymentsInput
+    disconnect?: ClientWhereInput | boolean
+    delete?: ClientWhereInput | boolean
     connect?: ClientWhereUniqueInput
     update?: XOR<XOR<ClientUpdateToOneWithWhereWithoutPaymentsInput, ClientUpdateWithoutPaymentsInput>, ClientUncheckedUpdateWithoutPaymentsInput>
+  }
+
+  export type PsychologistCreateNestedOneWithoutCalendarAppointmentInput = {
+    create?: XOR<PsychologistCreateWithoutCalendarAppointmentInput, PsychologistUncheckedCreateWithoutCalendarAppointmentInput>
+    connectOrCreate?: PsychologistCreateOrConnectWithoutCalendarAppointmentInput
+    connect?: PsychologistWhereUniqueInput
+  }
+
+  export type PsychologistUpdateOneRequiredWithoutCalendarAppointmentNestedInput = {
+    create?: XOR<PsychologistCreateWithoutCalendarAppointmentInput, PsychologistUncheckedCreateWithoutCalendarAppointmentInput>
+    connectOrCreate?: PsychologistCreateOrConnectWithoutCalendarAppointmentInput
+    upsert?: PsychologistUpsertWithoutCalendarAppointmentInput
+    connect?: PsychologistWhereUniqueInput
+    update?: XOR<XOR<PsychologistUpdateToOneWithWhereWithoutCalendarAppointmentInput, PsychologistUpdateWithoutCalendarAppointmentInput>, PsychologistUncheckedUpdateWithoutCalendarAppointmentInput>
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -9839,15 +8626,18 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
-  export type NestedDateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -9894,34 +8684,6 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
-  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
-  export type NestedStringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -9950,31 +8712,46 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
-  export type NestedDecimalFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+  export type NestedDateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type NestedDecimalWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+  export type NestedEnumApplicationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ApplicationStatus | EnumApplicationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ApplicationStatus[] | ListEnumApplicationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ApplicationStatus[] | ListEnumApplicationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumApplicationStatusFilter<$PrismaModel> | $Enums.ApplicationStatus
+  }
+
+  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
     _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedDecimalFilter<$PrismaModel>
-    _sum?: NestedDecimalFilter<$PrismaModel>
-    _min?: NestedDecimalFilter<$PrismaModel>
-    _max?: NestedDecimalFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumApplicationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ApplicationStatus | EnumApplicationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ApplicationStatus[] | ListEnumApplicationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ApplicationStatus[] | ListEnumApplicationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumApplicationStatusWithAggregatesFilter<$PrismaModel> | $Enums.ApplicationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumApplicationStatusFilter<$PrismaModel>
+    _max?: NestedEnumApplicationStatusFilter<$PrismaModel>
   }
 
   export type NestedBoolFilter<$PrismaModel = never> = {
@@ -9990,130 +8767,10 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
-  export type ClientCreateWithoutUserInput = {
-    history?: string | null
-    appointments?: AppointmentCreateNestedManyWithoutClientInput
-    payments?: PaymentCreateNestedManyWithoutClientInput
-  }
-
-  export type ClientUncheckedCreateWithoutUserInput = {
-    id?: number
-    history?: string | null
-    appointments?: AppointmentUncheckedCreateNestedManyWithoutClientInput
-    payments?: PaymentUncheckedCreateNestedManyWithoutClientInput
-  }
-
-  export type ClientCreateOrConnectWithoutUserInput = {
-    where: ClientWhereUniqueInput
-    create: XOR<ClientCreateWithoutUserInput, ClientUncheckedCreateWithoutUserInput>
-  }
-
-  export type PsychologistCreateWithoutUserInput = {
-    specialization: string
-    price: Decimal | DecimalJsLike | number | string
-    availability: Date | string
-    location: LocationCreateNestedOneWithoutPsychologistsInput
-    appointments?: AppointmentCreateNestedManyWithoutPsychologistInput
-  }
-
-  export type PsychologistUncheckedCreateWithoutUserInput = {
-    id?: number
-    specialization: string
-    price: Decimal | DecimalJsLike | number | string
-    availability: Date | string
-    locationId: number
-    appointments?: AppointmentUncheckedCreateNestedManyWithoutPsychologistInput
-  }
-
-  export type PsychologistCreateOrConnectWithoutUserInput = {
-    where: PsychologistWhereUniqueInput
-    create: XOR<PsychologistCreateWithoutUserInput, PsychologistUncheckedCreateWithoutUserInput>
-  }
-
-  export type ClientUpsertWithoutUserInput = {
-    update: XOR<ClientUpdateWithoutUserInput, ClientUncheckedUpdateWithoutUserInput>
-    create: XOR<ClientCreateWithoutUserInput, ClientUncheckedCreateWithoutUserInput>
-    where?: ClientWhereInput
-  }
-
-  export type ClientUpdateToOneWithWhereWithoutUserInput = {
-    where?: ClientWhereInput
-    data: XOR<ClientUpdateWithoutUserInput, ClientUncheckedUpdateWithoutUserInput>
-  }
-
-  export type ClientUpdateWithoutUserInput = {
-    history?: NullableStringFieldUpdateOperationsInput | string | null
-    appointments?: AppointmentUpdateManyWithoutClientNestedInput
-    payments?: PaymentUpdateManyWithoutClientNestedInput
-  }
-
-  export type ClientUncheckedUpdateWithoutUserInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    history?: NullableStringFieldUpdateOperationsInput | string | null
-    appointments?: AppointmentUncheckedUpdateManyWithoutClientNestedInput
-    payments?: PaymentUncheckedUpdateManyWithoutClientNestedInput
-  }
-
-  export type PsychologistUpsertWithoutUserInput = {
-    update: XOR<PsychologistUpdateWithoutUserInput, PsychologistUncheckedUpdateWithoutUserInput>
-    create: XOR<PsychologistCreateWithoutUserInput, PsychologistUncheckedCreateWithoutUserInput>
-    where?: PsychologistWhereInput
-  }
-
-  export type PsychologistUpdateToOneWithWhereWithoutUserInput = {
-    where?: PsychologistWhereInput
-    data: XOR<PsychologistUpdateWithoutUserInput, PsychologistUncheckedUpdateWithoutUserInput>
-  }
-
-  export type PsychologistUpdateWithoutUserInput = {
-    specialization?: StringFieldUpdateOperationsInput | string
-    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    availability?: DateTimeFieldUpdateOperationsInput | Date | string
-    location?: LocationUpdateOneRequiredWithoutPsychologistsNestedInput
-    appointments?: AppointmentUpdateManyWithoutPsychologistNestedInput
-  }
-
-  export type PsychologistUncheckedUpdateWithoutUserInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    specialization?: StringFieldUpdateOperationsInput | string
-    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    availability?: DateTimeFieldUpdateOperationsInput | Date | string
-    locationId?: IntFieldUpdateOperationsInput | number
-    appointments?: AppointmentUncheckedUpdateManyWithoutPsychologistNestedInput
-  }
-
-  export type UserCreateWithoutClientInput = {
-    role: string
-    email: string
-    password: string
-    firstName: string
-    lastName: string
-    phone: string
-    dateOfBirth: Date | string
-    psychologist?: PsychologistCreateNestedOneWithoutUserInput
-  }
-
-  export type UserUncheckedCreateWithoutClientInput = {
-    id?: number
-    role: string
-    email: string
-    password: string
-    firstName: string
-    lastName: string
-    phone: string
-    dateOfBirth: Date | string
-    psychologist?: PsychologistUncheckedCreateNestedOneWithoutUserInput
-  }
-
-  export type UserCreateOrConnectWithoutClientInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutClientInput, UserUncheckedCreateWithoutClientInput>
-  }
-
   export type AppointmentCreateWithoutClientInput = {
     meetingLink: string
     date: Date | string
-    isConfirmed: boolean
+    Status: $Enums.ApplicationStatus
     psychologist: PsychologistCreateNestedOneWithoutAppointmentsInput
     payment?: PaymentCreateNestedOneWithoutAppointmentInput
   }
@@ -10123,7 +8780,7 @@ export namespace Prisma {
     psychologistId: number
     meetingLink: string
     date: Date | string
-    isConfirmed: boolean
+    Status: $Enums.ApplicationStatus
     payment?: PaymentUncheckedCreateNestedOneWithoutAppointmentInput
   }
 
@@ -10162,40 +8819,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type UserUpsertWithoutClientInput = {
-    update: XOR<UserUpdateWithoutClientInput, UserUncheckedUpdateWithoutClientInput>
-    create: XOR<UserCreateWithoutClientInput, UserUncheckedCreateWithoutClientInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutClientInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutClientInput, UserUncheckedUpdateWithoutClientInput>
-  }
-
-  export type UserUpdateWithoutClientInput = {
-    role?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
-    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
-    psychologist?: PsychologistUpdateOneWithoutUserNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutClientInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    role?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
-    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
-    psychologist?: PsychologistUncheckedUpdateOneWithoutUserNestedInput
-  }
-
   export type AppointmentUpsertWithWhereUniqueWithoutClientInput = {
     where: AppointmentWhereUniqueInput
     update: XOR<AppointmentUpdateWithoutClientInput, AppointmentUncheckedUpdateWithoutClientInput>
@@ -10217,11 +8840,11 @@ export namespace Prisma {
     OR?: AppointmentScalarWhereInput[]
     NOT?: AppointmentScalarWhereInput | AppointmentScalarWhereInput[]
     id?: IntFilter<"Appointment"> | number
-    clientId?: IntFilter<"Appointment"> | number
+    clientCognitoId?: StringFilter<"Appointment"> | string
     psychologistId?: IntFilter<"Appointment"> | number
     meetingLink?: StringFilter<"Appointment"> | string
     date?: DateTimeFilter<"Appointment"> | Date | string
-    isConfirmed?: BoolFilter<"Appointment"> | boolean
+    Status?: EnumApplicationStatusFilter<"Appointment"> | $Enums.ApplicationStatus
   }
 
   export type PaymentUpsertWithWhereUniqueWithoutClientInput = {
@@ -10246,54 +8869,26 @@ export namespace Prisma {
     NOT?: PaymentScalarWhereInput | PaymentScalarWhereInput[]
     id?: IntFilter<"Payment"> | number
     appointmentId?: IntFilter<"Payment"> | number
-    clientId?: IntFilter<"Payment"> | number
+    clientCognitoId?: StringNullableFilter<"Payment"> | string | null
     paymentDate?: DateTimeFilter<"Payment"> | Date | string
     isPaid?: BoolFilter<"Payment"> | boolean
     amount?: IntFilter<"Payment"> | number
   }
 
-  export type UserCreateWithoutPsychologistInput = {
-    role: string
-    email: string
-    password: string
-    firstName: string
-    lastName: string
-    phone: string
-    dateOfBirth: Date | string
-    client?: ClientCreateNestedOneWithoutUserInput
-  }
-
-  export type UserUncheckedCreateWithoutPsychologistInput = {
-    id?: number
-    role: string
-    email: string
-    password: string
-    firstName: string
-    lastName: string
-    phone: string
-    dateOfBirth: Date | string
-    client?: ClientUncheckedCreateNestedOneWithoutUserInput
-  }
-
-  export type UserCreateOrConnectWithoutPsychologistInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutPsychologistInput, UserUncheckedCreateWithoutPsychologistInput>
-  }
-
   export type AppointmentCreateWithoutPsychologistInput = {
     meetingLink: string
     date: Date | string
-    isConfirmed: boolean
+    Status: $Enums.ApplicationStatus
     client: ClientCreateNestedOneWithoutAppointmentsInput
     payment?: PaymentCreateNestedOneWithoutAppointmentInput
   }
 
   export type AppointmentUncheckedCreateWithoutPsychologistInput = {
     id?: number
-    clientId: number
+    clientCognitoId: string
     meetingLink: string
     date: Date | string
-    isConfirmed: boolean
+    Status: $Enums.ApplicationStatus
     payment?: PaymentUncheckedCreateNestedOneWithoutAppointmentInput
   }
 
@@ -10307,58 +8902,27 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type UserUpsertWithoutPsychologistInput = {
-    update: XOR<UserUpdateWithoutPsychologistInput, UserUncheckedUpdateWithoutPsychologistInput>
-    create: XOR<UserCreateWithoutPsychologistInput, UserUncheckedCreateWithoutPsychologistInput>
-    where?: UserWhereInput
+  export type CalendarAppointmentCreateWithoutPsychologistInput = {
+    date: Date | string
+    startHour: string
+    patientName: string
   }
 
-  export type UserUpdateToOneWithWhereWithoutPsychologistInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutPsychologistInput, UserUncheckedUpdateWithoutPsychologistInput>
+  export type CalendarAppointmentUncheckedCreateWithoutPsychologistInput = {
+    id?: number
+    date: Date | string
+    startHour: string
+    patientName: string
   }
 
-  export type UserUpdateWithoutPsychologistInput = {
-    role?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
-    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
-    client?: ClientUpdateOneWithoutUserNestedInput
+  export type CalendarAppointmentCreateOrConnectWithoutPsychologistInput = {
+    where: CalendarAppointmentWhereUniqueInput
+    create: XOR<CalendarAppointmentCreateWithoutPsychologistInput, CalendarAppointmentUncheckedCreateWithoutPsychologistInput>
   }
 
-  export type UserUncheckedUpdateWithoutPsychologistInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    role?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
-    dateOfBirth?: DateTimeFieldUpdateOperationsInput | Date | string
-    client?: ClientUncheckedUpdateOneWithoutUserNestedInput
-  }
-
-  export type LocationUpdateToOneWithWhereWithoutPsychologistsInput = {
-    where?: LocationWhereInput
-    data: XOR<LocationUpdateWithoutPsychologistsInput, LocationUncheckedUpdateWithoutPsychologistsInput>
-  }
-
-  export type LocationUpdateWithoutPsychologistsInput = {
-    street?: StringFieldUpdateOperationsInput | string
-    city?: StringFieldUpdateOperationsInput | string
-    houseNumber?: StringFieldUpdateOperationsInput | string
-    postalCode?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type LocationUncheckedUpdateWithoutPsychologistsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    street?: StringFieldUpdateOperationsInput | string
-    city?: StringFieldUpdateOperationsInput | string
-    houseNumber?: StringFieldUpdateOperationsInput | string
-    postalCode?: StringFieldUpdateOperationsInput | string
+  export type CalendarAppointmentCreateManyPsychologistInputEnvelope = {
+    data: CalendarAppointmentCreateManyPsychologistInput | CalendarAppointmentCreateManyPsychologistInput[]
+    skipDuplicates?: boolean
   }
 
   export type AppointmentUpsertWithWhereUniqueWithoutPsychologistInput = {
@@ -10377,70 +8941,48 @@ export namespace Prisma {
     data: XOR<AppointmentUpdateManyMutationInput, AppointmentUncheckedUpdateManyWithoutPsychologistInput>
   }
 
-  export type PsychologistCreateWithoutLocationInput = {
-    specialization: string
-    price: Decimal | DecimalJsLike | number | string
-    availability: Date | string
-    user: UserCreateNestedOneWithoutPsychologistInput
-    appointments?: AppointmentCreateNestedManyWithoutPsychologistInput
+  export type CalendarAppointmentUpsertWithWhereUniqueWithoutPsychologistInput = {
+    where: CalendarAppointmentWhereUniqueInput
+    update: XOR<CalendarAppointmentUpdateWithoutPsychologistInput, CalendarAppointmentUncheckedUpdateWithoutPsychologistInput>
+    create: XOR<CalendarAppointmentCreateWithoutPsychologistInput, CalendarAppointmentUncheckedCreateWithoutPsychologistInput>
   }
 
-  export type PsychologistUncheckedCreateWithoutLocationInput = {
-    id?: number
-    userId: number
-    specialization: string
-    price: Decimal | DecimalJsLike | number | string
-    availability: Date | string
-    appointments?: AppointmentUncheckedCreateNestedManyWithoutPsychologistInput
+  export type CalendarAppointmentUpdateWithWhereUniqueWithoutPsychologistInput = {
+    where: CalendarAppointmentWhereUniqueInput
+    data: XOR<CalendarAppointmentUpdateWithoutPsychologistInput, CalendarAppointmentUncheckedUpdateWithoutPsychologistInput>
   }
 
-  export type PsychologistCreateOrConnectWithoutLocationInput = {
-    where: PsychologistWhereUniqueInput
-    create: XOR<PsychologistCreateWithoutLocationInput, PsychologistUncheckedCreateWithoutLocationInput>
+  export type CalendarAppointmentUpdateManyWithWhereWithoutPsychologistInput = {
+    where: CalendarAppointmentScalarWhereInput
+    data: XOR<CalendarAppointmentUpdateManyMutationInput, CalendarAppointmentUncheckedUpdateManyWithoutPsychologistInput>
   }
 
-  export type PsychologistUpsertWithWhereUniqueWithoutLocationInput = {
-    where: PsychologistWhereUniqueInput
-    update: XOR<PsychologistUpdateWithoutLocationInput, PsychologistUncheckedUpdateWithoutLocationInput>
-    create: XOR<PsychologistCreateWithoutLocationInput, PsychologistUncheckedCreateWithoutLocationInput>
-  }
-
-  export type PsychologistCreateManyLocationInputEnvelope = {
-    data: PsychologistCreateManyLocationInput | PsychologistCreateManyLocationInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type PsychologistUpdateWithWhereUniqueWithoutLocationInput = {
-    where: PsychologistWhereUniqueInput
-    data: XOR<PsychologistUpdateWithoutLocationInput, PsychologistUncheckedUpdateWithoutLocationInput>
-  }
-
-  export type PsychologistUpdateManyWithWhereWithoutLocationInput = {
-    where: PsychologistScalarWhereInput
-    data: XOR<PsychologistUpdateManyMutationInput, PsychologistUncheckedUpdateManyWithoutLocationInput>
-  }
-
-  export type PsychologistScalarWhereInput = {
-    AND?: PsychologistScalarWhereInput | PsychologistScalarWhereInput[]
-    OR?: PsychologistScalarWhereInput[]
-    NOT?: PsychologistScalarWhereInput | PsychologistScalarWhereInput[]
-    id?: IntFilter<"Psychologist"> | number
-    userId?: IntFilter<"Psychologist"> | number
-    specialization?: StringFilter<"Psychologist"> | string
-    price?: DecimalFilter<"Psychologist"> | Decimal | DecimalJsLike | number | string
-    availability?: DateTimeFilter<"Psychologist"> | Date | string
-    locationId?: IntFilter<"Psychologist"> | number
+  export type CalendarAppointmentScalarWhereInput = {
+    AND?: CalendarAppointmentScalarWhereInput | CalendarAppointmentScalarWhereInput[]
+    OR?: CalendarAppointmentScalarWhereInput[]
+    NOT?: CalendarAppointmentScalarWhereInput | CalendarAppointmentScalarWhereInput[]
+    id?: IntFilter<"CalendarAppointment"> | number
+    date?: DateTimeFilter<"CalendarAppointment"> | Date | string
+    startHour?: StringFilter<"CalendarAppointment"> | string
+    patientName?: StringFilter<"CalendarAppointment"> | string
+    psychologistId?: IntFilter<"CalendarAppointment"> | number
   }
 
   export type ClientCreateWithoutAppointmentsInput = {
+    cognitoId: string
+    name: string
+    email: string
+    phoneNumber: string
     history?: string | null
-    user: UserCreateNestedOneWithoutClientInput
     payments?: PaymentCreateNestedManyWithoutClientInput
   }
 
   export type ClientUncheckedCreateWithoutAppointmentsInput = {
     id?: number
-    userId: number
+    cognitoId: string
+    name: string
+    email: string
+    phoneNumber: string
     history?: string | null
     payments?: PaymentUncheckedCreateNestedManyWithoutClientInput
   }
@@ -10451,20 +8993,28 @@ export namespace Prisma {
   }
 
   export type PsychologistCreateWithoutAppointmentsInput = {
-    specialization: string
-    price: Decimal | DecimalJsLike | number | string
-    availability: Date | string
-    user: UserCreateNestedOneWithoutPsychologistInput
-    location: LocationCreateNestedOneWithoutPsychologistsInput
+    cognitoId: string
+    name: string
+    email: string
+    phoneNumber: string
+    location?: string
+    hourlyRate: number
+    Description: string
+    Specialization: string
+    CalendarAppointment?: CalendarAppointmentCreateNestedManyWithoutPsychologistInput
   }
 
   export type PsychologistUncheckedCreateWithoutAppointmentsInput = {
     id?: number
-    userId: number
-    specialization: string
-    price: Decimal | DecimalJsLike | number | string
-    availability: Date | string
-    locationId: number
+    cognitoId: string
+    name: string
+    email: string
+    phoneNumber: string
+    location?: string
+    hourlyRate: number
+    Description: string
+    Specialization: string
+    CalendarAppointment?: CalendarAppointmentUncheckedCreateNestedManyWithoutPsychologistInput
   }
 
   export type PsychologistCreateOrConnectWithoutAppointmentsInput = {
@@ -10476,12 +9026,12 @@ export namespace Prisma {
     paymentDate: Date | string
     isPaid: boolean
     amount: number
-    client: ClientCreateNestedOneWithoutPaymentsInput
+    client?: ClientCreateNestedOneWithoutPaymentsInput
   }
 
   export type PaymentUncheckedCreateWithoutAppointmentInput = {
     id?: number
-    clientId: number
+    clientCognitoId?: string | null
     paymentDate: Date | string
     isPaid: boolean
     amount: number
@@ -10504,14 +9054,20 @@ export namespace Prisma {
   }
 
   export type ClientUpdateWithoutAppointmentsInput = {
+    cognitoId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: StringFieldUpdateOperationsInput | string
     history?: NullableStringFieldUpdateOperationsInput | string | null
-    user?: UserUpdateOneRequiredWithoutClientNestedInput
     payments?: PaymentUpdateManyWithoutClientNestedInput
   }
 
   export type ClientUncheckedUpdateWithoutAppointmentsInput = {
     id?: IntFieldUpdateOperationsInput | number
-    userId?: IntFieldUpdateOperationsInput | number
+    cognitoId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: StringFieldUpdateOperationsInput | string
     history?: NullableStringFieldUpdateOperationsInput | string | null
     payments?: PaymentUncheckedUpdateManyWithoutClientNestedInput
   }
@@ -10528,20 +9084,28 @@ export namespace Prisma {
   }
 
   export type PsychologistUpdateWithoutAppointmentsInput = {
-    specialization?: StringFieldUpdateOperationsInput | string
-    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    availability?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutPsychologistNestedInput
-    location?: LocationUpdateOneRequiredWithoutPsychologistsNestedInput
+    cognitoId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    hourlyRate?: IntFieldUpdateOperationsInput | number
+    Description?: StringFieldUpdateOperationsInput | string
+    Specialization?: StringFieldUpdateOperationsInput | string
+    CalendarAppointment?: CalendarAppointmentUpdateManyWithoutPsychologistNestedInput
   }
 
   export type PsychologistUncheckedUpdateWithoutAppointmentsInput = {
     id?: IntFieldUpdateOperationsInput | number
-    userId?: IntFieldUpdateOperationsInput | number
-    specialization?: StringFieldUpdateOperationsInput | string
-    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    availability?: DateTimeFieldUpdateOperationsInput | Date | string
-    locationId?: IntFieldUpdateOperationsInput | number
+    cognitoId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    hourlyRate?: IntFieldUpdateOperationsInput | number
+    Description?: StringFieldUpdateOperationsInput | string
+    Specialization?: StringFieldUpdateOperationsInput | string
+    CalendarAppointment?: CalendarAppointmentUncheckedUpdateManyWithoutPsychologistNestedInput
   }
 
   export type PaymentUpsertWithoutAppointmentInput = {
@@ -10559,12 +9123,12 @@ export namespace Prisma {
     paymentDate?: DateTimeFieldUpdateOperationsInput | Date | string
     isPaid?: BoolFieldUpdateOperationsInput | boolean
     amount?: IntFieldUpdateOperationsInput | number
-    client?: ClientUpdateOneRequiredWithoutPaymentsNestedInput
+    client?: ClientUpdateOneWithoutPaymentsNestedInput
   }
 
   export type PaymentUncheckedUpdateWithoutAppointmentInput = {
     id?: IntFieldUpdateOperationsInput | number
-    clientId?: IntFieldUpdateOperationsInput | number
+    clientCognitoId?: NullableStringFieldUpdateOperationsInput | string | null
     paymentDate?: DateTimeFieldUpdateOperationsInput | Date | string
     isPaid?: BoolFieldUpdateOperationsInput | boolean
     amount?: IntFieldUpdateOperationsInput | number
@@ -10573,18 +9137,18 @@ export namespace Prisma {
   export type AppointmentCreateWithoutPaymentInput = {
     meetingLink: string
     date: Date | string
-    isConfirmed: boolean
+    Status: $Enums.ApplicationStatus
     client: ClientCreateNestedOneWithoutAppointmentsInput
     psychologist: PsychologistCreateNestedOneWithoutAppointmentsInput
   }
 
   export type AppointmentUncheckedCreateWithoutPaymentInput = {
     id?: number
-    clientId: number
+    clientCognitoId: string
     psychologistId: number
     meetingLink: string
     date: Date | string
-    isConfirmed: boolean
+    Status: $Enums.ApplicationStatus
   }
 
   export type AppointmentCreateOrConnectWithoutPaymentInput = {
@@ -10593,14 +9157,20 @@ export namespace Prisma {
   }
 
   export type ClientCreateWithoutPaymentsInput = {
+    cognitoId: string
+    name: string
+    email: string
+    phoneNumber: string
     history?: string | null
-    user: UserCreateNestedOneWithoutClientInput
     appointments?: AppointmentCreateNestedManyWithoutClientInput
   }
 
   export type ClientUncheckedCreateWithoutPaymentsInput = {
     id?: number
-    userId: number
+    cognitoId: string
+    name: string
+    email: string
+    phoneNumber: string
     history?: string | null
     appointments?: AppointmentUncheckedCreateNestedManyWithoutClientInput
   }
@@ -10624,18 +9194,18 @@ export namespace Prisma {
   export type AppointmentUpdateWithoutPaymentInput = {
     meetingLink?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
+    Status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     client?: ClientUpdateOneRequiredWithoutAppointmentsNestedInput
     psychologist?: PsychologistUpdateOneRequiredWithoutAppointmentsNestedInput
   }
 
   export type AppointmentUncheckedUpdateWithoutPaymentInput = {
     id?: IntFieldUpdateOperationsInput | number
-    clientId?: IntFieldUpdateOperationsInput | number
+    clientCognitoId?: StringFieldUpdateOperationsInput | string
     psychologistId?: IntFieldUpdateOperationsInput | number
     meetingLink?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
+    Status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
   }
 
   export type ClientUpsertWithoutPaymentsInput = {
@@ -10650,16 +9220,88 @@ export namespace Prisma {
   }
 
   export type ClientUpdateWithoutPaymentsInput = {
+    cognitoId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: StringFieldUpdateOperationsInput | string
     history?: NullableStringFieldUpdateOperationsInput | string | null
-    user?: UserUpdateOneRequiredWithoutClientNestedInput
     appointments?: AppointmentUpdateManyWithoutClientNestedInput
   }
 
   export type ClientUncheckedUpdateWithoutPaymentsInput = {
     id?: IntFieldUpdateOperationsInput | number
-    userId?: IntFieldUpdateOperationsInput | number
+    cognitoId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: StringFieldUpdateOperationsInput | string
     history?: NullableStringFieldUpdateOperationsInput | string | null
     appointments?: AppointmentUncheckedUpdateManyWithoutClientNestedInput
+  }
+
+  export type PsychologistCreateWithoutCalendarAppointmentInput = {
+    cognitoId: string
+    name: string
+    email: string
+    phoneNumber: string
+    location?: string
+    hourlyRate: number
+    Description: string
+    Specialization: string
+    appointments?: AppointmentCreateNestedManyWithoutPsychologistInput
+  }
+
+  export type PsychologistUncheckedCreateWithoutCalendarAppointmentInput = {
+    id?: number
+    cognitoId: string
+    name: string
+    email: string
+    phoneNumber: string
+    location?: string
+    hourlyRate: number
+    Description: string
+    Specialization: string
+    appointments?: AppointmentUncheckedCreateNestedManyWithoutPsychologistInput
+  }
+
+  export type PsychologistCreateOrConnectWithoutCalendarAppointmentInput = {
+    where: PsychologistWhereUniqueInput
+    create: XOR<PsychologistCreateWithoutCalendarAppointmentInput, PsychologistUncheckedCreateWithoutCalendarAppointmentInput>
+  }
+
+  export type PsychologistUpsertWithoutCalendarAppointmentInput = {
+    update: XOR<PsychologistUpdateWithoutCalendarAppointmentInput, PsychologistUncheckedUpdateWithoutCalendarAppointmentInput>
+    create: XOR<PsychologistCreateWithoutCalendarAppointmentInput, PsychologistUncheckedCreateWithoutCalendarAppointmentInput>
+    where?: PsychologistWhereInput
+  }
+
+  export type PsychologistUpdateToOneWithWhereWithoutCalendarAppointmentInput = {
+    where?: PsychologistWhereInput
+    data: XOR<PsychologistUpdateWithoutCalendarAppointmentInput, PsychologistUncheckedUpdateWithoutCalendarAppointmentInput>
+  }
+
+  export type PsychologistUpdateWithoutCalendarAppointmentInput = {
+    cognitoId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    hourlyRate?: IntFieldUpdateOperationsInput | number
+    Description?: StringFieldUpdateOperationsInput | string
+    Specialization?: StringFieldUpdateOperationsInput | string
+    appointments?: AppointmentUpdateManyWithoutPsychologistNestedInput
+  }
+
+  export type PsychologistUncheckedUpdateWithoutCalendarAppointmentInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    cognitoId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phoneNumber?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    hourlyRate?: IntFieldUpdateOperationsInput | number
+    Description?: StringFieldUpdateOperationsInput | string
+    Specialization?: StringFieldUpdateOperationsInput | string
+    appointments?: AppointmentUncheckedUpdateManyWithoutPsychologistNestedInput
   }
 
   export type AppointmentCreateManyClientInput = {
@@ -10667,7 +9309,7 @@ export namespace Prisma {
     psychologistId: number
     meetingLink: string
     date: Date | string
-    isConfirmed: boolean
+    Status: $Enums.ApplicationStatus
   }
 
   export type PaymentCreateManyClientInput = {
@@ -10681,7 +9323,7 @@ export namespace Prisma {
   export type AppointmentUpdateWithoutClientInput = {
     meetingLink?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
+    Status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     psychologist?: PsychologistUpdateOneRequiredWithoutAppointmentsNestedInput
     payment?: PaymentUpdateOneWithoutAppointmentNestedInput
   }
@@ -10691,7 +9333,7 @@ export namespace Prisma {
     psychologistId?: IntFieldUpdateOperationsInput | number
     meetingLink?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
+    Status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     payment?: PaymentUncheckedUpdateOneWithoutAppointmentNestedInput
   }
 
@@ -10700,7 +9342,7 @@ export namespace Prisma {
     psychologistId?: IntFieldUpdateOperationsInput | number
     meetingLink?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
+    Status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
   }
 
   export type PaymentUpdateWithoutClientInput = {
@@ -10728,68 +9370,62 @@ export namespace Prisma {
 
   export type AppointmentCreateManyPsychologistInput = {
     id?: number
-    clientId: number
+    clientCognitoId: string
     meetingLink: string
     date: Date | string
-    isConfirmed: boolean
+    Status: $Enums.ApplicationStatus
+  }
+
+  export type CalendarAppointmentCreateManyPsychologistInput = {
+    id?: number
+    date: Date | string
+    startHour: string
+    patientName: string
   }
 
   export type AppointmentUpdateWithoutPsychologistInput = {
     meetingLink?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
+    Status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     client?: ClientUpdateOneRequiredWithoutAppointmentsNestedInput
     payment?: PaymentUpdateOneWithoutAppointmentNestedInput
   }
 
   export type AppointmentUncheckedUpdateWithoutPsychologistInput = {
     id?: IntFieldUpdateOperationsInput | number
-    clientId?: IntFieldUpdateOperationsInput | number
+    clientCognitoId?: StringFieldUpdateOperationsInput | string
     meetingLink?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
+    Status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     payment?: PaymentUncheckedUpdateOneWithoutAppointmentNestedInput
   }
 
   export type AppointmentUncheckedUpdateManyWithoutPsychologistInput = {
     id?: IntFieldUpdateOperationsInput | number
-    clientId?: IntFieldUpdateOperationsInput | number
+    clientCognitoId?: StringFieldUpdateOperationsInput | string
     meetingLink?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
-    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
+    Status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
   }
 
-  export type PsychologistUpdateWithoutLocationInput = {
-    specialization?: StringFieldUpdateOperationsInput | string
-    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    availability?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutPsychologistNestedInput
-    appointments?: AppointmentUpdateManyWithoutPsychologistNestedInput
+  export type CalendarAppointmentUpdateWithoutPsychologistInput = {
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    startHour?: StringFieldUpdateOperationsInput | string
+    patientName?: StringFieldUpdateOperationsInput | string
   }
 
-  export type PsychologistUncheckedUpdateWithoutLocationInput = {
+  export type CalendarAppointmentUncheckedUpdateWithoutPsychologistInput = {
     id?: IntFieldUpdateOperationsInput | number
-    userId?: IntFieldUpdateOperationsInput | number
-    specialization?: StringFieldUpdateOperationsInput | string
-    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    availability?: DateTimeFieldUpdateOperationsInput | Date | string
-    appointments?: AppointmentUncheckedUpdateManyWithoutPsychologistNestedInput
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    startHour?: StringFieldUpdateOperationsInput | string
+    patientName?: StringFieldUpdateOperationsInput | string
   }
 
-  export type PsychologistCreateManyLocationInput = {
-    id?: number
-    userId: number
-    specialization: string
-    price: Decimal | DecimalJsLike | number | string
-    availability: Date | string
-  }
-
-  export type PsychologistUncheckedUpdateManyWithoutLocationInput = {
+  export type CalendarAppointmentUncheckedUpdateManyWithoutPsychologistInput = {
     id?: IntFieldUpdateOperationsInput | number
-    userId?: IntFieldUpdateOperationsInput | number
-    specialization?: StringFieldUpdateOperationsInput | string
-    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    availability?: DateTimeFieldUpdateOperationsInput | Date | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    startHour?: StringFieldUpdateOperationsInput | string
+    patientName?: StringFieldUpdateOperationsInput | string
   }
 
 

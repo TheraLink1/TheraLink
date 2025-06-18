@@ -51,8 +51,8 @@ model Appointment {
   id              Int               @id @default(autoincrement())
   clientCognitoId String
   client          Client            @relation(fields: [clientCognitoId], references: [cognitoId])
-  psychologistId  Int
-  psychologist    Psychologist      @relation(fields: [psychologistId], references: [id])
+  psychologistId  String
+  psychologist    Psychologist      @relation(fields: [psychologistId], references: [cognitoId])
   meetingLink     String
   date            DateTime
   Status          ApplicationStatus
@@ -75,8 +75,8 @@ model CalendarAppointment {
   date           DateTime
   startHour      String
   patientName    String
-  psychologist   Psychologist @relation(fields: [psychologistId], references: [id])
-  psychologistId Int
+  psychologist   Psychologist @relation(fields: [psychologistId], references: [cognitoId])
+  psychologistId String
 
   @@map("appointments")
 }

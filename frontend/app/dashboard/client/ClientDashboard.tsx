@@ -1,10 +1,11 @@
-// ClientDashboard.tsx
 import React, { useState } from 'react';
 import VerifyForm from './VerifyForm';
 import AccountSettings from './AccountSettings';
-import AppointmentHistory, { Appointment } from './AppointmentHistory'; 
+import AppointmentHistory from './AppointmentHistory'; 
 import { CardInfo, PaymentRecord } from './Billings';
 import Billings from './Billings'; 
+import { useGetAppointmentsForClientQuery, useGetAuthUserQuery } from '@/state/api';
+
 interface ClientDashboardProps {
   user: {
     id: number;
@@ -13,29 +14,6 @@ interface ClientDashboardProps {
     email: string;
   };
 }
-
-// ② użycie typu Appointment
-const sampleAppointments: Appointment[] = [
-  {
-    id: 1,
-    date: '2025-05-10T10:00:00Z',
-    meetingLink: 'https://meet.example.com/session1',
-    status: 'Approved',
-    psychologist: { id: 1, name: 'Dr. Anna Nowak', email: 'anna@example.com' },
-    payment: {
-      amount: 200,
-      isPaid: true,
-      paymentDate: '2025-05-09T14:30:00Z',
-    },
-  },
-  {
-    id: 2,
-    date: '2025-04-22T14:30:00Z',
-    meetingLink: 'https://meet.example.com/session2',
-    status: 'Denied',
-    psychologist: { id: 2, name: 'Dr. Tomasz Kowalski', email: 'tomasz@example.com' },
-  },
-];
 
 const sampleCard: CardInfo = {
   brand: 'Visa',
@@ -51,6 +29,13 @@ const samplePayments: PaymentRecord[] = [
 
 const ClientDashboard: React.FC<ClientDashboardProps> = ({ user }) => {
   const [selectedOption, setSelectedOption] = useState<string>('Account Settings');
+
+  const { data: authUser } = useGetAuthUserQuery();
+  const cognitoId = authUser?.userInfo?.cognitoId || '';
+
+  const { data: appointments, isLoading: appointmentsLoading } = useGetAppointmentsForClientQuery(cognitoId, {
+    skip: !cognitoId,
+  });
 
   const menuItems = ['Account Settings', 'Appointments', 'Billings', 'Verify'];
 
@@ -85,9 +70,7 @@ const ClientDashboard: React.FC<ClientDashboardProps> = ({ user }) => {
       {/* Main Content */}
       <div style={{ flex: 1, padding: '20px' }}>
         {selectedOption === 'Account Settings' && <AccountSettings user={user} />}
-        {selectedOption === 'Appointments' && (
-          <AppointmentHistory appointments={sampleAppointments} />
-        )}
+        {selectedOption === 'Appointments' && <AppointmentHistory />}
         {selectedOption === 'Billings' && <Billings userName={user.name} cardInfo={sampleCard} payments={samplePayments} />}
         {selectedOption === 'Verify' && <VerifyForm />}
       </div>

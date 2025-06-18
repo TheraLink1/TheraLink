@@ -7,28 +7,8 @@ async function main() {
   await prisma.payment.deleteMany();
   await prisma.appointment.deleteMany();
   await prisma.psychologist.deleteMany();
-  await prisma.location.deleteMany();
 
-  // 2. Seed lokalizacji z PostGIS
-  const locations = [
-    { street: 'Warszawska 10', city: 'Kraków', houseNumber: '10', postalCode: '31-155', lat: 50.06143, lon: 19.93658 },
-    { street: 'Nowomiejska 5', city: 'Poznań', houseNumber: '5', postalCode: '61-854', lat: 52.40827, lon: 16.93342 },
-  ];
-
-  for (const loc of locations) {
-    await prisma.$executeRawUnsafe(`
-      INSERT INTO "Location" ("street","city","houseNumber","postalCode","coordinates")
-      VALUES (
-        '${loc.street}', '${loc.city}', '${loc.houseNumber}', '${loc.postalCode}',
-        ST_GeographyFromText('SRID=4326;POINT(${loc.lon} ${loc.lat})')
-      )
-    `);
-  }
-
-  // 3. Pobierz wszystkie lokalizacje (aby mieć ich ID)
-  const allLocations = await prisma.location.findMany();
-
-  // 4. Seed psychologów (bez pola yearsOfExperience)
+  // 2. Seed psychologów (bez pola yearsOfExperience, location to zwykły string!)
   const psychologistsData = [
     {
       cognitoId: 'psych1',
@@ -38,7 +18,7 @@ async function main() {
       hourlyRate: 150,
       Description: 'Psycholog kliniczny z 10-letnim doświadczeniem.',
       Specialization: 'Terapia poznawczo-behawioralna',
-      locationId: allLocations[0].id,
+      location: 'Warszawska 10, Kraków',
     },
     {
       cognitoId: 'psych2',
@@ -48,7 +28,7 @@ async function main() {
       hourlyRate: 120,
       Description: 'Specjalista w terapii par.',
       Specialization: 'Terapia par',
-      locationId: allLocations[1].id,
+      location: 'Nowomiejska 5, Poznań',
     },
     {
       cognitoId: 'psych3',
@@ -58,7 +38,7 @@ async function main() {
       hourlyRate: 140,
       Description: 'Specjalistka od zaburzeń lękowych.',
       Specialization: 'Terapia zaburzeń lękowych',
-      locationId: allLocations[0].id,
+      location: 'Warszawska 10, Kraków',
     },
     {
       cognitoId: 'psych4',
@@ -68,7 +48,7 @@ async function main() {
       hourlyRate: 130,
       Description: 'Doświadczony psycholog dziecięcy.',
       Specialization: 'Psychologia dziecięca',
-      locationId: allLocations[1].id,
+      location: 'Nowomiejska 5, Poznań',
     },
     {
       cognitoId: 'psych5',
@@ -78,7 +58,7 @@ async function main() {
       hourlyRate: 160,
       Description: 'Ekspertka w terapii traumy.',
       Specialization: 'Terapia traumy',
-      locationId: allLocations[0].id,
+      location: 'Warszawska 10, Kraków',
     },
   ];
 

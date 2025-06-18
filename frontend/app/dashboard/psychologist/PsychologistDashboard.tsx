@@ -3,113 +3,23 @@ import { useState } from 'react';
 import { Psychologist } from '../../data/psychologists';
 import AccountSettings from './AccountSettings'
 import SetAvailability from './SetAvailability';
-import Appointments, {Appointment} from './Appointments';
+import Appointments from './Appointments';
 import Billings from './Billings'; 
-import Calendar from './Calendar';
+import CalendarContainer from './CalendarContainer';
 import Ratings from './Ratings';
+import { useGetAvailabilitiesForPsychologistQuery, useGetAppointmentsForPsychologistQuery } from '@/state/api';
 
 interface Props {
   psychologist: Psychologist;
 }
 
 const PsychologistDashboard: React.FC<Props> = ({psychologist}) => {
-    // Mock appointments array
-    const mockAppointments: Appointment[] = [
-      {
-        id: 1,
-        date: '2025-05-30T09:00:00Z',
-        meetingLink: 'https://meet.example.com/abc123',
-        status: 'Pending',
-        patient: {
-          id: 101,
-          name: 'Anna Kowalska',
-          email: 'anna.kowalska@example.com'
-        },
-        payment: {
-          amount: 150,
-          isPaid: false,
-          paymentDate: '2025-05-20T08:00:00Z'
-        }
-      },
-      {
-        id: 2,
-        date: '2025-06-01T11:30:00Z',
-        meetingLink: 'https://meet.example.com/xyz789',
-        status: 'Pending',
-        patient: {
-          id: 102,
-          name: 'Jan Nowak',
-          email: 'jan.nowak@example.com'
-        },
-        payment: {
-          amount: 200,
-          isPaid: true,
-          paymentDate: '2025-05-22T10:30:00Z'
-        }
-      },
-      {
-        id: 3,
-        date: '2025-06-05T14:00:00Z',
-        meetingLink: 'https://meet.example.com/def456',
-        status: 'Approved',
-        patient: {
-          id: 103,
-          name: 'Katarzyna Zielinska',
-          email: 'katarzyna.zielinska@example.com'
-        },
-        payment: {
-          amount: 180,
-          isPaid: true,
-          paymentDate: '2025-05-25T12:00:00Z'
-        }
-      },
-      {
-        id: 4,
-        date: '2025-06-07T10:00:00Z',
-        meetingLink: 'https://meet.example.com/ghi321',
-        status: 'Denied',
-        patient: {
-          id: 104,
-          name: 'Marek Wójcik',
-          email: 'marek.wojcik@example.com'
-        }
-      }
-    ];
-
-    const dummyAvailabilities = [
-  { date: '2025-05-30', start_hour: '08:00' },
-  { date: '2025-05-30', start_hour: '09:00' },
-  { date: '2025-05-30', start_hour: '11:00' },
-  { date: '2025-05-31', start_hour: '10:00' },
-  { date: '2025-05-31', start_hour: '12:00' },
-  { date: '2025-06-01', start_hour: '09:00' },
-  { date: '2025-06-01', start_hour: '14:00' },
-  { date: '2025-06-02', start_hour: '08:00' },
-  { date: '2025-06-02', start_hour: '16:00' },
-  { date: '2025-06-03', start_hour: '10:00' },
-  { date: '2025-06-03', start_hour: '13:00' },
-  { date: '2025-06-04', start_hour: '11:00' },
-  { date: '2025-06-04', start_hour: '17:00' },
-  { date: '2025-06-05', start_hour: '08:00' },
-  { date: '2025-06-05', start_hour: '15:00' },
-];
-
-const dummyAppointments = [
-  { date: '2025-05-30', start_hour: '09:00', patientName: 'Anna Kowalska' },
-  { date: '2025-05-31', start_hour: '12:00', patientName: 'Marek Nowak' },
-  { date: '2025-06-01', start_hour: '14:00', patientName: 'Julia Nowicka' },
-  { date: '2025-06-02', start_hour: '16:00', patientName: 'Kacper Wiśniewski' },
-  { date: '2025-06-03', start_hour: '13:00', patientName: 'Natalia Wójcik' },
-  { date: '2025-06-04', start_hour: '17:00', patientName: 'Tomasz Mazur' },
-  { date: '2025-06-05', start_hour: '15:00', patientName: 'Zofia Zielińska' },
-];
-
-
-
-
+    const { data: availabilities, isLoading: isLoadingAvailabilities } = useGetAvailabilitiesForPsychologistQuery(psychologist.id);
+    const { data: appointments, isLoading: isLoadingAppointments } = useGetAppointmentsForPsychologistQuery(psychologist.id.toString());
 
     const [selectedOption, setSelectedOption] = useState<string>('Account Settings');
     const menuItems = ['Account Settings', 'Set Availability', 'Appointments', 'Billings', 'Calendar', 'Ratings'];
+
     return (
         <div style={{display: 'flex', minHeight: '100vh'}}>
             <div style={{
@@ -139,12 +49,16 @@ const dummyAppointments = [
 
             <div style={{flex: 1, padding: '20px' ,marginTop: '-20px', backgroundColor: '#ffffff'}}>
                 {selectedOption === 'Account Settings' && <AccountSettings psychologist={psychologist}/>}
-                {selectedOption === 'Set Availability' && <SetAvailability/>}
-                {selectedOption === 'Appointments' && <Appointments appointments={mockAppointments}/>}
-                {selectedOption === 'Billings' && (
-                  <Billings appointments={mockAppointments} />
+                {selectedOption === 'Set Availability' && <SetAvailability />}
+                {selectedOption === 'Appointments' && (
+                  isLoadingAppointments ? <p>Loading appointments...</p> : <Appointments appointments={appointments || []} />
                 )}
-                {selectedOption === 'Calendar' && <Calendar availabilities={dummyAvailabilities} appointments={dummyAppointments} />}
+                {selectedOption === 'Billings' && (
+                  isLoadingAppointments ? <p>Loading appointments...</p> : <Billings appointments={appointments || []} />
+                )}
+                {selectedOption === 'Calendar' && (
+                  (isLoadingAvailabilities || isLoadingAppointments) ? <p>Loading calendar data...</p> : <CalendarContainer />
+                )}
                 {selectedOption === 'Ratings' && <Ratings />}
             </div>
         </div>

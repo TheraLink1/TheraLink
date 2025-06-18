@@ -13,9 +13,10 @@ import {
   Rating,
 } from '@mui/material';
 import { styled } from '@mui/system';
-import { Psychologist } from '../../data/psychologists';
 import AddressAutocomplete from '../../components/AddressAutocomplete';
 import {MapProvider} from '../../components/MapProvider';
+import { useGetAuthUserQuery, useUpdatePsychologistMutation } from '@/state/api';
+import { Psychologist } from '@/types/prismaTypes';
 
 const DARK_TEAL = '#2b6369';
 
@@ -36,13 +37,15 @@ interface Props {
 }
 
 const AccountSettings: React.FC<Props> = ({ psychologist }) => {
+  const { data: authUser } = useGetAuthUserQuery();
   const [form, setForm] = useState({
-    name: psychologist.name,
-    specialization: psychologist.specialization,
-    address: psychologist.address,
-    rate: psychologist.rate,
-    description: psychologist.description,
+    name: psychologist.name || "",
+    Specialization: psychologist.Specialization || "",
+    location: psychologist.location || "",
+    hourlyRate: psychologist.hourlyRate ?? 0,
+    Description: psychologist.Description || "",
   });
+
 
   const handleChange =
     (field: keyof typeof form) =>
@@ -51,13 +54,27 @@ const AccountSettings: React.FC<Props> = ({ psychologist }) => {
     };
 
   const handleAddressChange = (address: string) => {
-    setForm({ ...form, address });
+    setForm({ ...form, location: address });
   };
 
-  const handleSave = () => {
-    console.log('Saved settings:', form);
-    // Implement save functionality here
+  const [updatePsychologist, { isLoading, isSuccess,isError, error }] = useUpdatePsychologistMutation();
+
+const handleSave = async () => {
+  const payload = {
+    cognitoId: authUser?.userInfo.cognitoId,
+    name: form.name,
+    Specialization: form.Specialization,
+    location: form.location,
+    hourlyRate: Number(form.hourlyRate),
+    Description: form.Description,
   };
+  try {
+    await updatePsychologist(payload).unwrap();
+    // Sukces – można dać powiadomienie
+  } catch (err) {
+    console.log(err);
+  }
+};
 
   return (
     <MapProvider>
@@ -74,17 +91,17 @@ const AccountSettings: React.FC<Props> = ({ psychologist }) => {
               />
               <TextField
                 label="Specialization"
-                value={form.specialization}
-                onChange={handleChange('specialization')}
+                value={form.Specialization}
+                onChange={handleChange('Specialization')}
                 fullWidth
               />
               {/* Address Field with Google Maps Autocomplete */}
-              <AddressAutocomplete value={form.address} onChange={handleAddressChange} />
+              <AddressAutocomplete value={form.location} onChange={handleAddressChange} />
               <TextField
                 label="Hourly Rate (PLN)"
                 type="number"
-                value={form.rate}
-                onChange={handleChange('rate')}
+                value={form.hourlyRate}
+                onChange={handleChange('hourlyRate')}
                 sx={{ width: 160 }}
               />
               {/* Read-only Rating Display */}
@@ -101,8 +118,8 @@ const AccountSettings: React.FC<Props> = ({ psychologist }) => {
               </Box>
               <TextField
                 label="Description"
-                value={form.description}
-                onChange={handleChange('description')}
+                value={form.Description}
+                onChange={handleChange('Description')}
                 multiline
                 rows={4}
                 fullWidth
@@ -116,9 +133,20 @@ const AccountSettings: React.FC<Props> = ({ psychologist }) => {
                     px: 4,
                   }}
                   onClick={handleSave}
+                  disabled={isLoading}
                 >
                   Save Changes
                 </Button>
+                {isSuccess && (
+                  <Typography sx={{ mt: 1, color: 'green' }}>
+                    Settings saved successfully.
+                  </Typography>
+                )}
+                {isError && (
+                  <Typography sx={{ mt: 1, color: 'red' }}>
+                    Error saving settings. Please try again.
+                  </Typography>
+                )}
               </Box>
             </Stack>
           </CardContent>

@@ -3,51 +3,43 @@ import { Request, Response } from "express";
 
 const prisma = new PrismaClient();
 
-// create Appointment
-
-export const createAppointment = async (req: Request, res: Response): Promise<void> => {
+export const createAppointment = async (req: Request, res: Response) => {
   try {
-    const { cognitoId } = req.params;
-    const { psychologistId, date, time } = req.body;
+    const { cognitoId } = req.params; 
+    const { psychologistId, date, meetingLink } = req.body; 
 
-    const client = await prisma.client.findUnique({
-      where: { cognitoId },
-    });
+    const Status = req.body.Status || 'Approved';
 
-    if (!client) {
-      res.status(404).json({ message: "Client not found" });
-      return;
-    }
+    const link = meetingLink || 'link-do-spotkania';
 
     const appointment = await prisma.appointment.create({
       data: {
-        psychologistId,
-        clientId: client.id,
-        date,
-        time,
-        status: "pending",
+        psychologistId,                
+        clientCognitoId: cognitoId,     
+        date: new Date(date),           
+        meetingLink: link,              
+        Status,                         
       },
+      include: { client: true, psychologist: true }, // Dodajemy relacje!
     });
-
     res.status(201).json(appointment);
   } catch (error: any) {
     res.status(500).json({ message: `Error creating appointment: ${error.message}` });
   }
 };
 
-
-// get Appointment (id)
-
 export const getAppointment = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
 
+
     const appointment = await prisma.appointment.findUnique({
-      where: { id },
+      where: { id: Number(id) },
+      include: { client: true, psychologist: true }, 
     });
 
     if (appointment) {
-      res.json(appointment);
+      res.json(appointment); 
     } else {
       res.status(404).json({ message: "Appointment not found" });
     }
@@ -58,54 +50,33 @@ export const getAppointment = async (req: Request, res: Response): Promise<void>
   }
 };
 
-// get all Appointments for a Psychologist
-
 export const getAllAppointmentsForPsychologist = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { cognitoId } = req.params;
-
-    const psychologist = await prisma.psychologist.findUnique({
-      where: { cognitoId },
-    });
-
-    if (!psychologist) {
-        res.status(404).json({ message: "Psychologist not found" });
-        return;
-    }
+    const { cognitoId } = req.params; 
 
     const appointments = await prisma.appointment.findMany({
-      where: { psychologistId: psychologist.id },
+      where: { psychologistId: cognitoId },
+      include: { client: true, psychologist: true }, 
     });
 
-    res.json(appointments);
+    res.json(appointments); 
   } catch (error: any) {
     res
       .status(500)
       .json({ message: `Error retrieving appointments: ${error.message}` });
   }
 };
-
-
-// get all Appointments for a Client
 
 export const getAllAppointmentsForClient = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { cognitoId } = req.params;
-
-    const client = await prisma.client.findUnique({
-      where: { cognitoId },
-    });
-
-    if (!client) {
-      res.status(404).json({ message: "Client not found" });
-      return;
-    }
+    const { cognitoId } = req.params; 
 
     const appointments = await prisma.appointment.findMany({
-      where: { clientId: client.id },
+      where: { clientCognitoId: cognitoId },
+      include: { client: true, psychologist: true }, 
     });
 
-    res.json(appointments);
+    res.json(appointments); 
   } catch (error: any) {
     res
       .status(500)
@@ -113,28 +84,25 @@ export const getAllAppointmentsForClient = async (req: Request, res: Response): 
   }
 };
 
-
-// update Appointment (id), you can reuse this for updating status
-
 export const updateAppointment = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { id } = req.params;
-    const { date, time, status } = req.body;
+    const { id } = req.params; 
+    const { date, Status, meetingLink } = req.body;
 
     const updatedAppointment = await prisma.appointment.update({
-      where: { id },
+      where: { id: Number(id) }, 
       data: {
-        date,
-        time,
-        status,
+        ...(date && { date: new Date(date) }),
+        ...(Status && { Status }),
+        ...(meetingLink && { meetingLink }),
       },
+      include: { client: true, psychologist: true }, 
     });
 
-    res.json(updatedAppointment);
+    res.json(updatedAppointment); 
   } catch (error: any) {
     res
       .status(500)
       .json({ message: `Error updating appointment: ${error.message}` });
   }
 };
-
